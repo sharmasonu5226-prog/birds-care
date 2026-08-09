@@ -20,6 +20,11 @@ function Admin() {
 
   const [activeSection, setActiveSection] = useState("home");
 
+  // ORDERS
+  const [orders, setOrders] = useState(() => {
+    return JSON.parse(localStorage.getItem("orders")) || [];
+  });
+
   // ADD PET
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -211,24 +216,70 @@ function Admin() {
     alert("Category updated successfully!");
   };
 
+  // DELETE ORDER
+  const deleteOrder = (orderId) => {
+    const confirmDelete = window.confirm(
+      "Delete this order?"
+    );
+
+    if (!confirmDelete) return;
+
+    const updatedOrders = orders.filter(
+      (order) => order.id !== orderId
+    );
+
+    setOrders(updatedOrders);
+
+    localStorage.setItem(
+      "orders",
+      JSON.stringify(updatedOrders)
+    );
+  };
+
+  // UPDATE ORDER STATUS
+  const updateOrderStatus = (orderId, status) => {
+    const updatedOrders = orders.map((order) =>
+      order.id === orderId
+        ? {
+            ...order,
+            status,
+          }
+        : order
+    );
+
+    setOrders(updatedOrders);
+
+    localStorage.setItem(
+      "orders",
+      JSON.stringify(updatedOrders)
+    );
+  };
+
   const selectedCategory =
     activeSection !== "home" &&
     activeSection !== "categories" &&
-    categories.find((cat) => cat.name === activeSection);
+    activeSection !== "orders" &&
+    categories.find(
+      (cat) => cat.name === activeSection
+    );
 
   const categoryPets = selectedCategory
-    ? pets.filter((pet) => pet.type === selectedCategory.name)
+    ? pets.filter(
+        (pet) =>
+          pet.type === selectedCategory.name
+      )
     : [];
 
   return (
-    <section className="admin-page">
+    <section className="admin-panel">
 
       {/* HEADER */}
       <div className="admin-header">
         <div>
           <h1>Admin Panel 🛠️</h1>
+
           <p>
-            Manage your bird categories and birds from here.
+            Manage your birds, categories and orders.
           </p>
         </div>
       </div>
@@ -237,23 +288,51 @@ function Admin() {
       {activeSection === "home" && (
         <>
           <div className="admin-welcome">
-            <h2>Welcome to Admin Panel 👋</h2>
+            <h2>
+              Welcome to Admin Panel 👋
+            </h2>
 
             <p>
-              First select what you want to manage.
-            </p>
-
-            <p>
-              Select a category below to add or manage birds.
+              Manage your bird store from here.
             </p>
           </div>
 
           <div className="admin-main-grid">
 
+            {/* ORDERS */}
+            <div
+              className="admin-main-card"
+              onClick={() =>
+                setActiveSection("orders")
+              }
+            >
+              <div className="admin-main-icon">
+                📦
+              </div>
+
+              <h2>
+                Manage Orders
+              </h2>
+
+              <p>
+                View and manage customer orders.
+              </p>
+
+              <strong>
+                {orders.length} Orders
+              </strong>
+
+              <button>
+                Open Orders →
+              </button>
+            </div>
+
             {/* CATEGORIES */}
             <div
               className="admin-main-card"
-              onClick={() => setActiveSection("categories")}
+              onClick={() =>
+                setActiveSection("categories")
+              }
             >
               <div className="admin-main-icon">
                 📂
@@ -281,7 +360,9 @@ function Admin() {
               className="admin-main-card"
               onClick={() => {
                 if (categories.length > 0) {
-                  setActiveSection(categories[0].name);
+                  setActiveSection(
+                    categories[0].name
+                  );
                 }
               }}
             >
@@ -294,7 +375,7 @@ function Admin() {
               </h2>
 
               <p>
-                Select a bird category and manage its birds.
+                Select a bird category and manage birds.
               </p>
 
               <strong>
@@ -320,10 +401,13 @@ function Admin() {
                 <button
                   key={cat.id}
                   onClick={() =>
-                    setActiveSection(cat.name)
+                    setActiveSection(
+                      cat.name
+                    )
                   }
                 >
-                  {cat.emoji || "🐦"} {cat.name}
+                  {cat.emoji || "🐦"}{" "}
+                  {cat.name}
                 </button>
               ))}
 
@@ -332,13 +416,274 @@ function Admin() {
         </>
       )}
 
+      {/* ORDERS */}
+      {activeSection === "orders" && (
+        <div className="admin-content">
+
+          <div className="admin-topbar">
+
+            <button
+              onClick={() =>
+                setActiveSection("home")
+              }
+            >
+              ← Back
+            </button>
+
+            <div>
+              <h2>
+                📦 Customer Orders
+              </h2>
+
+              <p>
+                Total Orders: {orders.length}
+              </p>
+            </div>
+
+          </div>
+
+          {orders.length === 0 ? (
+            <div className="empty-admin">
+
+              <div>
+                📦
+              </div>
+
+              <h3>
+                No Orders Yet
+              </h3>
+
+              <p>
+                Customer orders will appear here.
+              </p>
+
+            </div>
+          ) : (
+            <div
+              className="admin-list-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(auto-fit, minmax(320px, 1fr))",
+                gap: "20px",
+              }}
+            >
+
+              {orders
+                .slice()
+                .reverse()
+                .map((order) => (
+
+                  <div
+                    className="admin-manage-card"
+                    key={order.id}
+                    style={{
+                      padding: "22px",
+                    }}
+                  >
+
+                    <h3
+                      style={{
+                        marginTop: 0,
+                      }}
+                    >
+                      📦 Order #{order.id}
+                    </h3>
+
+                    <p>
+                      <strong>
+                        Customer:
+                      </strong>{" "}
+                      {order.customerName}
+                    </p>
+
+                    <p>
+                      <strong>
+                        Phone:
+                      </strong>{" "}
+                      {order.phone}
+                    </p>
+
+                    <p>
+                      <strong>
+                        Address:
+                      </strong>{" "}
+                      {order.address}
+                    </p>
+
+                    <p>
+                      <strong>
+                        City:
+                      </strong>{" "}
+                      {order.city}
+                    </p>
+
+                    <p>
+                      <strong>
+                        Pincode:
+                      </strong>{" "}
+                      {order.pincode}
+                    </p>
+
+                    <p>
+                      <strong>
+                        Date:
+                      </strong>{" "}
+                      {order.date}
+                    </p>
+
+                    <hr />
+
+                    <h4>
+                      🐦 Ordered Birds
+                    </h4>
+
+                    {order.items &&
+                    order.items.length > 0 ? (
+                      <div>
+                        {order.items.map(
+                          (item, index) => (
+                            <div
+                              key={
+                                item.id ??
+                                index
+                              }
+                              style={{
+                                padding:
+                                  "10px",
+                                marginBottom:
+                                  "8px",
+                                background:
+                                  "#f5f8f7",
+                                borderRadius:
+                                  "8px",
+                              }}
+                            >
+                              <strong>
+                                {item.name}
+                              </strong>
+
+                              <div>
+                                ₹{item.price}
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    ) : (
+                      <p>
+                        No items found.
+                      </p>
+                    )}
+
+                    <h2
+                      style={{
+                        color:
+                          "#0f766e",
+                      }}
+                    >
+                      Total: ₹
+                      {order.total}
+                    </h2>
+
+                    <div
+                      style={{
+                        marginTop:
+                          "15px",
+                      }}
+                    >
+                      <label>
+                        <strong>
+                          Order Status
+                        </strong>
+                      </label>
+
+                      <select
+                        value={
+                          order.status ||
+                          "Order Placed"
+                        }
+                        onChange={(e) =>
+                          updateOrderStatus(
+                            order.id,
+                            e.target.value
+                          )
+                        }
+                        style={{
+                          width:
+                            "100%",
+                          padding:
+                            "11px",
+                          marginTop:
+                            "7px",
+                          borderRadius:
+                            "8px",
+                          border:
+                            "1px solid #ccd9d5",
+                        }}
+                      >
+                        <option value="Order Placed">
+                          Order Placed
+                        </option>
+
+                        <option value="Confirmed">
+                          Confirmed
+                        </option>
+
+                        <option value="Preparing">
+                          Preparing
+                        </option>
+
+                        <option value="Out for Delivery">
+                          Out for Delivery
+                        </option>
+
+                        <option value="Delivered">
+                          Delivered
+                        </option>
+
+                        <option value="Cancelled">
+                          Cancelled
+                        </option>
+                      </select>
+                    </div>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() =>
+                        deleteOrder(
+                          order.id
+                        )
+                      }
+                      style={{
+                        marginTop:
+                          "15px",
+                        width: "100%",
+                      }}
+                    >
+                      🗑️ Delete Order
+                    </button>
+
+                  </div>
+
+                ))}
+
+            </div>
+          )}
+
+        </div>
+      )}
+
       {/* CATEGORY LIST */}
       {activeSection === "categories" && (
         <div className="admin-content">
 
           <div className="admin-topbar">
+
             <button
-              onClick={() => setActiveSection("home")}
+              onClick={() =>
+                setActiveSection("home")
+              }
             >
               ← Back
             </button>
@@ -346,6 +691,7 @@ function Admin() {
             <h2>
               📂 Add / Manage Categories
             </h2>
+
           </div>
 
           {/* ADD CATEGORY */}
@@ -355,14 +701,18 @@ function Admin() {
               ➕ Add New Category
             </h3>
 
-            <form onSubmit={handleAddCategory}>
+            <form
+              onSubmit={handleAddCategory}
+            >
 
               <input
                 type="text"
                 placeholder="Category Name"
                 value={catName}
                 onChange={(e) =>
-                  setCatName(e.target.value)
+                  setCatName(
+                    e.target.value
+                  )
                 }
                 required
               />
@@ -372,14 +722,18 @@ function Admin() {
                 placeholder="Emoji e.g. 🦜"
                 value={catEmoji}
                 onChange={(e) =>
-                  setCatEmoji(e.target.value)
+                  setCatEmoji(
+                    e.target.value
+                  )
                 }
               />
 
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleCategoryImage}
+                onChange={
+                  handleCategoryImage
+                }
               />
 
               <button type="submit">
@@ -395,10 +749,13 @@ function Admin() {
             {categories.map((cat) => {
 
               const data =
-                editCategoryData[cat.id] || {};
+                editCategoryData[
+                  cat.id
+                ] || {};
 
               const categoryImage =
-                data.image || cat.image;
+                data.image ||
+                cat.image;
 
               return (
                 <div
@@ -415,7 +772,9 @@ function Admin() {
                       />
                     ) : (
                       <span>
-                        {data.emoji || cat.emoji || "🐦"}
+                        {data.emoji ||
+                          cat.emoji ||
+                          "🐦"}
                       </span>
                     )}
 
@@ -424,7 +783,8 @@ function Admin() {
                   <input
                     type="text"
                     value={
-                      data.name ?? cat.name
+                      data.name ??
+                      cat.name
                     }
                     onChange={(e) =>
                       changeCategory(
@@ -438,7 +798,9 @@ function Admin() {
                   <input
                     type="text"
                     value={
-                      data.emoji ?? cat.emoji ?? ""
+                      data.emoji ??
+                      cat.emoji ??
+                      ""
                     }
                     onChange={(e) =>
                       changeCategory(
@@ -464,7 +826,9 @@ function Admin() {
 
                     <button
                       onClick={() =>
-                        handleUpdateCategory(cat)
+                        handleUpdateCategory(
+                          cat
+                        )
                       }
                     >
                       💾 Update
@@ -473,13 +837,17 @@ function Admin() {
                     <button
                       className="delete-btn"
                       onClick={() => {
+
                         if (
                           window.confirm(
                             `Delete ${cat.name}?`
                           )
                         ) {
-                          removeCategory(cat.id);
+                          removeCategory(
+                            cat.id
+                          );
                         }
+
                       }}
                     >
                       🗑️ Delete
@@ -490,7 +858,9 @@ function Admin() {
                   <button
                     className="open-category-btn"
                     onClick={() =>
-                      setActiveSection(cat.name)
+                      setActiveSection(
+                        cat.name
+                      )
                     }
                   >
                     Open {cat.name} Birds →
@@ -511,20 +881,27 @@ function Admin() {
           <div className="admin-topbar">
 
             <button
-              onClick={() => setActiveSection("home")}
+              onClick={() =>
+                setActiveSection("home")
+              }
             >
               ← Back
             </button>
 
             <div>
+
               <h2>
-                {selectedCategory.emoji || "🐦"}{" "}
+                {selectedCategory.emoji ||
+                  "🐦"}{" "}
                 {selectedCategory.name}
               </h2>
 
               <p>
-                Manage all {selectedCategory.name} birds here.
+                Manage all{" "}
+                {selectedCategory.name}{" "}
+                birds here.
               </p>
+
             </div>
 
           </div>
@@ -533,17 +910,22 @@ function Admin() {
           <div className="admin-form-card">
 
             <h3>
-              ➕ Add New {selectedCategory.name}
+              ➕ Add New{" "}
+              {selectedCategory.name}
             </h3>
 
-            <form onSubmit={handleAddPet}>
+            <form
+              onSubmit={handleAddPet}
+            >
 
               <input
                 type="text"
                 placeholder="Bird Name"
                 value={name}
                 onChange={(e) =>
-                  setName(e.target.value)
+                  setName(
+                    e.target.value
+                  )
                 }
                 required
               />
@@ -553,7 +935,9 @@ function Admin() {
                 placeholder="Price"
                 value={price}
                 onChange={(e) =>
-                  setPrice(e.target.value)
+                  setPrice(
+                    e.target.value
+                  )
                 }
                 required
               />
@@ -561,35 +945,47 @@ function Admin() {
               <select
                 value={category}
                 onChange={(e) =>
-                  setCategory(e.target.value)
+                  setCategory(
+                    e.target.value
+                  )
                 }
                 required
               >
+
                 <option value="">
                   Select Category
                 </option>
 
-                {categories.map((cat) => (
-                  <option
-                    key={cat.id}
-                    value={cat.name}
-                  >
-                    {cat.emoji || "🐦"} {cat.name}
-                  </option>
-                ))}
+                {categories.map(
+                  (cat) => (
+                    <option
+                      key={cat.id}
+                      value={cat.name}
+                    >
+                      {cat.emoji ||
+                        "🐦"}{" "}
+                      {cat.name}
+                    </option>
+                  )
+                )}
+
               </select>
 
               <input
                 type="file"
                 accept="image/*"
-                onChange={handlePetImage}
+                onChange={
+                  handlePetImage
+                }
               />
 
               <textarea
                 placeholder="Bird Description"
                 value={description}
                 onChange={(e) =>
-                  setDescription(e.target.value)
+                  setDescription(
+                    e.target.value
+                  )
                 }
               />
 
@@ -602,173 +998,223 @@ function Admin() {
 
           {/* BIRDS */}
           <div className="admin-birds-header">
+
             <h2>
-              {selectedCategory.emoji || "🐦"}{" "}
-              {selectedCategory.name} Birds
+              {selectedCategory.emoji ||
+                "🐦"}{" "}
+              {selectedCategory.name}{" "}
+              Birds
             </h2>
 
             <span>
               {categoryPets.length} Birds
             </span>
+
           </div>
 
           {categoryPets.length === 0 ? (
+
             <div className="empty-admin">
+
               <div>🐦</div>
 
               <h3>
-                No {selectedCategory.name} Birds Yet
+                No{" "}
+                {selectedCategory.name}{" "}
+                Birds Yet
               </h3>
 
               <p>
-                Add your first bird using the form above.
+                Add your first bird using
+                the form above.
               </p>
+
             </div>
+
           ) : (
+
             <div className="admin-list-grid">
 
-              {categoryPets.map((pet) => {
+              {categoryPets.map(
+                (pet) => {
 
-                const data =
-                  editPetData[pet.id] || {};
+                  const data =
+                    editPetData[
+                      pet.id
+                    ] || {};
 
-                const petImage =
-                  data.image || pet.image;
+                  const petImage =
+                    data.image ||
+                    pet.image;
 
-                return (
-                  <div
-                    className="admin-manage-card"
-                    key={pet.id}
-                  >
+                  return (
 
-                    <div className="admin-manage-image">
-
-                      {petImage &&
-                      (
-                        petImage.startsWith("http") ||
-                        petImage.startsWith("data:image")
-                      ) ? (
-                        <img
-                          src={petImage}
-                          alt={data.name || pet.name}
-                        />
-                      ) : (
-                        <span>
-                          {petImage || "🐦"}
-                        </span>
-                      )}
-
-                    </div>
-
-                    <input
-                      type="text"
-                      placeholder="Bird Name"
-                      value={
-                        data.name ?? pet.name
-                      }
-                      onChange={(e) =>
-                        changePet(
-                          pet.id,
-                          "name",
-                          e.target.value
-                        )
-                      }
-                    />
-
-                    <input
-                      type="number"
-                      placeholder="Price"
-                      value={
-                        data.price ?? pet.price
-                      }
-                      onChange={(e) =>
-                        changePet(
-                          pet.id,
-                          "price",
-                          e.target.value
-                        )
-                      }
-                    />
-
-                    <select
-                      value={
-                        data.type ?? pet.type
-                      }
-                      onChange={(e) =>
-                        changePet(
-                          pet.id,
-                          "type",
-                          e.target.value
-                        )
-                      }
+                    <div
+                      className="admin-manage-card"
+                      key={pet.id}
                     >
-                      {categories.map((cat) => (
-                        <option
-                          key={cat.id}
-                          value={cat.name}
-                        >
-                          {cat.name}
-                        </option>
-                      ))}
-                    </select>
 
-                    <textarea
-                      placeholder="Bird Description"
-                      value={
-                        data.description ??
-                        pet.description ??
-                        ""
-                      }
-                      onChange={(e) =>
-                        changePet(
-                          pet.id,
-                          "description",
-                          e.target.value
-                        )
-                      }
-                    />
+                      <div className="admin-manage-image">
 
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) =>
-                        handleEditPetImage(
-                          e,
-                          pet.id
-                        )
-                      }
-                    />
+                        {petImage &&
+                        (
+                          petImage.startsWith(
+                            "http"
+                          ) ||
+                          petImage.startsWith(
+                            "data:image"
+                          )
+                        ) ? (
 
-                    <div className="admin-buttons">
+                          <img
+                            src={petImage}
+                            alt={
+                              data.name ||
+                              pet.name
+                            }
+                          />
 
-                      <button
-                        onClick={() =>
-                          handleUpdatePet(pet)
+                        ) : (
+
+                          <span>
+                            {petImage ||
+                              "🐦"}
+                          </span>
+
+                        )}
+
+                      </div>
+
+                      <input
+                        type="text"
+                        placeholder="Bird Name"
+                        value={
+                          data.name ??
+                          pet.name
+                        }
+                        onChange={(e) =>
+                          changePet(
+                            pet.id,
+                            "name",
+                            e.target.value
+                          )
+                        }
+                      />
+
+                      <input
+                        type="number"
+                        placeholder="Price"
+                        value={
+                          data.price ??
+                          pet.price
+                        }
+                        onChange={(e) =>
+                          changePet(
+                            pet.id,
+                            "price",
+                            e.target.value
+                          )
+                        }
+                      />
+
+                      <select
+                        value={
+                          data.type ??
+                          pet.type
+                        }
+                        onChange={(e) =>
+                          changePet(
+                            pet.id,
+                            "type",
+                            e.target.value
+                          )
                         }
                       >
-                        💾 Update
-                      </button>
 
-                      <button
-                        className="delete-btn"
-                        onClick={() => {
-                          if (
-                            window.confirm(
-                              `Delete ${pet.name}?`
+                        {categories.map(
+                          (cat) => (
+                            <option
+                              key={
+                                cat.id
+                              }
+                              value={
+                                cat.name
+                              }
+                            >
+                              {
+                                cat.name
+                              }
+                            </option>
+                          )
+                        )}
+
+                      </select>
+
+                      <textarea
+                        placeholder="Bird Description"
+                        value={
+                          data.description ??
+                          pet.description ??
+                          ""
+                        }
+                        onChange={(e) =>
+                          changePet(
+                            pet.id,
+                            "description",
+                            e.target.value
+                          )
+                        }
+                      />
+
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          handleEditPetImage(
+                            e,
+                            pet.id
+                          )
+                        }
+                      />
+
+                      <div className="admin-buttons">
+
+                        <button
+                          onClick={() =>
+                            handleUpdatePet(
+                              pet
                             )
-                          ) {
-                            deletePet(pet.id);
                           }
-                        }}
-                      >
-                        🗑️ Delete
-                      </button>
+                        >
+                          💾 Update
+                        </button>
+
+                        <button
+                          className="delete-btn"
+                          onClick={() => {
+
+                            if (
+                              window.confirm(
+                                `Delete ${pet.name}?`
+                              )
+                            ) {
+                              deletePet(
+                                pet.id
+                              );
+                            }
+
+                          }}
+                        >
+                          🗑️ Delete
+                        </button>
+
+                      </div>
 
                     </div>
 
-                  </div>
-                );
-              })}
+                  );
+                }
+              )}
 
             </div>
           )}
