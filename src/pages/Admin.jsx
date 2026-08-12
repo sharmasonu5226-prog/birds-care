@@ -1,1228 +1,167 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { PetContext } from "../context/PetContext";
 import { CategoryContext } from "../context/CategoryContext";
 
+import BirdsPage from "./BirdsPage";
+import CategoryPage from "./CategoryPage";
+
 function Admin() {
-  const {
-    pets,
-    addPet,
-    deletePet,
-    updatePet,
-  } = useContext(PetContext);
+  const navigate = useNavigate();
 
-  const {
-    categories,
-    addCategory,
-    removeCategory,
-    updateCategory,
-  } = useContext(CategoryContext);
+  const { pets } = useContext(PetContext);
+  const { categories } = useContext(CategoryContext);
 
-  const [activeSection, setActiveSection] = useState("home");
+  const [activeMenu, setActiveMenu] =
+    useState("dashboard");
 
-  // ORDERS
-  const [orders, setOrders] = useState(() => {
-    return JSON.parse(localStorage.getItem("orders")) || [];
-  });
+  // =========================
+  // ADMIN LOGIN CHECK
+  // =========================
 
-  // ADD PET
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("");
-  const [image, setImage] = useState("");
-  const [description, setDescription] = useState("");
+  const isAdmin =
+    localStorage.getItem("admin") === "true";
 
-  // ADD CATEGORY
-  const [catName, setCatName] = useState("");
-  const [catEmoji, setCatEmoji] = useState("");
-  const [catImage, setCatImage] = useState("");
+  if (!isAdmin) {
+    navigate("/admin-login");
+    return null;
+  }
 
-  // EDIT PET
-  const [editPetData, setEditPetData] = useState({});
+  // =========================
+  // COUNTS
+  // =========================
 
-  // EDIT CATEGORY
-  const [editCategoryData, setEditCategoryData] = useState({});
+  const totalBirds =
+    Array.isArray(pets) ? pets.length : 0;
 
-  // IMAGE READER
-  const readImage = (file, callback) => {
-    const reader = new FileReader();
+  const totalCategories =
+    Array.isArray(categories)
+      ? categories.length
+      : 0;
 
-    reader.onload = () => {
-      callback(reader.result);
-    };
+  // =========================
+  // LOGOUT
+  // =========================
 
-    reader.readAsDataURL(file);
+  const handleLogout = () => {
+    localStorage.removeItem("admin");
+
+    navigate("/admin-login");
   };
 
-  // PET IMAGE
-  const handlePetImage = (e) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    readImage(file, setImage);
-  };
-
-  // CATEGORY IMAGE
-  const handleCategoryImage = (e) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    readImage(file, setCatImage);
-  };
-
-  // EDIT PET IMAGE
-  const handleEditPetImage = (e, id) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    readImage(file, (img) => {
-      setEditPetData((prev) => ({
-        ...prev,
-        [id]: {
-          ...prev[id],
-          image: img,
-        },
-      }));
-    });
-  };
-
-  // EDIT CATEGORY IMAGE
-  const handleEditCategoryImage = (e, id) => {
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    readImage(file, (img) => {
-      setEditCategoryData((prev) => ({
-        ...prev,
-        [id]: {
-          ...prev[id],
-          image: img,
-        },
-      }));
-    });
-  };
-
-  // ADD PET
-  const handleAddPet = (e) => {
-    e.preventDefault();
-
-    if (!name || !price || !category) {
-      alert("Please fill all required fields.");
-      return;
-    }
-
-    addPet({
-      name,
-      price,
-      type: category,
-      image: image || "🐦",
-      description,
-    });
-
-    setName("");
-    setPrice("");
-    setCategory("");
-    setImage("");
-    setDescription("");
-
-    alert("Bird added successfully!");
-  };
-
-  // ADD CATEGORY
-  const handleAddCategory = (e) => {
-    e.preventDefault();
-
-    if (!catName) {
-      alert("Please enter category name.");
-      return;
-    }
-
-    addCategory({
-      name: catName,
-      emoji: catEmoji || "🐦",
-      image: catImage,
-    });
-
-    setCatName("");
-    setCatEmoji("");
-    setCatImage("");
-
-    alert("Category added successfully!");
-  };
-
-  // CHANGE PET
-  const changePet = (id, field, value) => {
-    setEditPetData((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        [field]: value,
-      },
-    }));
-  };
-
-  // UPDATE PET
-  const handleUpdatePet = (pet) => {
-    const data = editPetData[pet.id] || {};
-
-    updatePet(pet.id, {
-      name: data.name ?? pet.name,
-      price: data.price ?? pet.price,
-      type: data.type ?? pet.type,
-      image: data.image ?? pet.image,
-      description: data.description ?? pet.description,
-    });
-
-    setEditPetData((prev) => {
-      const copy = { ...prev };
-      delete copy[pet.id];
-      return copy;
-    });
-
-    alert("Bird updated successfully!");
-  };
-
-  // CHANGE CATEGORY
-  const changeCategory = (id, field, value) => {
-    setEditCategoryData((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        [field]: value,
-      },
-    }));
-  };
-
-  // UPDATE CATEGORY
-  const handleUpdateCategory = (cat) => {
-    const data = editCategoryData[cat.id] || {};
-
-    updateCategory(cat.id, {
-      name: data.name ?? cat.name,
-      emoji: data.emoji ?? cat.emoji,
-      image: data.image ?? cat.image,
-    });
-
-    setEditCategoryData((prev) => {
-      const copy = { ...prev };
-      delete copy[cat.id];
-      return copy;
-    });
-
-    alert("Category updated successfully!");
-  };
-
-  // DELETE ORDER
-  const deleteOrder = (orderId) => {
-    const confirmDelete = window.confirm(
-      "Delete this order?"
-    );
-
-    if (!confirmDelete) return;
-
-    const updatedOrders = orders.filter(
-      (order) => order.id !== orderId
-    );
-
-    setOrders(updatedOrders);
-
-    localStorage.setItem(
-      "orders",
-      JSON.stringify(updatedOrders)
-    );
-  };
-
-  // UPDATE ORDER STATUS
-  const updateOrderStatus = (orderId, status) => {
-    const updatedOrders = orders.map((order) =>
-      order.id === orderId
-        ? {
-            ...order,
-            status,
-          }
-        : order
-    );
-
-    setOrders(updatedOrders);
-
-    localStorage.setItem(
-      "orders",
-      JSON.stringify(updatedOrders)
-    );
-  };
-
-  const selectedCategory =
-    activeSection !== "home" &&
-    activeSection !== "categories" &&
-    activeSection !== "orders" &&
-    categories.find(
-      (cat) => cat.name === activeSection
-    );
-
-  const categoryPets = selectedCategory
-    ? pets.filter(
-        (pet) =>
-          pet.type === selectedCategory.name
-      )
-    : [];
+  // =========================
+  // ADMIN
+  // =========================
 
   return (
-    <section className="admin-panel">
+    <div className="admin-layout">
 
-      {/* HEADER */}
-      <div className="admin-header">
-        <div>
-          <h1>Admin Panel 🛠️</h1>
+      {/* =========================
+          SIDEBAR
+      ========================= */}
 
-          <p>
-            Manage your birds, categories and orders.
-          </p>
-        </div>
+      <div className="admin-sidebar">
+
+        <h2>
+          🐦 Birds Care
+        </h2>
+
+        <button
+          onClick={() =>
+            setActiveMenu("dashboard")
+          }
+        >
+          🏠 Dashboard
+        </button>
+
+        <button
+          onClick={() =>
+            setActiveMenu("birds")
+          }
+        >
+          🐦 Manage Birds
+        </button>
+
+        <button
+          onClick={() =>
+            setActiveMenu("categories")
+          }
+        >
+          🗂 Categories
+        </button>
+
+        <button
+          onClick={handleLogout}
+        >
+          🚪 Logout
+        </button>
+
       </div>
 
-      {/* HOME */}
-      {activeSection === "home" && (
-        <>
-          <div className="admin-welcome">
-            <h2>
-              Welcome to Admin Panel 👋
-            </h2>
+      {/* =========================
+          CONTENT
+      ========================= */}
 
-            <p>
-              Manage your bird store from here.
-            </p>
-          </div>
+      <div className="admin-content">
 
-          <div className="admin-main-grid">
+        {/* =========================
+            DASHBOARD
+        ========================= */}
 
-            {/* ORDERS */}
-            <div
-              className="admin-main-card"
-              onClick={() =>
-                setActiveSection("orders")
-              }
-            >
-              <div className="admin-main-icon">
-                📦
-              </div>
+        {activeMenu === "dashboard" && (
+          <div>
 
-              <h2>
-                Manage Orders
-              </h2>
-
-              <p>
-                View and manage customer orders.
-              </p>
-
-              <strong>
-                {orders.length} Orders
-              </strong>
-
-              <button>
-                Open Orders →
-              </button>
-            </div>
-
-            {/* CATEGORIES */}
-            <div
-              className="admin-main-card"
-              onClick={() =>
-                setActiveSection("categories")
-              }
-            >
-              <div className="admin-main-icon">
-                📂
-              </div>
-
-              <h2>
-                Manage Categories
-              </h2>
-
-              <p>
-                Add, edit or delete bird categories.
-              </p>
-
-              <strong>
-                {categories.length} Categories
-              </strong>
-
-              <button>
-                Open Categories →
-              </button>
-            </div>
-
-            {/* BIRDS */}
-            <div
-              className="admin-main-card"
-              onClick={() => {
-                if (categories.length > 0) {
-                  setActiveSection(
-                    categories[0].name
-                  );
-                }
-              }}
-            >
-              <div className="admin-main-icon">
-                🐦
-              </div>
-
-              <h2>
-                Manage Birds
-              </h2>
-
-              <p>
-                Select a bird category and manage birds.
-              </p>
-
-              <strong>
-                {pets.length} Birds
-              </strong>
-
-              <button>
-                Open Birds →
-              </button>
-            </div>
-
-          </div>
-
-          {/* CATEGORY SHORTCUTS */}
-          <div className="admin-shortcuts">
-            <h2>
-              Bird Categories
-            </h2>
-
-            <div className="admin-category-buttons">
-
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() =>
-                    setActiveSection(
-                      cat.name
-                    )
-                  }
-                >
-                  {cat.emoji || "🐦"}{" "}
-                  {cat.name}
-                </button>
-              ))}
-
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* ORDERS */}
-      {activeSection === "orders" && (
-        <div className="admin-content">
-
-          <div className="admin-topbar">
-
-            <button
-              onClick={() =>
-                setActiveSection("home")
-              }
-            >
-              ← Back
-            </button>
+            <h1>
+              Admin Dashboard
+            </h1>
 
             <div>
-              <h2>
-                📦 Customer Orders
-              </h2>
-
-              <p>
-                Total Orders: {orders.length}
-              </p>
-            </div>
-
-          </div>
-
-          {orders.length === 0 ? (
-            <div className="empty-admin">
-
-              <div>
-                📦
-              </div>
 
               <h3>
-                No Orders Yet
+                Total Birds
               </h3>
 
-              <p>
-                Customer orders will appear here.
-              </p>
+              <h2>
+                {totalBirds}
+              </h2>
 
             </div>
-          ) : (
-            <div
-              className="admin-list-grid"
-              style={{
-                display: "grid",
-                gridTemplateColumns:
-                  "repeat(auto-fit, minmax(320px, 1fr))",
-                gap: "20px",
-              }}
-            >
-
-              {orders
-                .slice()
-                .reverse()
-                .map((order) => (
-
-                  <div
-                    className="admin-manage-card"
-                    key={order.id}
-                    style={{
-                      padding: "22px",
-                    }}
-                  >
-
-                    <h3
-                      style={{
-                        marginTop: 0,
-                      }}
-                    >
-                      📦 Order #{order.id}
-                    </h3>
-
-                    <p>
-                      <strong>
-                        Customer:
-                      </strong>{" "}
-                      {order.customerName}
-                    </p>
-
-                    <p>
-                      <strong>
-                        Phone:
-                      </strong>{" "}
-                      {order.phone}
-                    </p>
-
-                    <p>
-                      <strong>
-                        Address:
-                      </strong>{" "}
-                      {order.address}
-                    </p>
-
-                    <p>
-                      <strong>
-                        City:
-                      </strong>{" "}
-                      {order.city}
-                    </p>
-
-                    <p>
-                      <strong>
-                        Pincode:
-                      </strong>{" "}
-                      {order.pincode}
-                    </p>
-
-                    <p>
-                      <strong>
-                        Date:
-                      </strong>{" "}
-                      {order.date}
-                    </p>
-
-                    <hr />
-
-                    <h4>
-                      🐦 Ordered Birds
-                    </h4>
-
-                    {order.items &&
-                    order.items.length > 0 ? (
-                      <div>
-                        {order.items.map(
-                          (item, index) => (
-                            <div
-                              key={
-                                item.id ??
-                                index
-                              }
-                              style={{
-                                padding:
-                                  "10px",
-                                marginBottom:
-                                  "8px",
-                                background:
-                                  "#f5f8f7",
-                                borderRadius:
-                                  "8px",
-                              }}
-                            >
-                              <strong>
-                                {item.name}
-                              </strong>
-
-                              <div>
-                                ₹{item.price}
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    ) : (
-                      <p>
-                        No items found.
-                      </p>
-                    )}
-
-                    <h2
-                      style={{
-                        color:
-                          "#0f766e",
-                      }}
-                    >
-                      Total: ₹
-                      {order.total}
-                    </h2>
-
-                    <div
-                      style={{
-                        marginTop:
-                          "15px",
-                      }}
-                    >
-                      <label>
-                        <strong>
-                          Order Status
-                        </strong>
-                      </label>
-
-                      <select
-                        value={
-                          order.status ||
-                          "Order Placed"
-                        }
-                        onChange={(e) =>
-                          updateOrderStatus(
-                            order.id,
-                            e.target.value
-                          )
-                        }
-                        style={{
-                          width:
-                            "100%",
-                          padding:
-                            "11px",
-                          marginTop:
-                            "7px",
-                          borderRadius:
-                            "8px",
-                          border:
-                            "1px solid #ccd9d5",
-                        }}
-                      >
-                        <option value="Order Placed">
-                          Order Placed
-                        </option>
-
-                        <option value="Confirmed">
-                          Confirmed
-                        </option>
-
-                        <option value="Preparing">
-                          Preparing
-                        </option>
-
-                        <option value="Out for Delivery">
-                          Out for Delivery
-                        </option>
-
-                        <option value="Delivered">
-                          Delivered
-                        </option>
-
-                        <option value="Cancelled">
-                          Cancelled
-                        </option>
-                      </select>
-                    </div>
-
-                    <button
-                      className="delete-btn"
-                      onClick={() =>
-                        deleteOrder(
-                          order.id
-                        )
-                      }
-                      style={{
-                        marginTop:
-                          "15px",
-                        width: "100%",
-                      }}
-                    >
-                      🗑️ Delete Order
-                    </button>
-
-                  </div>
-
-                ))}
-
-            </div>
-          )}
-
-        </div>
-      )}
-
-      {/* CATEGORY LIST */}
-      {activeSection === "categories" && (
-        <div className="admin-content">
-
-          <div className="admin-topbar">
-
-            <button
-              onClick={() =>
-                setActiveSection("home")
-              }
-            >
-              ← Back
-            </button>
-
-            <h2>
-              📂 Add / Manage Categories
-            </h2>
-
-          </div>
-
-          {/* ADD CATEGORY */}
-          <div className="admin-form-card">
-
-            <h3>
-              ➕ Add New Category
-            </h3>
-
-            <form
-              onSubmit={handleAddCategory}
-            >
-
-              <input
-                type="text"
-                placeholder="Category Name"
-                value={catName}
-                onChange={(e) =>
-                  setCatName(
-                    e.target.value
-                  )
-                }
-                required
-              />
-
-              <input
-                type="text"
-                placeholder="Emoji e.g. 🦜"
-                value={catEmoji}
-                onChange={(e) =>
-                  setCatEmoji(
-                    e.target.value
-                  )
-                }
-              />
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={
-                  handleCategoryImage
-                }
-              />
-
-              <button type="submit">
-                ➕ Add Category
-              </button>
-
-            </form>
-          </div>
-
-          {/* CATEGORY CARDS */}
-          <div className="admin-list-grid">
-
-            {categories.map((cat) => {
-
-              const data =
-                editCategoryData[
-                  cat.id
-                ] || {};
-
-              const categoryImage =
-                data.image ||
-                cat.image;
-
-              return (
-                <div
-                  className="admin-manage-card"
-                  key={cat.id}
-                >
-
-                  <div className="admin-manage-image">
-
-                    {categoryImage ? (
-                      <img
-                        src={categoryImage}
-                        alt={cat.name}
-                      />
-                    ) : (
-                      <span>
-                        {data.emoji ||
-                          cat.emoji ||
-                          "🐦"}
-                      </span>
-                    )}
-
-                  </div>
-
-                  <input
-                    type="text"
-                    value={
-                      data.name ??
-                      cat.name
-                    }
-                    onChange={(e) =>
-                      changeCategory(
-                        cat.id,
-                        "name",
-                        e.target.value
-                      )
-                    }
-                  />
-
-                  <input
-                    type="text"
-                    value={
-                      data.emoji ??
-                      cat.emoji ??
-                      ""
-                    }
-                    onChange={(e) =>
-                      changeCategory(
-                        cat.id,
-                        "emoji",
-                        e.target.value
-                      )
-                    }
-                  />
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      handleEditCategoryImage(
-                        e,
-                        cat.id
-                      )
-                    }
-                  />
-
-                  <div className="admin-buttons">
-
-                    <button
-                      onClick={() =>
-                        handleUpdateCategory(
-                          cat
-                        )
-                      }
-                    >
-                      💾 Update
-                    </button>
-
-                    <button
-                      className="delete-btn"
-                      onClick={() => {
-
-                        if (
-                          window.confirm(
-                            `Delete ${cat.name}?`
-                          )
-                        ) {
-                          removeCategory(
-                            cat.id
-                          );
-                        }
-
-                      }}
-                    >
-                      🗑️ Delete
-                    </button>
-
-                  </div>
-
-                  <button
-                    className="open-category-btn"
-                    onClick={() =>
-                      setActiveSection(
-                        cat.name
-                      )
-                    }
-                  >
-                    Open {cat.name} Birds →
-                  </button>
-
-                </div>
-              );
-            })}
-
-          </div>
-        </div>
-      )}
-
-      {/* SELECTED CATEGORY */}
-      {selectedCategory && (
-        <div className="admin-content">
-
-          <div className="admin-topbar">
-
-            <button
-              onClick={() =>
-                setActiveSection("home")
-              }
-            >
-              ← Back
-            </button>
 
             <div>
 
-              <h2>
-                {selectedCategory.emoji ||
-                  "🐦"}{" "}
-                {selectedCategory.name}
-              </h2>
-
-              <p>
-                Manage all{" "}
-                {selectedCategory.name}{" "}
-                birds here.
-              </p>
-
-            </div>
-
-          </div>
-
-          {/* ADD BIRD */}
-          <div className="admin-form-card">
-
-            <h3>
-              ➕ Add New{" "}
-              {selectedCategory.name}
-            </h3>
-
-            <form
-              onSubmit={handleAddPet}
-            >
-
-              <input
-                type="text"
-                placeholder="Bird Name"
-                value={name}
-                onChange={(e) =>
-                  setName(
-                    e.target.value
-                  )
-                }
-                required
-              />
-
-              <input
-                type="number"
-                placeholder="Price"
-                value={price}
-                onChange={(e) =>
-                  setPrice(
-                    e.target.value
-                  )
-                }
-                required
-              />
-
-              <select
-                value={category}
-                onChange={(e) =>
-                  setCategory(
-                    e.target.value
-                  )
-                }
-                required
-              >
-
-                <option value="">
-                  Select Category
-                </option>
-
-                {categories.map(
-                  (cat) => (
-                    <option
-                      key={cat.id}
-                      value={cat.name}
-                    >
-                      {cat.emoji ||
-                        "🐦"}{" "}
-                      {cat.name}
-                    </option>
-                  )
-                )}
-
-              </select>
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={
-                  handlePetImage
-                }
-              />
-
-              <textarea
-                placeholder="Bird Description"
-                value={description}
-                onChange={(e) =>
-                  setDescription(
-                    e.target.value
-                  )
-                }
-              />
-
-              <button type="submit">
-                ➕ Add Bird
-              </button>
-
-            </form>
-          </div>
-
-          {/* BIRDS */}
-          <div className="admin-birds-header">
-
-            <h2>
-              {selectedCategory.emoji ||
-                "🐦"}{" "}
-              {selectedCategory.name}{" "}
-              Birds
-            </h2>
-
-            <span>
-              {categoryPets.length} Birds
-            </span>
-
-          </div>
-
-          {categoryPets.length === 0 ? (
-
-            <div className="empty-admin">
-
-              <div>🐦</div>
-
               <h3>
-                No{" "}
-                {selectedCategory.name}{" "}
-                Birds Yet
+                Total Categories
               </h3>
 
-              <p>
-                Add your first bird using
-                the form above.
-              </p>
+              <h2>
+                {totalCategories}
+              </h2>
 
             </div>
 
-          ) : (
+          </div>
+        )}
 
-            <div className="admin-list-grid">
+        {/* =========================
+            BIRDS
+        ========================= */}
 
-              {categoryPets.map(
-                (pet) => {
+        {activeMenu === "birds" && (
+          <BirdsPage />
+        )}
 
-                  const data =
-                    editPetData[
-                      pet.id
-                    ] || {};
+        {/* =========================
+            CATEGORIES
+        ========================= */}
 
-                  const petImage =
-                    data.image ||
-                    pet.image;
+        {activeMenu === "categories" && (
+          <CategoryPage />
+        )}
 
-                  return (
+      </div>
 
-                    <div
-                      className="admin-manage-card"
-                      key={pet.id}
-                    >
-
-                      <div className="admin-manage-image">
-
-                        {petImage &&
-                        (
-                          petImage.startsWith(
-                            "http"
-                          ) ||
-                          petImage.startsWith(
-                            "data:image"
-                          )
-                        ) ? (
-
-                          <img
-                            src={petImage}
-                            alt={
-                              data.name ||
-                              pet.name
-                            }
-                          />
-
-                        ) : (
-
-                          <span>
-                            {petImage ||
-                              "🐦"}
-                          </span>
-
-                        )}
-
-                      </div>
-
-                      <input
-                        type="text"
-                        placeholder="Bird Name"
-                        value={
-                          data.name ??
-                          pet.name
-                        }
-                        onChange={(e) =>
-                          changePet(
-                            pet.id,
-                            "name",
-                            e.target.value
-                          )
-                        }
-                      />
-
-                      <input
-                        type="number"
-                        placeholder="Price"
-                        value={
-                          data.price ??
-                          pet.price
-                        }
-                        onChange={(e) =>
-                          changePet(
-                            pet.id,
-                            "price",
-                            e.target.value
-                          )
-                        }
-                      />
-
-                      <select
-                        value={
-                          data.type ??
-                          pet.type
-                        }
-                        onChange={(e) =>
-                          changePet(
-                            pet.id,
-                            "type",
-                            e.target.value
-                          )
-                        }
-                      >
-
-                        {categories.map(
-                          (cat) => (
-                            <option
-                              key={
-                                cat.id
-                              }
-                              value={
-                                cat.name
-                              }
-                            >
-                              {
-                                cat.name
-                              }
-                            </option>
-                          )
-                        )}
-
-                      </select>
-
-                      <textarea
-                        placeholder="Bird Description"
-                        value={
-                          data.description ??
-                          pet.description ??
-                          ""
-                        }
-                        onChange={(e) =>
-                          changePet(
-                            pet.id,
-                            "description",
-                            e.target.value
-                          )
-                        }
-                      />
-
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) =>
-                          handleEditPetImage(
-                            e,
-                            pet.id
-                          )
-                        }
-                      />
-
-                      <div className="admin-buttons">
-
-                        <button
-                          onClick={() =>
-                            handleUpdatePet(
-                              pet
-                            )
-                          }
-                        >
-                          💾 Update
-                        </button>
-
-                        <button
-                          className="delete-btn"
-                          onClick={() => {
-
-                            if (
-                              window.confirm(
-                                `Delete ${pet.name}?`
-                              )
-                            ) {
-                              deletePet(
-                                pet.id
-                              );
-                            }
-
-                          }}
-                        >
-                          🗑️ Delete
-                        </button>
-
-                      </div>
-
-                    </div>
-
-                  );
-                }
-              )}
-
-            </div>
-          )}
-
-        </div>
-      )}
-
-    </section>
+    </div>
   );
 }
 

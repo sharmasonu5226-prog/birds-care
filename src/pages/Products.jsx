@@ -1,127 +1,406 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { CartContext } from "../context/CartContext";
 import { PetContext } from "../context/PetContext";
-import { CategoryContext } from "../context/CategoryContext";
 
 function Products() {
   const { addToCart } = useContext(CartContext);
   const { pets } = useContext(PetContext);
-  const { categories } = useContext(CategoryContext);
 
   const [search, setSearch] = useState("");
-  const [type, setType] = useState("All");
+
+  const [searchParams] = useSearchParams();
+
+  const categoryType = searchParams.get("type");
+
+  // =========================
+  // FILTER PRODUCTS
+  // =========================
 
   const filteredPets = pets.filter((bird) => {
     const nameMatch = bird.name
       .toLowerCase()
       .includes(search.toLowerCase());
 
-    const typeMatch =
-      type === "All" || bird.type === type;
+    const categoryMatch =
+      !categoryType ||
+      bird.type === categoryType;
 
-    return nameMatch && typeMatch;
+    return nameMatch && categoryMatch;
   });
 
   return (
-    <section className="products-page">
+    <div className="products-page">
 
-      <h1>All Birds 🐦</h1>
+      {/* =========================
+          PAGE TITLE
+      ========================= */}
 
-      <div className="filter-box">
+      <h1>
+        {categoryType
+          ? categoryType
+          : "All Birds"}
+      </h1>
 
-        <input
-          type="text"
-          placeholder="Search Bird..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      {/* =========================
+          SEARCH
+      ========================= */}
 
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
-          <option value="All">
-            All Birds
-          </option>
+      <input
+        type="text"
+        placeholder="Search Bird..."
+        value={search}
+        onChange={(e) =>
+          setSearch(e.target.value)
+        }
+      />
 
-          {categories.map((cat) => (
-            <option
-              key={cat.id}
-              value={cat.name}
-            >
-              {cat.emoji} {cat.name}
-            </option>
+      {/* =========================
+          NO PRODUCTS
+      ========================= */}
+
+      {filteredPets.length === 0 ? (
+
+        <div className="no-products">
+          <h2>No Birds Found</h2>
+        </div>
+
+      ) : (
+
+        <div className="products-grid">
+
+          {filteredPets.map((bird) => (
+
+            <BirdCard
+              key={bird.id}
+              bird={bird}
+              addToCart={addToCart}
+            />
+
           ))}
-        </select>
 
-      </div>
+        </div>
 
-      <div className="products-grid">
-
-        {filteredPets.map((bird) => (
-          <div
-            className="product-card"
-            key={bird.id}
-          >
-
-            <div className="product-image">
-
-              {bird.image &&
-              (
-                bird.image.startsWith("http") ||
-                bird.image.startsWith("data:image")
-              ) ? (
-                <img
-                  src={bird.image}
-                  alt={bird.name}
-                  className="product-img"
-                />
-              ) : (
-                <span>
-                  {bird.image || "🐦"}
-                </span>
-              )}
-
-            </div>
-
-            <h3>
-              {bird.name}
-            </h3>
-
-            <p>
-              ₹{bird.price}
-            </p>
-
-            <div className="product-buttons">
-
-              <button
-                onClick={() => addToCart(bird)}
-              >
-                🛒 Add Cart
-              </button>
-
-              <Link to={`/bird/${bird.id}`}>
-                <button className="details-btn">
-                  View Details
-                </button>
-              </Link>
-
-            </div>
-
-          </div>
-        ))}
-
-      </div>
-
-      {filteredPets.length === 0 && (
-        <h2>
-          No Bird Found 🐦
-        </h2>
       )}
 
-    </section>
+    </div>
+  );
+}
+
+// =================================================
+// PRODUCT CARD
+// =================================================
+
+function BirdCard({
+  bird,
+  addToCart
+}) {
+  const [age, setAge] =
+    useState("Young");
+
+  const [gender, setGender] =
+    useState("Male");
+
+  const [quantity, setQuantity] =
+    useState(1);
+
+  // =========================
+  // QUANTITY
+  // =========================
+
+  const increaseQuantity = () => {
+    setQuantity(
+      (previous) =>
+        previous + 1
+    );
+  };
+
+  const decreaseQuantity = () => {
+    setQuantity(
+      (previous) =>
+        previous > 1
+          ? previous - 1
+          : 1
+    );
+  };
+
+  // =========================
+  // TOTAL
+  // =========================
+
+  const totalPrice =
+    Number(bird.price || 0) *
+    quantity;
+
+  // =========================
+  // ADD TO CART
+  // =========================
+
+  const handleAddToCart = () => {
+    addToCart(
+      bird,
+      {
+        age,
+        gender,
+        quantity
+      }
+    );
+  };
+
+  const isOutOfStock =
+    (bird.stock || "In Stock") ===
+    "Out of Stock";
+
+  return (
+    <div className="product-card">
+
+      {/* =========================
+          IMAGE
+      ========================= */}
+
+      <div className="product-image">
+
+        {bird.image ? (
+
+          <img
+            src={bird.image}
+            alt={bird.name}
+          />
+
+        ) : (
+
+          <div className="product-emoji">
+            {bird.emoji || "🐦"}
+          </div>
+
+        )}
+
+      </div>
+
+      {/* =========================
+          NAME
+      ========================= */}
+
+      <h2>
+        {bird.name}
+      </h2>
+
+      {/* =========================
+          TYPE
+      ========================= */}
+
+      <p className="product-type">
+        {bird.type}
+      </p>
+
+      {/* =========================
+          PRICE
+      ========================= */}
+
+      <h3 className="product-price">
+        ₹{bird.price}
+      </h3>
+
+      {/* =========================
+          STOCK
+      ========================= */}
+
+      <p
+        className={
+          isOutOfStock
+            ? "stock-red"
+            : "stock-green"
+        }
+      >
+        {bird.stock || "In Stock"}
+      </p>
+
+      {/* =========================
+          AGE
+      ========================= */}
+
+      <div className="product-selection">
+
+        <strong>
+          Select Age
+        </strong>
+
+        <div className="option-buttons">
+
+          <button
+            type="button"
+            className={
+              age === "Young"
+                ? "selected-option"
+                : ""
+            }
+            onClick={() =>
+              setAge("Young")
+            }
+          >
+            🐣 Young
+          </button>
+
+          <button
+            type="button"
+            className={
+              age === "Adult"
+                ? "selected-option"
+                : ""
+            }
+            onClick={() =>
+              setAge("Adult")
+            }
+          >
+            🐦 Adult
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* =========================
+          GENDER
+      ========================= */}
+
+      <div className="product-selection">
+
+        <strong>
+          Select Gender
+        </strong>
+
+        <div className="option-buttons">
+
+          <button
+            type="button"
+            className={
+              gender === "Male"
+                ? "selected-option"
+                : ""
+            }
+            onClick={() =>
+              setGender("Male")
+            }
+          >
+            ♂ Male
+          </button>
+
+          <button
+            type="button"
+            className={
+              gender === "Female"
+                ? "selected-option"
+                : ""
+            }
+            onClick={() =>
+              setGender("Female")
+            }
+          >
+            ♀ Female
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* =========================
+          QUANTITY
+      ========================= */}
+
+      <div className="product-selection">
+
+        <strong>
+          Quantity
+        </strong>
+
+        <div className="quantity-control">
+
+          <button
+            type="button"
+            onClick={decreaseQuantity}
+          >
+            −
+          </button>
+
+          <span>
+            {quantity}
+          </span>
+
+          <button
+            type="button"
+            onClick={increaseQuantity}
+          >
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* =========================
+          SUMMARY
+      ========================= */}
+
+      <div className="product-summary">
+
+        <p>
+          Age:{" "}
+          <strong>
+            {age}
+          </strong>
+        </p>
+
+        <p>
+          Gender:{" "}
+          <strong>
+            {gender}
+          </strong>
+        </p>
+
+        <p>
+          Quantity:{" "}
+          <strong>
+            {quantity}
+          </strong>
+        </p>
+
+        <p>
+          Total:{" "}
+          <strong>
+            ₹{totalPrice}
+          </strong>
+        </p>
+
+      </div>
+
+      {/* =========================
+          ADD TO CART
+      ========================= */}
+
+      <button
+        type="button"
+        className="add-cart-button"
+        disabled={isOutOfStock}
+        onClick={handleAddToCart}
+      >
+        {isOutOfStock
+          ? "Out of Stock"
+          : "🛒 Add To Cart"}
+      </button>
+
+      {/* =========================
+          VIEW DETAILS
+      ========================= */}
+
+      <Link
+        to={`/product/${bird.id}`}
+        className="view-details-button"
+      >
+        View Details
+      </Link>
+
+    </div>
   );
 }
 

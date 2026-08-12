@@ -1,142 +1,349 @@
 import { createContext, useState } from "react";
 
 
-export const CartContext = createContext();
+// =========================
+// CART CONTEXT
+// =========================
 
+export const CartContext = createContext(null);
 
 
-function CartProvider({children}){
+// =========================
+// CART PROVIDER
+// =========================
 
+function CartProvider({ children }) {
 
-const [cart,setCart] = useState(()=>{
+  // =========================
+  // LOAD CART FROM LOCAL STORAGE
+  // =========================
 
+  const [cart, setCart] = useState(() => {
 
-const saved = localStorage.getItem("cart");
+    const saved = localStorage.getItem("cart");
 
+    if (!saved) {
+      return [];
+    }
 
-return saved ? JSON.parse(saved) : [];
+    try {
 
+      const parsed = JSON.parse(saved);
 
-});
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
 
+      return parsed.map((item) => ({
 
+        ...item,
 
+        quantity:
+          Number(item.quantity) > 0
+            ? Number(item.quantity)
+            : 1,
 
+        age: item.age || "",
 
-const addToCart = (bird)=>{
+        gender: item.gender || "",
 
+      }));
 
-const updated = [
+    } catch (error) {
 
-...cart,
+      console.error(
+        "Cart loading error:",
+        error
+      );
 
-bird
+      return [];
+    }
 
-];
+  });
 
 
-setCart(updated);
+  // =========================
+  // SAVE CART
+  // =========================
 
+  const saveCart = (updatedCart) => {
 
-localStorage.setItem(
+    setCart(updatedCart);
 
-"cart",
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(updatedCart)
+    );
 
-JSON.stringify(updated)
+  };
 
-);
 
+  // =========================
+  // ADD TO CART
+  // =========================
 
-};
+  const addToCart = (bird) => {
 
+    if (
+      bird.stock === "Out of Stock" ||
+      bird.stock === false ||
+      bird.inStock === false
+    ) {
 
+      alert(
+        "This bird is Out of Stock ❌"
+      );
 
+      return;
+    }
 
 
+    // Check already exists
 
+    const alreadyExist = cart.find(
+      (item) =>
+        item.id === bird.id
+    );
 
-const removeFromCart = (id)=>{
 
+    if (alreadyExist) {
 
-const updated = cart.filter(
+      alert(
+        "This bird is already in cart 🛒"
+      );
 
-(item)=> item.id !== id
+      return;
+    }
 
-);
 
+    // Create cart item
 
+    const cartItem = {
 
-setCart(updated);
+      ...bird,
 
+      age: "",
 
-localStorage.setItem(
+      gender: "",
 
-"cart",
+      quantity: 1,
 
-JSON.stringify(updated)
+    };
 
-);
 
+    const updated = [
+      ...cart,
+      cartItem,
+    ];
 
 
-};
+    saveCart(updated);
 
 
+    alert(
+      "Bird added to cart 🛒"
+    );
 
+  };
 
 
+  // =========================
+  // UPDATE AGE / GENDER
+  // =========================
 
+  const updateItemOptions = (
+    id,
+    age,
+    gender
+  ) => {
 
-const clearCart = ()=>{
+    const updated = cart.map(
+      (item) => {
 
+        if (item.id === id) {
 
-setCart([]);
+          return {
 
+            ...item,
 
-localStorage.removeItem("cart");
+            age:
+              age !== undefined
+                ? age
+                : item.age,
 
+            gender:
+              gender !== undefined
+                ? gender
+                : item.gender,
 
-};
+          };
 
+        }
 
+        return item;
 
+      }
+    );
 
 
+    saveCart(updated);
 
-return (
+  };
 
 
-<CartContext.Provider
+  // =========================
+  // UPDATE QUANTITY
+  // =========================
 
+  const updateQuantity = (
+    id,
+    newQuantity
+  ) => {
 
-value={{
+    const quantity =
+      Number(newQuantity);
 
-cart,
 
-addToCart,
+    if (
+      !Number.isFinite(quantity) ||
+      quantity <= 0
+    ) {
 
-removeFromCart,
+      removeFromCart(id);
 
-clearCart
+      return;
+    }
 
-}}
 
+    const updated = cart.map(
+      (item) => {
 
->
+        if (item.id === id) {
 
+          return {
 
-{children}
+            ...item,
 
+            quantity,
 
-</CartContext.Provider>
+          };
 
+        }
 
+        return item;
 
-);
+      }
+    );
 
+
+    saveCart(updated);
+
+  };
+
+
+  // =========================
+  // REMOVE FROM CART
+  // =========================
+
+  const removeFromCart = (id) => {
+
+    const updated = cart.filter(
+      (item) =>
+        item.id !== id
+    );
+
+
+    saveCart(updated);
+
+  };
+
+
+  // =========================
+  // CLEAR CART
+  // =========================
+
+  const clearCart = () => {
+
+    setCart([]);
+
+    localStorage.removeItem(
+      "cart"
+    );
+
+  };
+
+
+  // =========================
+  // CART TOTAL
+  // =========================
+
+  const cartTotal = cart.reduce(
+    (total, item) => {
+
+      const price =
+        Number(
+          String(
+            item.price || 0
+          )
+            .replace("₹", "")
+            .replace(/,/g, "")
+            .trim()
+        ) || 0;
+
+
+      const quantity =
+        Number(item.quantity) > 0
+          ? Number(item.quantity)
+          : 1;
+
+
+      return (
+        total +
+        price * quantity
+      );
+
+    },
+    0
+  );
+
+
+  // =========================
+  // PROVIDER
+  // =========================
+
+  return (
+
+    <CartContext.Provider
+      value={{
+
+        cart,
+
+        addToCart,
+
+        updateItemOptions,
+
+        updateQuantity,
+
+        removeFromCart,
+
+        clearCart,
+
+        cartTotal,
+
+      }}
+    >
+
+      {children}
+
+    </CartContext.Provider>
+
+  );
 
 }
 
 
+// =========================
+// DEFAULT EXPORT
+// =========================
 
 export default CartProvider;

@@ -1,6 +1,7 @@
 /* =====================================================
    ADMIN PANEL
-   ===================================================== */
+   ADMIN CSS - ORIGINAL
+===================================================== */
 
 .admin-page {
   width: 100%;
@@ -31,10 +32,9 @@
   opacity: 0.9;
 }
 
-
 /* =====================================================
    WELCOME
-   ===================================================== */
+===================================================== */
 
 .admin-welcome {
   background: white;
@@ -56,10 +56,9 @@
   font-size: 16px;
 }
 
-
 /* =====================================================
    MAIN ADMIN CARDS
-   ===================================================== */
+===================================================== */
 
 .admin-main-grid {
   display: grid;
@@ -128,10 +127,9 @@
   cursor: pointer;
 }
 
-
 /* =====================================================
    CATEGORY SHORTCUTS
-   ===================================================== */
+===================================================== */
 
 .admin-shortcuts {
   background: white;
@@ -170,10 +168,9 @@
   color: white;
 }
 
-
 /* =====================================================
    CONTENT
-   ===================================================== */
+===================================================== */
 
 .admin-content {
   background: white;
@@ -213,10 +210,9 @@
   color: #777;
 }
 
-
 /* =====================================================
    FORM
-   ===================================================== */
+===================================================== */
 
 .admin-form-card {
   background: #f7faf9;
@@ -282,10 +278,9 @@
   background: #095c54;
 }
 
-
 /* =====================================================
    BIRDS HEADER
-   ===================================================== */
+===================================================== */
 
 .admin-birds-header {
   display: flex;
@@ -308,10 +303,9 @@
   font-weight: 700;
 }
 
-
 /* =====================================================
    LIST GRID
-   ===================================================== */
+===================================================== */
 
 .admin-list-grid {
   display: grid;
@@ -319,10 +313,9 @@
   gap: 25px;
 }
 
-
 /* =====================================================
    MANAGE CARD
-   ===================================================== */
+===================================================== */
 
 .admin-manage-card {
   background: white;
@@ -347,7 +340,7 @@
 .admin-manage-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .admin-manage-image span {
@@ -382,10 +375,9 @@
   padding: 9px;
 }
 
-
 /* =====================================================
    BUTTONS
-   ===================================================== */
+===================================================== */
 
 .admin-buttons {
   display: grid;
@@ -435,10 +427,9 @@
   color: white;
 }
 
-
 /* =====================================================
    EMPTY
-   ===================================================== */
+===================================================== */
 
 .empty-admin {
   text-align: center;
@@ -465,11 +456,9 @@
   font-size: 15px;
 }
 
-
 /* =====================================================
    MAIN WEBSITE
-   ADMIN CSS KO TOUCH NAHI KARNA
-   ===================================================== */
+===================================================== */
 
 * {
   box-sizing: border-box;
@@ -485,7 +474,10 @@ body {
   width: 100%;
   min-width: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f7faf8;
+
+  /* GREY BACKGROUND */
+  background: #eef1f0;
+
   color: #18332d;
   overflow-x: hidden;
 }
@@ -494,16 +486,19 @@ img {
   max-width: 100%;
 }
 
-
 /* =====================================================
    HEADER
-   ===================================================== */
+   BIRDS CARE LOGO WALA BAR - GREEN
+===================================================== */
 
 .header {
   width: 100%;
-  background: #0b5d3f;
+
+  /* DARK GREEN HEADER */
+  background: #075c3b;
+
   color: white;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
   position: relative;
   z-index: 20;
 }
@@ -519,10 +514,9 @@ img {
   gap: 25px;
 }
 
-
 /* =====================================================
    LOGO
-   ===================================================== */
+===================================================== */
 
 .logo {
   display: flex;
@@ -550,10 +544,9 @@ img {
   font-size: 12px;
 }
 
-
 /* =====================================================
    SEARCH
-   ===================================================== */
+===================================================== */
 
 .search-box {
   flex: 1;
@@ -600,10 +593,9 @@ img {
   background: #d97706;
 }
 
-
 /* =====================================================
    HEADER LINKS
-   ===================================================== */
+===================================================== */
 
 .header-links {
   display: flex;
@@ -623,14 +615,16 @@ img {
   color: #ffd166;
 }
 
-
 /* =====================================================
    NAVIGATION
-   ===================================================== */
+===================================================== */
 
 .nav-menu {
   width: 100%;
-  background: #084c35;
+
+  /* GREEN NAV BAR */
+  background: #064c34;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -651,21 +645,18 @@ img {
   transform: translateY(-1px);
 }
 
-
 /* =====================================================
    MAIN
-   ===================================================== */
+===================================================== */
 
 main {
   width: 100%;
   min-height: 400px;
 }
 
-
 /* =====================================================
    HERO
-   FIX: IMAGE KO CONTROL KIYA GAYA HAI
-   ===================================================== */
+===================================================== */
 
 .hero {
   width: 100%;
@@ -675,13 +666,15 @@ main {
   align-items: center;
   position: relative;
   overflow: hidden;
+
+  /* LIGHT GREY BACKGROUND */
   background:
     linear-gradient(
       90deg,
-      rgba(244, 251, 247, 0.98) 0%,
-      rgba(244, 251, 247, 0.94) 42%,
-      rgba(244, 251, 247, 0.72) 68%,
-      rgba(244, 251, 247, 0.45) 100%
+      rgba(238, 241, 240, 0.98) 0%,
+      rgba(238, 241, 240, 0.94) 42%,
+      rgba(238, 241, 240, 0.72) 68%,
+      rgba(238, 241, 240, 0.45) 100%
     );
 }
 
@@ -730,11 +723,9 @@ main {
   background: #095c54;
 }
 
-
 /* =====================================================
-   HERO IMAGE FIX
-   Ye selectors alag-alag HTML structures ke liye hain.
-   ===================================================== */
+   HERO IMAGE
+===================================================== */
 
 .hero > img,
 .hero .hero-image,
@@ -775,10 +766,9 @@ main {
   object-position: center;
 }
 
-
 /* =====================================================
    HERO BACKGROUND IMAGE SAFETY
-   ===================================================== */
+===================================================== */
 
 .hero picture {
   position: absolute;
@@ -804,16 +794,17 @@ main {
   opacity: 0.82;
 }
 
-
 /* =====================================================
    POPULAR CATEGORIES
-   ===================================================== */
+===================================================== */
 
 .popular-categories,
 .categories {
   width: 100%;
-  padding: 55px 7%;
-  background: white;
+  padding: 55px 5%;
+
+  /* GREY */
+  background: #eef1f0;
 }
 
 .section-title {
@@ -835,23 +826,25 @@ main {
 .categories-grid,
 .popular-grid {
   width: 100%;
-  max-width: 1250px;
+  max-width: 1400px;
   margin: 30px auto 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
-}
 
+  /* 6 CATEGORIES IN ONE ROW */
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+
+  gap: 22px;
+}
 
 /* =====================================================
    CATEGORY CARD
-   ===================================================== */
+===================================================== */
 
 .category-card {
   background: white;
   border: 1px solid #e1ebe6;
   border-radius: 18px;
-  padding: 24px 18px;
+  padding: 22px 14px;
   text-align: center;
   cursor: pointer;
   text-decoration: none;
@@ -866,19 +859,28 @@ main {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
+/* =====================================================
+   CATEGORY CIRCLE - BIGGER
+===================================================== */
+
 .category-card img {
-  width: 120px;
-  height: 120px;
-  max-width: 120px;
+  width: 145px;
+  height: 145px;
+  max-width: 145px;
+
   object-fit: cover;
   border-radius: 50%;
+
   margin: 0 auto 15px;
   display: block;
+
+  /* CLEARER IMAGE */
+  border: 3px solid #f0f3f1;
 }
 
 .category-card .category-icon {
-  width: 120px;
-  height: 120px;
+  width: 145px;
+  height: 145px;
   margin: 0 auto 15px;
   border-radius: 50%;
   background: #eaf6f1;
@@ -900,30 +902,43 @@ main {
   font-size: 14px;
 }
 
-
 /* =====================================================
    FEATURED BIRDS
-   ===================================================== */
+===================================================== */
 
 .featured {
   width: 100%;
-  padding: 60px 7%;
-  background: #f7faf8;
+  padding: 60px 5%;
+
+  /* GREY BACKGROUND */
+  background: #eef1f0;
 }
+
+/* =====================================================
+   FEATURED GRID - 5 CARDS IN ONE ROW
+===================================================== */
 
 .featured-grid {
   width: 100%;
-  max-width: 1250px;
+  max-width: 1400px;
   margin: 32px auto 0;
+
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 25px;
+
+  /* 5 IN ONE ROW */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  gap: 20px;
 }
+
+/* =====================================================
+   BIRD CARD
+===================================================== */
 
 .bird-card {
   background: white;
   border-radius: 18px;
-  padding: 16px;
+  padding: 14px;
   border: 1px solid #e2ebe7;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
   overflow: hidden;
@@ -935,9 +950,13 @@ main {
   box-shadow: 0 13px 30px rgba(0, 0, 0, 0.12);
 }
 
+/* =====================================================
+   BIRD IMAGE
+===================================================== */
+
 .bird-img {
   width: 100%;
-  height: 230px;
+  height: 205px;
   border-radius: 13px;
   object-fit: cover;
   display: flex;
@@ -951,44 +970,44 @@ main {
 }
 
 .bird-card h3 {
-  margin: 16px 0 8px;
-  font-size: 20px;
+  margin: 14px 0 7px;
+  font-size: 18px;
   color: #123b35;
 }
 
 .price {
-  margin: 0 0 9px;
+  margin: 0 0 8px;
   color: #0f766e;
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 800;
 }
 
 .rating {
   color: #f59e0b;
-  font-size: 15px;
-  margin-bottom: 15px;
+  font-size: 14px;
+  margin-bottom: 13px;
 }
 
 .rating span {
   color: #777;
   margin-left: 6px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .bird-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 9px;
+  gap: 8px;
 }
 
 .bird-buttons button {
   width: 100%;
   border: none;
-  padding: 11px 8px;
+  padding: 10px 7px;
   border-radius: 8px;
   background: #0f766e;
   color: white;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -1007,15 +1026,14 @@ main {
   color: white;
 }
 
-
 /* =====================================================
    ABOUT
-   ===================================================== */
+===================================================== */
 
 .about {
   width: 100%;
   padding: 70px 7%;
-  background: white;
+  background: #f5f7f6;
 }
 
 .about-content {
@@ -1045,7 +1063,7 @@ main {
 
 .about-card {
   padding: 25px;
-  background: #f5faf7;
+  background: white;
   border-radius: 15px;
   border: 1px solid #dfebe5;
 }
@@ -1060,15 +1078,17 @@ main {
   font-size: 14px;
 }
 
-
 /* =====================================================
    PRODUCTS PAGE
-   ===================================================== */
+===================================================== */
 
 .products-page {
   width: 100%;
-  padding: 55px 7%;
-  background: #f7faf8;
+  padding: 55px 5%;
+
+  /* GREY */
+  background: #eef1f0;
+
   min-height: 600px;
 }
 
@@ -1081,17 +1101,32 @@ main {
 
 .products-grid {
   width: 100%;
-  max-width: 1250px;
+  max-width: 1400px;
   margin: auto;
+
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 25px;
+
+  /* 5 PRODUCTS IN ONE ROW */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  gap: 20px;
 }
 
+/* =====================================================
+   PRODUCT PAGE CARD
+===================================================== */
+
+.product-card {
+  background: white;
+  border-radius: 18px;
+  padding: 15px;
+  border: 1px solid #e2ebe7;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+}
 
 /* =====================================================
    BIRD DETAILS
-   ===================================================== */
+===================================================== */
 
 .bird-details,
 .bird-detail {
@@ -1122,16 +1157,15 @@ main {
   font-weight: 800;
 }
 
-
 /* =====================================================
    CART
-   ===================================================== */
+===================================================== */
 
 .cart-page {
   width: 100%;
   min-height: 600px;
   padding: 55px 7%;
-  background: #f7faf8;
+  background: #eef1f0;
 }
 
 .cart-page h1 {
@@ -1151,10 +1185,9 @@ main {
   box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
 }
 
-
 /* =====================================================
    FOOTER
-   ===================================================== */
+===================================================== */
 
 .footer {
   width: 100%;
@@ -1202,14 +1235,12 @@ main {
   font-size: 14px;
 }
 
-
 /* =====================================================
    RESPONSIVE - ADMIN
    ADMIN KO MOBILE PAR BHI SAHI RAKHA HAI
-   ===================================================== */
+===================================================== */
 
 @media (max-width: 900px) {
-
   .admin-page {
     padding: 35px 4%;
   }
@@ -1224,13 +1255,11 @@ main {
   }
 }
 
-
 /* =====================================================
    TABLET
-   ===================================================== */
+===================================================== */
 
-@media (max-width: 1000px) {
-
+@media (max-width: 1100px) {
   .main-header {
     flex-wrap: wrap;
   }
@@ -1248,12 +1277,12 @@ main {
   .category-grid,
   .categories-grid,
   .popular-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .featured-grid,
   .products-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .hero {
@@ -1288,10 +1317,9 @@ main {
   }
 }
 
-
 /* =====================================================
    MOBILE
-   ===================================================== */
+===================================================== */
 
 @media (max-width: 650px) {
 
@@ -1342,7 +1370,6 @@ main {
     flex-direction: column;
   }
 
-
   /* ---------------- HEADER ---------------- */
 
   .main-header {
@@ -1370,7 +1397,6 @@ main {
     font-size: 13px;
   }
 
-
   /* ---------------- NAVIGATION ---------------- */
 
   .nav-menu {
@@ -1384,7 +1410,6 @@ main {
     white-space: nowrap;
     font-size: 14px;
   }
-
 
   /* ---------------- SEARCH ---------------- */
 
@@ -1406,7 +1431,6 @@ main {
   .search-box button {
     padding: 0 12px;
   }
-
 
   /* ---------------- HERO ---------------- */
 
@@ -1432,11 +1456,6 @@ main {
     font-size: 15px;
     line-height: 1.6;
   }
-
-  /*
-     Mobile par image ko neeche rakha gaya hai.
-     Isse screenshot jaisa huge image/text overlap nahi hoga.
-  */
 
   .hero > img,
   .hero .hero-image,
@@ -1481,7 +1500,6 @@ main {
     opacity: 0.78;
   }
 
-
   /* ---------------- SECTIONS ---------------- */
 
   .popular-categories,
@@ -1499,16 +1517,30 @@ main {
 
   .category-grid,
   .categories-grid,
-  .popular-grid,
+  .popular-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+  }
+
   .featured-grid,
   .products-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+  }
+
+  .category-card img,
+  .category-card .category-icon {
+    width: 125px;
+    height: 125px;
+  }
+
+  .bird-img {
+    height: 180px;
   }
 
   .about-grid {
     grid-template-columns: 1fr;
   }
-
 
   /* ---------------- DETAILS ---------------- */
 
@@ -1519,13 +1551,11 @@ main {
     padding: 20px;
   }
 
-
   /* ---------------- BUTTONS ---------------- */
 
   .bird-buttons {
     grid-template-columns: 1fr 1fr;
   }
-
 
   /* ---------------- FOOTER ---------------- */
 
@@ -1534,10 +1564,9 @@ main {
   }
 }
 
-
 /* =====================================================
    VERY SMALL MOBILE
-   ===================================================== */
+===================================================== */
 
 @media (max-width: 420px) {
 
@@ -1582,8 +1611,10 @@ main {
   .bird-buttons {
     grid-template-columns: 1fr;
   }
-}/* =====================================================
-LOGIN PAGE
+}
+
+/* =====================================================
+   LOGIN PAGE
 ===================================================== */
 
 .login-page {
@@ -1710,5 +1741,871 @@ LOGIN PAGE
 
   .login-card h1 {
     font-size: 27px;
+  }
+}
+
+/* =====================================================
+   CATEGORIES SECTION
+===================================================== */
+
+.categories-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+  padding: 40px 20px;
+}
+
+.category-card {
+  text-decoration: none;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+  transition: 0.3s;
+  color: #222;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+}
+
+.category-card img {
+  width: 145px;
+  height: 145px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+}
+
+.category-placeholder {
+  width: 145px;
+  height: 145px;
+  border-radius: 50%;
+  background: #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  margin: auto;
+}
+
+.category-card h3 {
+  margin-top: 15px;
+  font-size: 22px;
+}
+
+.category-card p {
+  color: #666;
+}
+
+/* =====================================================
+   ADMIN DASHBOARD LAYOUT
+===================================================== */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.admin-sidebar {
+  width: 260px;
+  background: #111827;
+  color: white;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.admin-sidebar h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.admin-sidebar button {
+  background: #1f2937;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: left;
+  transition: 0.3s;
+}
+
+.admin-sidebar button:hover {
+  background: #2563eb;
+}
+
+/* =====================================================
+   ADMIN CONTENT
+===================================================== */
+
+.admin-content {
+  flex: 1;
+  padding: 30px;
+}
+
+.admin-content h1 {
+  font-size: 30px;
+  margin-bottom: 25px;
+}
+
+/* =====================================================
+   DASHBOARD CARDS
+===================================================== */
+
+.dashboard-cards {
+  display: flex;
+  gap: 25px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  width: 220px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.dashboard-card p {
+  font-size: 35px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+/* =====================================================
+   ADD FORM BOX
+===================================================== */
+
+.add-box {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.add-box input,
+.add-box select,
+.add-box textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.add-box textarea {
+  height: 100px;
+  resize: none;
+}
+
+.add-box button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* =====================================================
+   BIRD ADMIN CARDS
+===================================================== */
+
+.bird-admin-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.bird-admin-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.bird-admin-card .no-image {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+  font-size: 50px;
+  border-radius: 12px;
+}
+
+.bird-admin-card h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.bird-admin-card button {
+  margin-left: auto;
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* =====================================================
+   CATEGORY CARDS
+===================================================== */
+
+.category-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.category-admin-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.category-admin-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.category-admin-card h3 {
+  margin: 15px 0;
+}
+
+.category-admin-card button {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: auto;
+  }
+
+  .dashboard-cards {
+    flex-direction: column;
+  }
+
+  .dashboard-card {
+    width: auto;
+  }
+
+  .bird-admin-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .bird-admin-card button {
+    margin: auto;
+  }
+}
+
+/* =====================================================
+   ADMIN BIRD IMAGE
+===================================================== */
+
+.bird-admin-card img,
+.category-admin-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #f5f5f5;
+}
+
+/* =====================================================
+   ADMIN BIRD CARD FIX
+===================================================== */
+
+.admin-bird-card {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 20px;
+  margin: 20px 0;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.admin-bird-card img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.admin-bird-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-bird-info input,
+.admin-bird-info select {
+  width: 250px;
+  padding: 8px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .admin-bird-card {
+    flex-direction: column;
+  }
+}
+
+/* =====================================================
+   STOCK
+===================================================== */
+
+.stock-green {
+  color: green;
+  font-weight: bold;
+}
+
+.stock-red {
+  color: red;
+  font-weight: bold;
+}
+
+/* =====================================================
+   CHECKOUT PAGE
+===================================================== */
+
+.checkout-section {
+  min-height: 80vh;
+  padding: 50px 20px;
+  background: #f5f7fa;
+}
+
+.checkout-box {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 35px;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.checkout-box h1 {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.checkout-subtitle {
+  text-align: center;
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.checkout-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.checkout-box input,
+.checkout-box textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.checkout-box input:focus,
+.checkout-box textarea:focus {
+  border-color: #4caf50;
+}
+
+.checkout-box textarea {
+  resize: vertical;
+}
+
+.checkout-summary {
+  margin-top: 10px;
+  padding: 20px;
+  background: #f7f9fb;
+  border-radius: 12px;
+}
+
+.checkout-summary > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+}
+
+.checkout-summary hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 12px 0;
+}
+
+.checkout-total {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.discount-text {
+  color: #159447;
+}
+
+.payment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 15px;
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 10px;
+}
+
+.payment-info span {
+  color: #777;
+  font-size: 14px;
+}
+
+.checkout-box button {
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  background: #198754;
+  color: white;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.checkout-box button:hover {
+  background: #157347;
+}
+
+.checkout-box button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   BILL PAGE
+===================================================== */
+
+.bill-page {
+  min-height: 80vh;
+  padding: 40px 20px;
+  background: #f1f3f6;
+}
+
+.bill-container {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+  background: white;
+  padding: 45px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* =====================================================
+   BILL HEADER
+===================================================== */
+
+.bill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.bill-header h1 {
+  margin: 0;
+  font-size: 32px;
+  letter-spacing: 1px;
+}
+
+.bill-header p {
+  margin: 5px 0 0;
+  color: #777;
+}
+
+.invoice-title {
+  text-align: right;
+}
+
+.invoice-title h2 {
+  margin: 0;
+  font-size: 25px;
+}
+
+.invoice-title p {
+  margin-top: 5px;
+}
+
+.bill-line {
+  border-top: 2px solid #222;
+  margin: 25px 0;
+}
+
+/* =====================================================
+   ORDER INFORMATION
+===================================================== */
+
+.bill-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 25px;
+}
+
+.bill-info-grid h3,
+.customer-box h3,
+.items-section h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.bill-info-grid p {
+  margin: 7px 0;
+}
+
+.status {
+  color: #168a45;
+  font-weight: 700;
+}
+
+/* =====================================================
+   CUSTOMER
+===================================================== */
+
+.customer-box {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.customer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.customer-grid p {
+  margin: 4px 0;
+}
+
+.address {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.address p {
+  white-space: pre-line;
+  margin-bottom: 0;
+}
+
+/* =====================================================
+   ITEMS TABLE
+===================================================== */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.items-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.items-section th {
+  background: #f2f4f6;
+  font-weight: 700;
+}
+
+.items-section th,
+.items-section td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.items-section th:nth-child(1),
+.items-section td:nth-child(1) {
+  width: 50px;
+  text-align: center;
+}
+
+.items-section th:nth-child(3),
+.items-section td:nth-child(3) {
+  text-align: center;
+}
+
+.items-section th:nth-child(4),
+.items-section td:nth-child(4),
+.items-section th:nth-child(5),
+.items-section td:nth-child(5) {
+  text-align: right;
+}
+
+/* =====================================================
+   ITEM
+===================================================== */
+
+.bill-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bill-item img {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1px solid #ddd;
+}
+
+/* =====================================================
+   BILL BOTTOM
+===================================================== */
+
+.bill-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.thank-you {
+  flex: 1;
+}
+
+.thank-you h3 {
+  margin-top: 0;
+}
+
+.thank-you p {
+  color: #777;
+  margin: 5px 0;
+}
+
+.totals {
+  width: 350px;
+  max-width: 100%;
+}
+
+.totals > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.total-row {
+  border-top: 2px solid #222;
+  margin-top: 10px;
+  padding-top: 15px !important;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+/* =====================================================
+   BILL BUTTONS
+===================================================== */
+
+.bill-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+.bill-actions button {
+  border: none;
+  padding: 13px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.print-btn {
+  background: #222;
+  color: white;
+}
+
+.shop-btn {
+  background: #198754;
+  color: white;
+}
+
+.bill-actions button:hover {
+  opacity: 0.9;
+}
+
+/* =====================================================
+   NO BILL
+===================================================== */
+
+.bill-empty {
+  max-width: 500px;
+  margin: 50px auto;
+  background: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+.bill-empty button {
+  margin-top: 15px;
+  border: none;
+  padding: 12px 25px;
+  background: #198754;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* =====================================================
+   BILL MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+  .checkout-box {
+    padding: 22px;
+  }
+
+  .bill-page {
+    padding: 15px;
+  }
+
+  .bill-container {
+    padding: 20px;
+  }
+
+  .bill-header {
+    flex-direction: column;
+  }
+
+  .invoice-title {
+    text-align: left;
+  }
+
+  .bill-info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .customer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bill-bottom {
+    flex-direction: column;
+  }
+
+  .totals {
+    width: 100%;
+  }
+
+  .bill-actions {
+    flex-direction: column;
+  }
+
+  .bill-actions button {
+    width: 100%;
+  }
+}
+
+/* =====================================================
+   PRINT BILL
+===================================================== */
+
+@media print {
+
+  body {
+    background: white !important;
+  }
+
+  header,
+  footer,
+  .bill-actions {
+    display: none !important;
+  }
+
+  .bill-page {
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .bill-container {
+    max-width: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 20px !important;
   }
 }

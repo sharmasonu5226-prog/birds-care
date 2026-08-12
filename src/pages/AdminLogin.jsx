@@ -1,120 +1,45 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
-function AdminLogin(){
-
-
-  const [password,setPassword] = useState("");
+function AdminLogin() {
+  const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
-
-
-
-  const handleLogin = (e)=>{
-
-
+  const handleLogin = (e) => {
     e.preventDefault();
 
-
-
-    if(password === "admin123"){
-
-
-      localStorage.setItem(
-
-        "admin",
-
-        "true"
-
-      );
-
-
+    if (password === "admin123") {
+      localStorage.setItem("admin", "true");
       navigate("/admin");
-
-
-    }
-
-    else{
-
-
+    } else {
       alert("Wrong Password");
-
-
     }
-
-
   };
 
-
-
-
-
-
-
   return (
-
-    <section className="login-page">
-
-
-
-      <h1>
-
-        Admin Login
-
-      </h1>
-
-
-
-
+    <div className="login-page">
+      <h1>Admin Login</h1>
 
       <form
-
         onSubmit={handleLogin}
-
         className="login-form"
-
       >
-
-
-
         <input
-
           type="password"
-
-          placeholder="Enter Password"
-
+          placeholder="Enter Admin Password"
           value={password}
-
-          onChange={(e)=>setPassword(e.target.value)}
-
+          onChange={(e) =>
+            setPassword(e.target.value)
+          }
         />
 
-
-
-
-
-        <button>
-
+        <button type="submit">
           Login
-
         </button>
-
-
-
       </form>
-
-
-
-    </section>
-
+    </div>
   );
-
-
 }
-
-
 
 export default AdminLogin;

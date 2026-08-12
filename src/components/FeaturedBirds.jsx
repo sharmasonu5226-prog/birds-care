@@ -4,101 +4,328 @@ import { Link, useSearchParams } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { PetContext } from "../context/PetContext";
 
+
 function FeaturedBirds() {
-  const { addToCart } = useContext(CartContext);
-  const { pets } = useContext(PetContext);
 
-  const [searchParams] = useSearchParams();
 
-  const selectedCategory = searchParams.get("type");
+const { addToCart } = useContext(CartContext);
 
-  const categoryBirds = selectedCategory
-    ? pets.filter((bird) => bird.type === selectedCategory)
-    : pets;
+const { pets } = useContext(PetContext);
 
-  return (
-    <section className="featured">
 
-      <h2 className="section-title">
-        {selectedCategory
-          ? `${selectedCategory} Birds`
-          : "Featured Birds"}
-      </h2>
+const [searchParams] = useSearchParams();
 
-      <div className="featured-grid">
 
-        {categoryBirds.length === 0 ? (
+const selectedCategory = searchParams.get("type");
 
-          <div className="no-products">
-            <h2>
-              No {selectedCategory} Birds Found
-            </h2>
-          </div>
 
-        ) : (
 
-          categoryBirds.map((bird) => (
+const categoryBirds = selectedCategory
 
-            <div
-              className="bird-card"
-              key={bird.id}
-            >
+? pets.filter(
+(bird)=> bird.type === selectedCategory
+)
 
-              {bird.image ? (
+: pets;
 
-                <div className="bird-img no-image">
-                  {bird.image}
-                </div>
 
-              ) : (
 
-                <div className="bird-img no-image">
-                  🐦
-                </div>
 
-              )}
 
-              <h3>
-                {bird.name}
-              </h3>
+return (
 
-              <p className="price">
-                ₹{bird.price}
-              </p>
+<section className="featured">
 
-              <div className="rating">
-                ⭐⭐⭐⭐⭐
-                <span>
-                  ({bird.id * 20})
-                </span>
-              </div>
 
-              <div className="bird-buttons">
+<h2 className="section-title">
 
-                <button
-                  onClick={() => addToCart(bird)}
-                >
-                  🛒 Add Cart
-                </button>
-
-                <Link to={`/bird/${bird.id}`}>
-                  <button className="details-btn">
-                    View Details
-                  </button>
-                </Link>
-
-              </div>
-
-            </div>
-
-          ))
-
-        )}
-
-      </div>
-
-    </section>
-  );
+{
+selectedCategory
+?
+`${selectedCategory} Birds`
+:
+"Featured Birds"
 }
+
+</h2>
+
+
+
+
+<div className="featured-grid">
+
+
+{
+
+categoryBirds.length === 0 ?
+
+
+(
+
+<div className="empty-admin">
+
+<div>🐦</div>
+
+<h3>
+No Birds Found
+</h3>
+
+<p>
+This category has no birds available.
+</p>
+
+</div>
+
+)
+
+
+:
+
+
+categoryBirds.map((bird)=>(
+
+
+<div
+
+className="bird-card"
+
+key={bird.id}
+
+>
+
+
+
+{
+bird.image
+
+?
+
+
+<img
+
+className="bird-img"
+
+src={bird.image}
+
+alt={bird.name}
+
+/>
+
+
+:
+
+
+<div className="bird-img no-image">
+
+{bird.emoji || "🐦"}
+
+</div>
+
+
+}
+
+
+
+
+<h3>
+
+{bird.name}
+
+</h3>
+
+
+
+
+<p className="price">
+
+₹{bird.price}
+
+</p>
+
+
+
+
+
+<div className="rating">
+
+⭐⭐⭐⭐⭐
+
+<span>
+
+({bird.id * 20})
+
+</span>
+
+</div>
+
+
+
+
+
+{/* STOCK */}
+
+{
+
+bird.stock === "Out of Stock"
+
+?
+
+
+<p className="stock-red">
+
+❌ Out of Stock
+
+</p>
+
+
+:
+
+
+<p className="stock-green">
+
+✅ In Stock
+
+</p>
+
+
+}
+
+
+
+
+
+<div className="bird-buttons">
+
+
+
+
+
+<button
+
+
+disabled={
+bird.stock === "Out of Stock"
+}
+
+
+onClick={()=>{
+
+if(
+bird.stock === "Out of Stock"
+){
+
+alert(
+"This bird is Out of Stock ❌"
+);
+
+return;
+
+}
+
+
+addToCart(bird);
+
+
+}}
+
+
+
+style={{
+
+opacity:
+
+bird.stock === "Out of Stock"
+
+?
+
+0.5
+
+:
+
+1,
+
+
+cursor:
+
+bird.stock === "Out of Stock"
+
+?
+
+"not-allowed"
+
+:
+
+"pointer"
+
+
+}}
+
+
+>
+
+
+{
+
+bird.stock === "Out of Stock"
+
+?
+
+"❌ Out of Stock"
+
+:
+
+"🛒 Add Cart"
+
+}
+
+
+</button>
+
+
+
+
+
+<Link
+
+className="details-btn"
+
+to={`/bird/${bird.id}`}
+
+>
+
+View Details
+
+</Link>
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+))
+
+
+}
+
+
+
+</div>
+
+
+
+</section>
+
+
+);
+
+
+}
+
 
 export default FeaturedBirds;
