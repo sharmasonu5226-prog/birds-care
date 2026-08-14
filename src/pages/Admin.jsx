@@ -6,6 +6,8 @@ import { CategoryContext } from "../context/CategoryContext";
 
 import BirdsPage from "./BirdsPage";
 import CategoryPage from "./CategoryPage";
+import OrdersPage from "./OrdersPage";
+
 
 function Admin() {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ function Admin() {
 
   const [activeMenu, setActiveMenu] =
     useState("dashboard");
+
 
   // =========================
   // ADMIN LOGIN CHECK
@@ -28,17 +31,21 @@ function Admin() {
     return null;
   }
 
+
   // =========================
   // COUNTS
   // =========================
 
   const totalBirds =
-    Array.isArray(pets) ? pets.length : 0;
+    Array.isArray(pets)
+      ? pets.length
+      : 0;
 
   const totalCategories =
     Array.isArray(categories)
       ? categories.length
       : 0;
+
 
   // =========================
   // LOGOUT
@@ -50,12 +57,14 @@ function Admin() {
     navigate("/admin-login");
   };
 
+
   // =========================
   // ADMIN
   // =========================
 
   return (
     <div className="admin-layout">
+
 
       {/* =========================
           SIDEBAR
@@ -67,6 +76,9 @@ function Admin() {
           🐦 Birds Care
         </h2>
 
+
+        {/* DASHBOARD */}
+
         <button
           onClick={() =>
             setActiveMenu("dashboard")
@@ -74,6 +86,9 @@ function Admin() {
         >
           🏠 Dashboard
         </button>
+
+
+        {/* BIRDS */}
 
         <button
           onClick={() =>
@@ -83,6 +98,9 @@ function Admin() {
           🐦 Manage Birds
         </button>
 
+
+        {/* CATEGORIES */}
+
         <button
           onClick={() =>
             setActiveMenu("categories")
@@ -90,6 +108,20 @@ function Admin() {
         >
           🗂 Categories
         </button>
+
+
+        {/* ORDERS */}
+
+        <button
+          onClick={() =>
+            setActiveMenu("orders")
+          }
+        >
+          📦 Orders
+        </button>
+
+
+        {/* LOGOUT */}
 
         <button
           onClick={handleLogout}
@@ -99,22 +131,26 @@ function Admin() {
 
       </div>
 
+
       {/* =========================
           CONTENT
       ========================= */}
 
       <div className="admin-content">
 
+
         {/* =========================
             DASHBOARD
         ========================= */}
 
         {activeMenu === "dashboard" && (
+
           <div>
 
             <h1>
               Admin Dashboard
             </h1>
+
 
             <div>
 
@@ -127,6 +163,7 @@ function Admin() {
               </h2>
 
             </div>
+
 
             <div>
 
@@ -141,7 +178,9 @@ function Admin() {
             </div>
 
           </div>
+
         )}
+
 
         {/* =========================
             BIRDS
@@ -151,6 +190,7 @@ function Admin() {
           <BirdsPage />
         )}
 
+
         {/* =========================
             CATEGORIES
         ========================= */}
@@ -159,10 +199,21 @@ function Admin() {
           <CategoryPage />
         )}
 
+
+        {/* =========================
+            ORDERS
+        ========================= */}
+
+        {activeMenu === "orders" && (
+          <OrdersPage />
+        )}
+
+
       </div>
 
     </div>
   );
 }
+
 
 export default Admin;

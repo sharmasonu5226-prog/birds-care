@@ -408,7 +408,7 @@ function Cart() {
 
       const response =
         await fetch(
-          "http://localhost:5000/api/send-order",
+          "http://10.206.203.228:5000/api/send-order",
           {
             method: "POST",
 
