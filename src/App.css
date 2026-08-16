@@ -1,7 +1,7 @@
-/* =====================================================
-   BIRDS CARE FINAL CSS PART 1
-   RESET + ADMIN DASHBOARD
-===================================================== */
+/* =========================================
+   BIRDS CARE FINAL CSS
+   PART 1 - RESET + HEADER + HERO
+========================================= */
 
 
 *{
@@ -9,122 +9,626 @@
 }
 
 
-html{
+html,
+body{
+
+  margin:0;
+  padding:0;
   width:100%;
   overflow-x:hidden;
-}
-
-
-body{
-  margin:0;
-  width:100%;
-  min-width:0;
   font-family:Arial, Helvetica, sans-serif;
   background:#eef1f0;
   color:#18332d;
+
 }
 
 
 img{
+
   max-width:100%;
   display:block;
+
 }
 
 
+/* =========================
+   HEADER
+========================= */
 
-/* =====================================================
-   ADMIN MAIN
-===================================================== */
 
+.header{
 
-.admin-page{
-
-  min-height:100vh;
   width:100%;
-  background:#f5f7f6;
-  padding:25px;
+  background:#075c3b;
+  color:white;
+
+}
+
+
+.main-header{
+
+  max-width:1400px;
+  margin:auto;
+  padding:12px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+
+}
+
+
+/* LOGO */
+
+.logo{
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:white;
+
+}
+
+
+.logo-icon{
+
+  font-size:38px;
+  line-height:1;
+
+}
+
+
+.logo-text h2{
+
+  margin:0;
+  font-size:26px;
+  color:white;
+
+}
+
+
+.logo-text h2 span{
+
+  color:#65d46e;
+
+}
+
+
+.logo-text small{
+
+  color:#d8f2e5;
+  font-size:12px;
 
 }
 
 
 
-.admin-page h1,
-.admin-page h2,
-.admin-page h3{
+/* SEARCH */
 
+.search-box{
+
+  display:flex;
+  align-items:center;
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+
+}
+
+
+.search-box select{
+
+  height:42px;
+  border:none;
+  padding:0 12px;
+
+}
+
+
+.search-box input{
+
+  width:300px;
+  height:42px;
+  border:none;
+  padding:0 12px;
+  outline:none;
+
+}
+
+
+.search-box button{
+
+  height:42px;
+  width:50px;
+  border:none;
+  background:#0f766e;
+  color:white;
+  cursor:pointer;
+
+}
+
+
+
+/* HEADER LINKS */
+
+
+.header-links{
+
+  display:flex;
+  gap:18px;
+
+}
+
+
+.header-links a{
+
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+
+}
+
+
+
+/* NAV */
+
+.nav-menu{
+
+  background:#064c34;
+  display:flex;
+  justify-content:center;
+  gap:35px;
+  padding:12px;
+  flex-wrap:wrap;
+
+}
+
+
+.nav-menu a{
+
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+
+}
+
+
+
+/* =========================
+   HERO
+========================= */
+
+
+.hero{
+
+  min-height:520px;
+  padding:60px 7%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:relative;
+  overflow:hidden;
+  background:#eef1f0;
+
+}
+
+
+.hero-content{
+
+  width:50%;
+  z-index:2;
+
+}
+
+
+.hero h1{
+
+  font-size:52px;
+  margin:0 0 20px;
   color:#123b35;
 
 }
 
 
+.hero p{
 
-/* =====================================================
-   ADMIN MENU
-===================================================== */
-
-
-.admin-menu{
-
-  width:100%;
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  background:white;
-  padding:18px;
-  border-radius:18px;
-  margin-bottom:25px;
-  box-shadow:0 5px 20px rgba(0,0,0,.08);
+  font-size:18px;
+  line-height:1.7;
+  color:#53635e;
 
 }
 
 
-
-.admin-menu button{
+.hero button,
+.hero-btn{
 
   background:#0f766e;
   color:white;
+  padding:14px 28px;
   border:none;
-  padding:12px 18px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+
+}
+
+
+
+.hero-image-box{
+
+  width:45%;
+
+}
+
+
+.hero-image{
+
+  width:100%;
+  height:420px;
+  object-fit:contain;
+
+}
+
+
+
+/* =========================
+   MOBILE HEADER FIX
+========================= */
+
+
+@media(max-width:600px){
+
+
+.main-header{
+
+  padding:8px 12px;
+  height:65px;
+  gap:5px;
+
+}
+
+
+.logo-icon{
+
+  font-size:28px;
+
+}
+
+
+.logo-text h2{
+
+  font-size:18px;
+
+}
+
+
+.logo-text small{
+
+  font-size:9px;
+
+}
+
+
+.search-box{
+
+  display:none;
+
+}
+
+
+.header-links{
+
+  gap:6px;
+
+}
+
+
+.header-links a{
+
+  font-size:11px;
+
+}
+
+
+.nav-menu{
+
+  height:45px;
+  padding:8px;
+  gap:20px;
+
+}
+
+
+
+.hero{
+
+  min-height:auto;
+  padding:25px 15px 40px;
+  flex-direction:column;
+
+}
+
+
+
+.hero-content{
+
+  width:100%;
+
+}
+
+
+.hero h1{
+
+  font-size:32px;
+
+}
+
+
+.hero-image-box{
+
+  width:100%;
+  margin-top:20px;
+
+}
+
+
+.hero-image{
+
+  height:auto;
+
+}
+
+
+}/* =========================================
+   PART 2 - PRODUCTS + CATEGORY + ADMIN
+========================================= */
+
+
+/* =========================
+   CATEGORY
+========================= */
+
+
+.categories,
+.popular-categories{
+
+  padding:55px 5%;
+  background:#eef1f0;
+
+}
+
+
+.section-title{
+
+  text-align:center;
+  font-size:32px;
+  color:#123b35;
+
+}
+
+
+.category-grid,
+.categories-container,
+.website-category-grid{
+
+  max-width:1400px;
+  margin:30px auto;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:25px;
+
+}
+
+
+.category-card,
+.website-category-card{
+
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  text-align:center;
+  text-decoration:none;
+  color:#18332d;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+
+}
+
+
+.category-card img,
+.website-category-card img{
+
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:50%;
+  margin:auto;
+
+}
+
+
+/* =========================
+   PRODUCTS
+========================= */
+
+
+.products-page{
+
+  width:100%;
+  min-height:650px;
+  padding:55px 5%;
+  background:#eef1f0;
+
+}
+
+
+.products-page h1{
+
+  text-align:center;
+  color:#123b35;
+  font-size:36px;
+
+}
+
+
+.products-page input{
+
+  display:block;
+  width:600px;
+  max-width:100%;
+  margin:0 auto 35px;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #ddd;
+
+}
+
+
+
+.products-grid{
+
+  max-width:1400px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:25px;
+
+}
+
+
+
+.product-card{
+
+  background:white;
+  padding:15px;
+  border-radius:20px;
+  box-shadow:0 7px 25px rgba(0,0,0,.07);
+
+}
+
+
+.product-image{
+
+  width:100%;
+  height:230px;
+  border-radius:15px;
+  overflow:hidden;
+
+}
+
+
+.product-image img{
+
+  width:100%;
+  height:100%;
+  object-fit:cover;
+
+}
+
+
+.product-card h2{
+
+  color:#123b35;
+  font-size:20px;
+
+}
+
+
+.price{
+
+  color:#0f766e;
+  font-size:20px;
+  font-weight:bold;
+
+}
+
+
+.add-cart-button{
+
+  width:100%;
+  padding:12px;
+  background:#0f766e;
+  color:white;
+  border:none;
   border-radius:10px;
   cursor:pointer;
-  font-weight:700;
+  font-weight:bold;
 
 }
 
 
-.admin-menu button:hover{
+.view-details-button{
 
-  background:#075c3b;
+  display:block;
+  margin-top:10px;
+  padding:10px;
+  text-align:center;
+  background:#e7f4ef;
+  color:#0f766e;
+  border-radius:10px;
+  text-decoration:none;
 
 }
 
 
 
-/* =====================================================
-   ADMIN CONTENT
-===================================================== */
+/* =========================
+   ADMIN
+========================= */
+
+
+.admin-layout{
+
+  display:flex;
+  min-height:100vh;
+  background:#f5f7f6;
+
+}
+
+
+
+.admin-sidebar{
+
+  width:250px;
+  background:#111827;
+  color:white;
+  padding:25px 15px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+
+}
+
+
+
+.admin-sidebar button{
+
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:#1f2937;
+  color:white;
+  cursor:pointer;
+
+}
 
 
 .admin-content{
 
-  width:100%;
+  flex:1;
+  padding:30px;
   background:#f5f7f6;
-  padding:10px;
 
 }
 
 
 
-/* =====================================================
-   DASHBOARD
-===================================================== */
-
-
-.dashboard-box{
+.dashboard-cards{
 
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:20px;
+  gap:25px;
 
 }
 
@@ -135,34 +639,19 @@ img{
   background:white;
   padding:25px;
   border-radius:18px;
-  box-shadow:0 5px 20px rgba(0,0,0,.08);
-  text-align:center;
-
-}
-
-
-
-.dashboard-card h2{
-
-  margin:0;
-  font-size:35px;
-  color:#0f766e;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
 
 }
 
 
 .dashboard-card p{
 
-  margin-top:10px;
-  font-weight:700;
+  font-size:40px;
+  font-weight:bold;
+  color:#0f766e;
 
 }
 
-
-
-/* =====================================================
-   ADMIN FORM
-===================================================== */
 
 
 .admin-form-card{
@@ -171,61 +660,29 @@ img{
   padding:25px;
   border-radius:18px;
   margin-bottom:30px;
-  box-shadow:0 5px 20px rgba(0,0,0,.08);
 
 }
-
 
 
 .admin-form-card input,
 .admin-form-card select,
 .admin-form-card textarea{
 
-
- width:100%;
- padding:13px;
- margin-bottom:15px;
- border:1px solid #ddd;
- border-radius:10px;
- font-size:15px;
+  width:100%;
+  padding:13px;
+  margin-bottom:15px;
+  border:1px solid #ddd;
+  border-radius:10px;
 
 }
 
-
-
-.admin-form-card textarea{
-
- min-height:100px;
-
-}
-
-
-
-.admin-form-card button{
-
-
- background:#0f766e;
- color:white;
- border:none;
- padding:13px 25px;
- border-radius:10px;
- cursor:pointer;
- font-weight:700;
-
-}
-
-
-
-/* =====================================================
-   PRODUCT LIST ADMIN
-===================================================== */
 
 
 .admin-list-grid{
 
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:25px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:25px;
 
 }
 
@@ -233,593 +690,29 @@ img{
 
 .admin-manage-card{
 
-
- background:white;
- padding:20px;
- border-radius:18px;
- box-shadow:0 5px 20px rgba(0,0,0,.08);
- text-align:center;
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  text-align:center;
 
 }
-
 
 
 .admin-manage-card img{
 
-
- width:150px;
- height:150px;
- object-fit:cover;
- border-radius:15px;
- margin:auto;
-
-}
-
-
-
-.admin-manage-card input,
-.admin-manage-card select,
-.admin-manage-card textarea{
-
-
- width:100%;
- padding:10px;
- margin-bottom:10px;
- border:1px solid #ddd;
- border-radius:8px;
+  width:150px;
+  height:150px;
+  object-fit:cover;
+  border-radius:15px;
+  margin:auto;
 
 }
 
 
 
-.admin-manage-card button{
-
-
- padding:10px 18px;
- border:none;
- border-radius:8px;
- background:#0f766e;
- color:white;
- cursor:pointer;
- font-weight:700;
-
-}
-
-
-
-.delete-btn{
-
- background:#dc2626 !important;
-
-}
-
-
-
-/* =====================================================
-   MOBILE ADMIN
-===================================================== */
-
-
-@media(max-width:1000px){
-
-
-.dashboard-box{
-
- grid-template-columns:repeat(2,1fr);
-
-}
-
-
-
-.admin-list-grid{
-
- grid-template-columns:repeat(2,1fr);
-
-}
-
-
-}
-
-
-
-@media(max-width:600px){
-
-
-.admin-page{
-
- padding:15px;
-
-}
-
-
-.dashboard-box{
-
- grid-template-columns:1fr;
-
-}
-
-
-
-.admin-list-grid{
-
- grid-template-columns:1fr;
-
-}
-
-
-.admin-menu button{
-
- width:100%;
-
-}
-
-
-}/* =====================================================
-   BIRDS CARE FINAL CSS PART 2
-   PRODUCTS + CATEGORY + HOME
-===================================================== */
-
-
-/* =====================================================
-   WEBSITE HEADER
-===================================================== */
-
-
-.header{
-
- width:100%;
- background:#075c3b;
- color:white;
-
-}
-
-
-
-.main-header{
-
- max-width:1400px;
- margin:auto;
- padding:18px 5%;
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:20px;
-
-}
-
-
-
-.logo{
-
- display:flex;
- align-items:center;
- gap:12px;
-
-}
-
-
-.logo span{
-
- font-size:40px;
-
-}
-
-
-.logo h2{
-
- margin:0;
- font-size:28px;
-
-}
-
-
-.logo small{
-
- color:#d8f2e5;
-
-}
-
-
-
-.header-links{
-
- display:flex;
- gap:20px;
-
-}
-
-
-.header-links a{
-
- color:white;
- text-decoration:none;
- font-weight:700;
-
-}
-
-
-
-.nav-menu{
-
- background:#064c34;
- display:flex;
- justify-content:center;
- gap:40px;
- padding:14px;
- flex-wrap:wrap;
-
-}
-
-
-
-.nav-menu a{
-
- color:white;
- text-decoration:none;
- font-weight:700;
-
-}
-
-
-
-/* =====================================================
-   HERO SECTION
-===================================================== */
-
-
-.hero{
-
- min-height:520px;
- padding:70px 7%;
- display:flex;
- align-items:center;
- position:relative;
- overflow:hidden;
- background:#eef1f0;
-
-}
-
-
-
-.hero-content{
-
- width:55%;
- z-index:2;
-
-}
-
-
-
-.hero h1{
-
- font-size:52px;
- color:#123b35;
-
-}
-
-
-
-.hero h1 span{
-
- color:#5c8d27;
-
-}
-
-
-
-.hero p{
-
- font-size:18px;
- line-height:1.7;
- color:#53635e;
-
-}
-
-
-
-.hero button,
-.shop-now-btn{
-
-
- background:#0f766e;
- color:white;
- padding:14px 28px;
- border:none;
- border-radius:10px;
- font-weight:bold;
- cursor:pointer;
- text-decoration:none;
-
-}
-
-
-
-.hero img{
-
- position:absolute;
- right:5%;
- width:45%;
- height:90%;
- object-fit:contain;
-
-}
-
-
-
-/* =====================================================
-   CATEGORY SECTION
-===================================================== */
-
-
-.categories,
-.popular-categories{
-
-
- padding:55px 5%;
- background:#eef1f0;
-
-}
-
-
-
-.section-title{
-
- text-align:center;
- font-size:32px;
- color:#123b35;
-
-}
-
-
-
-.category-grid,
-.categories-container,
-.website-category-grid{
-
-
- max-width:1400px;
- margin:30px auto;
-
- display:grid;
- grid-template-columns:repeat(6,1fr);
- gap:25px;
-
-}
-
-
-
-.category-card,
-.website-category-card{
-
-
- background:white;
- padding:20px;
- border-radius:18px;
- text-align:center;
- text-decoration:none;
- color:#18332d;
- box-shadow:0 5px 20px rgba(0,0,0,.06);
-
-}
-
-
-
-.category-card img,
-.website-category-card img{
-
-
- width:120px;
- height:120px;
- object-fit:cover;
- border-radius:50%;
- margin:auto;
-
-}
-
-
-
-.category-card h3,
-.website-category-card h3{
-
- color:#123b35;
-
-}
-
-
-
-
-/* =====================================================
-   PRODUCTS PAGE
-===================================================== */
-
-
-.products-page{
-
-
- width:100%;
- min-height:650px;
- padding:55px 5%;
- background:#eef1f0;
-
-}
-
-
-
-.products-page h1{
-
- text-align:center;
- color:#123b35;
- font-size:36px;
-
-}
-
-
-
-.products-page input{
-
-
- display:block;
- width:600px;
- max-width:100%;
- margin:0 auto 35px;
- padding:14px;
- border-radius:10px;
- border:1px solid #ddd;
-
-}
-
-
-
-/* PRODUCT GRID */
-
-
-.products-grid{
-
-
- max-width:1400px;
- margin:auto;
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:25px;
-
-}
-
-
-
-/* PRODUCT CARD */
-
-
-.product-card{
-
-
- background:white;
- padding:15px;
- border-radius:20px;
- box-shadow:0 7px 25px rgba(0,0,0,.07);
-
-}
-
-
-
-.product-image{
-
-
- width:100%;
- height:230px;
- border-radius:15px;
- overflow:hidden;
- background:#f1f5f3;
-
-}
-
-
-
-.product-image img{
-
-
- width:100%;
- height:100%;
- object-fit:cover;
-
-}
-
-
-
-.product-card h2{
-
- color:#123b35;
- font-size:20px;
-
-}
-
-
-
-.product-type{
-
- color:#71807b;
-
-}
-
-
-
-.price{
-
- color:#0f766e;
- font-size:20px;
- font-weight:bold;
-
-}
-
-
-
-.add-cart-button{
-
-
- width:100%;
- padding:12px;
- background:#0f766e;
- color:white;
- border:none;
- border-radius:10px;
- cursor:pointer;
- font-weight:bold;
-
-}
-
-
-
-.view-details-button{
-
-
- display:block;
- margin-top:10px;
- padding:10px;
- text-align:center;
- background:#e7f4ef;
- color:#0f766e;
- border-radius:10px;
- text-decoration:none;
- font-weight:bold;
-
-}
-
-
-
-
-/* =====================================================
-   CATEGORY ADMIN WEBSITE FIX
-===================================================== */
-
-
-.category-admin-card img{
-
-
- width:100px;
- height:100px;
- object-fit:cover;
- border-radius:50%;
- margin:auto;
-
-}
-
-
-
-.category-list{
-
-
- display:grid;
- grid-template-columns:repeat(6,1fr);
- gap:20px;
-
-}
-
-
-
-
-
-/* =====================================================
-   RESPONSIVE PART 2
-===================================================== */
+/* =========================
+   RESPONSIVE
+========================= */
 
 
 @media(max-width:1200px){
@@ -848,28 +741,11 @@ img{
 @media(max-width:900px){
 
 
-.hero-content{
-
- width:100%;
-
-}
-
-
-.hero img{
-
- width:80%;
- opacity:.3;
-
-}
-
-
-
 .products-grid{
 
  grid-template-columns:repeat(2,1fr);
 
 }
-
 
 
 .category-grid,
@@ -881,6 +757,26 @@ img{
 }
 
 
+.admin-layout{
+
+ flex-direction:column;
+
+}
+
+
+.admin-sidebar{
+
+ width:100%;
+
+}
+
+
+.dashboard-cards{
+
+ grid-template-columns:1fr 1fr;
+
+}
+
 
 }
 
@@ -889,28 +785,11 @@ img{
 @media(max-width:600px){
 
 
-.main-header{
-
- flex-direction:column;
-
-}
-
-
-
-.hero h1{
-
- font-size:34px;
-
-}
-
-
-
 .products-grid{
 
  grid-template-columns:repeat(2,1fr);
 
 }
-
 
 
 .category-grid,
@@ -922,143 +801,121 @@ img{
 }
 
 
+.dashboard-cards{
 
-.product-image{
-
- height:170px;
+ grid-template-columns:1fr;
 
 }
 
 
+.admin-content{
 
-}/* =====================================================
-   BIRDS CARE FINAL CSS PART 3
-   CART + CHECKOUT + BILL + FOOTER + MOBILE
-===================================================== */
+ padding:15px;
+
+}
 
 
+}/* =========================================
+   PART 3 - CART + CHECKOUT + BILL + FOOTER
+========================================= */
 
-/* =====================================================
+
+/* =========================
    BIRD DETAILS
-===================================================== */
+========================= */
 
 
 .bird-details,
 .bird-detail{
 
-
- max-width:1200px;
- margin:45px auto;
- padding:35px;
- background:white;
- border-radius:20px;
- box-shadow:0 7px 25px rgba(0,0,0,.08);
-
-}
-
-
-
-.bird-details h1,
-.bird-detail h1{
-
- color:#123b35;
+  max-width:1200px;
+  margin:45px auto;
+  padding:35px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 7px 25px rgba(0,0,0,.08);
 
 }
-
 
 
 .bird-details img,
 .bird-detail img{
 
- max-width:100%;
- border-radius:15px;
+  max-width:100%;
+  border-radius:15px;
 
 }
 
 
 
-
-
-/* =====================================================
+/* =========================
    CART
-===================================================== */
+========================= */
 
 
 .cart-page{
 
-
- min-height:600px;
- padding:55px 7%;
- background:#eef1f0;
+  min-height:600px;
+  padding:55px 7%;
+  background:#eef1f0;
 
 }
-
 
 
 .cart-page h1{
 
- text-align:center;
- color:#123b35;
+  text-align:center;
+  color:#123b35;
 
 }
-
 
 
 .cart-item{
 
-
- max-width:900px;
- margin:0 auto 20px;
- padding:20px;
- background:white;
- border-radius:15px;
- box-shadow:0 5px 18px rgba(0,0,0,.06);
+  max-width:900px;
+  margin:0 auto 20px;
+  padding:20px;
+  background:white;
+  border-radius:15px;
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
 
 }
-
-
 
 
 .cart-item img{
 
-
- width:90px;
- height:90px;
- object-fit:cover;
- border-radius:10px;
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:10px;
 
 }
 
 
 
-
-
-/* =====================================================
+/* =========================
    CHECKOUT
-===================================================== */
+========================= */
 
 
 .checkout-section{
 
-
- min-height:80vh;
- padding:50px 20px;
- background:#f5f7fa;
+  min-height:80vh;
+  padding:50px 20px;
+  background:#f5f7fa;
 
 }
-
 
 
 
 .checkout-box{
 
-
- max-width:650px;
- margin:auto;
- background:white;
- padding:35px;
- border-radius:18px;
- box-shadow:0 8px 30px rgba(0,0,0,.08);
+  max-width:650px;
+  margin:auto;
+  background:white;
+  padding:35px;
+  border-radius:18px;
+  box-shadow:0 8px 30px rgba(0,0,0,.08);
 
 }
 
@@ -1066,8 +923,8 @@ img{
 
 .checkout-box h1{
 
- text-align:center;
- color:#123b35;
+  text-align:center;
+  color:#123b35;
 
 }
 
@@ -1077,13 +934,11 @@ img{
 .checkout-box textarea,
 .checkout-box select{
 
-
- width:100%;
- padding:14px;
- margin-bottom:15px;
- border:1px solid #ddd;
- border-radius:10px;
- font-size:16px;
+  width:100%;
+  padding:14px;
+  margin-bottom:15px;
+  border:1px solid #ddd;
+  border-radius:10px;
 
 }
 
@@ -1091,10 +946,9 @@ img{
 
 .checkout-summary{
 
-
- background:#f7f9fb;
- padding:20px;
- border-radius:12px;
+  background:#f7f9fb;
+  padding:20px;
+  border-radius:12px;
 
 }
 
@@ -1102,10 +956,9 @@ img{
 
 .checkout-summary div{
 
-
- display:flex;
- justify-content:space-between;
- padding:8px 0;
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
 
 }
 
@@ -1113,9 +966,8 @@ img{
 
 .checkout-total{
 
-
- font-size:22px;
- font-weight:bold;
+  font-size:22px;
+  font-weight:bold;
 
 }
 
@@ -1123,34 +975,30 @@ img{
 
 .checkout-box button{
 
-
- width:100%;
- padding:15px;
- border:none;
- border-radius:10px;
- background:#198754;
- color:white;
- font-size:17px;
- font-weight:bold;
- cursor:pointer;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:10px;
+  background:#198754;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
 
 }
 
 
 
-
-
-/* =====================================================
-   BILL PAGE
-===================================================== */
+/* =========================
+   BILL
+========================= */
 
 
 .bill-page{
 
-
- min-height:80vh;
- padding:40px 20px;
- background:#f1f3f6;
+  min-height:80vh;
+  padding:40px 20px;
+  background:#f1f3f6;
 
 }
 
@@ -1158,13 +1006,12 @@ img{
 
 .bill-container{
 
-
- max-width:950px;
- margin:auto;
- background:white;
- padding:45px;
- border-radius:12px;
- box-shadow:0 8px 35px rgba(0,0,0,.08);
+  max-width:950px;
+  margin:auto;
+  background:white;
+  padding:45px;
+  border-radius:12px;
+  box-shadow:0 8px 35px rgba(0,0,0,.08);
 
 }
 
@@ -1172,28 +1019,9 @@ img{
 
 .bill-header{
 
-
- display:flex;
- justify-content:space-between;
- align-items:center;
-
-}
-
-
-
-.bill-header h1{
-
- color:#123b35;
-
-}
-
-
-
-.bill-line{
-
-
- border-top:2px solid #222;
- margin:25px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 
 }
 
@@ -1201,10 +1029,9 @@ img{
 
 .bill-info-grid{
 
-
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:30px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
 
 }
 
@@ -1212,9 +1039,8 @@ img{
 
 .items-section table{
 
-
- width:100%;
- border-collapse:collapse;
+  width:100%;
+  border-collapse:collapse;
 
 }
 
@@ -1223,9 +1049,8 @@ img{
 .items-section th,
 .items-section td{
 
-
- border:1px solid #ddd;
- padding:12px;
+  border:1px solid #ddd;
+  padding:12px;
 
 }
 
@@ -1233,10 +1058,9 @@ img{
 
 .bill-bottom{
 
-
- display:flex;
- justify-content:space-between;
- margin-top:25px;
+  display:flex;
+  justify-content:space-between;
+  margin-top:25px;
 
 }
 
@@ -1244,9 +1068,8 @@ img{
 
 .total-row{
 
-
- font-size:22px;
- font-weight:bold;
+  font-size:22px;
+  font-weight:bold;
 
 }
 
@@ -1254,11 +1077,10 @@ img{
 
 .bill-actions{
 
-
- display:flex;
- justify-content:center;
- gap:15px;
- margin-top:35px;
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-top:35px;
 
 }
 
@@ -1266,49 +1088,41 @@ img{
 
 .bill-actions button{
 
-
- padding:13px 25px;
- border:none;
- border-radius:8px;
- cursor:pointer;
- font-weight:bold;
+  padding:13px 25px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
 
 }
-
 
 
 .print-btn{
 
-
- background:#222;
- color:white;
+  background:#222;
+  color:white;
 
 }
-
 
 
 .shop-btn{
 
-
- background:#198754;
- color:white;
+  background:#198754;
+  color:white;
 
 }
 
 
 
-
-/* =====================================================
+/* =========================
    FOOTER
-===================================================== */
+========================= */
 
 
 .footer{
 
-
- background:#073f2d;
- color:white;
- padding:45px 7%;
+  background:#073f2d;
+  color:white;
+  padding:45px 7%;
 
 }
 
@@ -1316,10 +1130,9 @@ img{
 
 .footer-container{
 
-
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:35px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:35px;
 
 }
 
@@ -1327,56 +1140,19 @@ img{
 
 .footer a{
 
-
- color:white;
- text-decoration:none;
-
-}
-
-
-
-
-
-/* =====================================================
-   FINAL MOBILE RESPONSIVE
-===================================================== */
-
-
-
-@media(max-width:900px){
-
-
-
-.bill-info-grid{
-
- grid-template-columns:1fr;
+  color:white;
+  text-decoration:none;
 
 }
 
 
 
-.footer-container{
-
- grid-template-columns:1fr;
-
-}
-
-
-
-.bill-container{
-
- padding:25px;
-
-}
-
-
-
-}
-
+/* =========================
+   FINAL MOBILE FIX
+========================= */
 
 
 @media(max-width:600px){
-
 
 
 .cart-page,
@@ -1384,40 +1160,7 @@ img{
 .categories,
 .popular-categories{
 
- padding:35px 15px;
-
-}
-
-
-
-.hero{
-
- min-height:550px;
-
-}
-
-
-
-.hero img{
-
- width:90%;
- right:5%;
-
-}
-
-
-
-.product-card h2{
-
- font-size:17px;
-
-}
-
-
-
-.product-image{
-
- height:160px;
+  padding:35px 15px;
 
 }
 
@@ -1425,7 +1168,15 @@ img{
 
 .checkout-box{
 
- padding:20px;
+  padding:20px;
+
+}
+
+
+
+.bill-container{
+
+  padding:20px;
 
 }
 
@@ -1434,9 +1185,8 @@ img{
 .bill-header,
 .bill-bottom{
 
-
- flex-direction:column;
- gap:15px;
+  flex-direction:column;
+  gap:15px;
 
 }
 
@@ -1444,8 +1194,7 @@ img{
 
 .bill-actions{
 
-
- flex-direction:column;
+  flex-direction:column;
 
 }
 
@@ -1453,8 +1202,15 @@ img{
 
 .bill-actions button{
 
+  width:100%;
 
- width:100%;
+}
+
+
+
+.bill-info-grid{
+
+  grid-template-columns:1fr;
 
 }
 
@@ -1462,571 +1218,15 @@ img{
 
 .footer{
 
- padding:35px 20px;
-
-}
-
-
-}/* ==========================================
-   BIRDS CARE ADMIN DASHBOARD FINAL CSS
-========================================== */
-
-
-.admin-layout{
-
-    display:flex;
-    min-height:100vh;
-    background:#f5f7f6;
-
-}
-
-
-/* ==============================
-      SIDEBAR
-============================== */
-
-
-.admin-sidebar{
-
-    width:250px;
-
-    background:#111827;
-
-    color:white;
-
-    padding:25px 15px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
-}
-
-
-.admin-sidebar h2{
-
-    text-align:center;
-
-    margin-bottom:25px;
-
-    font-size:26px;
-
-    color:white;
+  padding:35px 20px;
 
 }
 
 
 
-.admin-sidebar button{
+.footer-container{
 
-    width:100%;
-
-    padding:14px;
-
-    border:none;
-
-    border-radius:10px;
-
-    background:#1f2937;
-
-    color:white;
-
-    text-align:left;
-
-    cursor:pointer;
-
-    font-size:16px;
-
-    transition:.3s;
-
-}
-
-
-
-.admin-sidebar button:hover{
-
-    background:#0f766e;
-
-}
-
-
-
-
-
-
-/* ==============================
-      MAIN CONTENT
-============================== */
-
-
-.admin-content{
-
-    flex:1;
-
-    padding:30px;
-
-    background:#f5f7f6;
-
-}
-
-
-
-.admin-content h1{
-
-    color:#123b35;
-
-    margin-bottom:25px;
-
-    font-size:32px;
-
-}
-
-
-
-
-
-
-/* ==============================
-      DASHBOARD CARDS
-============================== */
-
-
-.dashboard-cards{
-
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:25px;
-
-
-}
-
-
-
-.dashboard-card{
-
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:18px;
-
-    box-shadow:
-    0 8px 25px rgba(0,0,0,.08);
-
-
-}
-
-
-
-.dashboard-card h3{
-
-
-    color:#555;
-
-    margin:0;
-
-}
-
-
-
-.dashboard-card p{
-
-
-    font-size:40px;
-
-    font-weight:bold;
-
-    color:#0f766e;
-
-    margin-top:15px;
-
-
-}
-
-
-
-
-
-
-/* ==============================
-      FORM BOX
-============================== */
-
-
-.admin-form-card{
-
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:18px;
-
-    box-shadow:
-    0 8px 25px rgba(0,0,0,.08);
-
-    margin-bottom:30px;
-
-
-}
-
-
-
-.admin-form-card input,
-.admin-form-card select,
-.admin-form-card textarea{
-
-
-    width:100%;
-
-    padding:13px;
-
-    margin-bottom:15px;
-
-    border:1px solid #ddd;
-
-    border-radius:10px;
-
-    font-size:15px;
-
-
-}
-
-
-
-.admin-form-card textarea{
-
-    min-height:100px;
-
-}
-
-
-
-
-.admin-form-card button{
-
-
-    background:#0f766e;
-
-    color:white;
-
-    border:none;
-
-    padding:13px 25px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    font-weight:bold;
-
-
-}
-
-
-
-
-
-
-/* ==============================
-      PRODUCT GRID
-============================== */
-
-
-.admin-list-grid{
-
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:25px;
-
-
-}
-
-
-
-
-.admin-manage-card{
-
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:18px;
-
-    box-shadow:
-    0 8px 25px rgba(0,0,0,.08);
-
-    text-align:center;
-
-
-}
-
-
-
-
-.admin-product-image{
-
-
-    width:150px;
-
-    height:150px;
-
-    object-fit:cover;
-
-    border-radius:15px;
-
-    margin-bottom:15px;
-
-
-}
-
-
-
-
-.admin-manage-card input,
-.admin-manage-card textarea,
-.admin-manage-card select{
-
-
-    width:100%;
-
-    padding:10px;
-
-    margin-bottom:10px;
-
-    border-radius:8px;
-
-    border:1px solid #ddd;
-
-
-}
-
-
-
-
-.admin-manage-card button{
-
-
-    width:100%;
-
-    padding:12px;
-
-    border:none;
-
-    border-radius:8px;
-
-    background:#0f766e;
-
-    color:white;
-
-    cursor:pointer;
-
-    margin-top:8px;
-
-
-}
-
-
-
-.delete-btn,
-.delete-category{
-
-
-    background:#dc2626!important;
-
-
-}
-
-
-
-
-
-
-
-/* ==============================
-      CATEGORY
-============================== */
-
-
-.category-list{
-
-
-    display:grid;
-
-    grid-template-columns:repeat(6,1fr);
-
-    gap:20px;
-
-
-}
-
-
-
-.category-admin-card{
-
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:18px;
-
-    text-align:center;
-
-    box-shadow:
-    0 8px 20px rgba(0,0,0,.08);
-
-
-}
-
-
-
-
-.category-admin-card img,
-.category-placeholder{
-
-
-    width:90px;
-
-    height:90px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
-    margin:auto;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:40px;
-
-
-}
-
-
-
-
-.category-admin-card button{
-
-
-    padding:10px 15px;
-
-    border:none;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    color:white;
-
-    background:#dc2626;
-
-
-}
-
-
-
-
-
-
-/* ==============================
-      MOBILE
-============================== */
-
-
-@media(max-width:900px){
-
-
-.admin-layout{
-
-    flex-direction:column;
-
-}
-
-
-
-.admin-sidebar{
-
-    width:100%;
-
-    min-height:auto;
-
-}
-
-
-
-.dashboard-cards{
-
-    grid-template-columns:1fr 1fr;
-
-}
-
-
-
-.admin-list-grid{
-
-    grid-template-columns:1fr 1fr;
-
-}
-
-
-
-.category-list{
-
-    grid-template-columns:repeat(3,1fr);
-
-}
-
-
-}
-
-
-
-
-@media(max-width:600px){
-
-
-.admin-content{
-
-    padding:15px;
-
-}
-
-
-
-.dashboard-cards{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.admin-list-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.category-list{
-
-    grid-template-columns:repeat(2,1fr);
+  grid-template-columns:1fr;
 
 }
 

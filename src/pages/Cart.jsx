@@ -268,39 +268,31 @@ function Cart() {
     // SEND SERVER ORDER
     // ===================================================
 
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/send-order",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify(order),
-        }
-      );
-
-      let result = {};
-
-      try {
-        result = await response.json();
-      } catch {
-        result = {};
-      }
-
-      console.log(
-        "SERVER RESPONSE:",
-        result
-      );
-    } catch (error) {
-      console.log(
-        "Server error:",
-        error
-      );
+try {
+  const response = await fetch(
+    "http://10.206.203.228:5000/api/send-order",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
     }
+  );
+
+  let result = {};
+
+  try {
+    result = await response.json();
+  } catch {
+    result = {};
+  }
+
+  console.log("SERVER RESPONSE:", result);
+
+} catch (error) {
+  console.log("Server error:", error);
+}
 
     // ===================================================
     // FINISH ORDER

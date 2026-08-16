@@ -62,7 +62,7 @@ app.post("/api/send-order", async (req, res) => {
       "BODY:",
       JSON.stringify(req.body, null, 2)
     );
-
+console.log("ORDER RECEIVED SUCCESSFULLY");
     const {
       orderId,
       orderDate,
