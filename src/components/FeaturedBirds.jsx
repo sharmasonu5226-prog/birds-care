@@ -1,329 +1,892 @@
-import { useContext } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import {
+  useContext,
+  useMemo,
+  useState
+} from "react";
+
+import {
+  Link,
+  useSearchParams
+} from "react-router-dom";
 
 import { CartContext } from "../context/CartContext";
 import { PetContext } from "../context/PetContext";
+
+import "./FeaturedBirds.css";
 
 
 function FeaturedBirds() {
 
 
-const { addToCart } = useContext(CartContext);
+  const {
+    addToCart
+  } = useContext(CartContext);
 
-const { pets } = useContext(PetContext);
 
+  const {
+    pets = []
+  } = useContext(PetContext);
 
-const [searchParams] = useSearchParams();
 
+  const [
+    searchParams
+  ] = useSearchParams();
 
-const selectedCategory = searchParams.get("type");
 
+  const selectedCategory =
+    searchParams.get("type");
 
 
-const categoryBirds = selectedCategory
+  const [
+    selectedBird,
+    setSelectedBird
+  ] = useState(null);
 
-? pets.filter(
-(bird)=> bird.type === selectedCategory
-)
 
-: pets;
+  // =========================
+  // NUMBER
+  // =========================
 
+  const number = (value) => {
 
+    const n =
+      Number(
+        String(value ?? 0)
+          .replace("₹", "")
+          .replace(/,/g, "")
+          .replace("%", "")
+          .trim()
+      );
 
+    return Number.isFinite(n)
+      ? n
+      : 0;
 
+  };
 
-return (
 
-<section className="featured">
+  // =========================
+  // PRICE FORMAT
+  // =========================
 
+  const priceFormat = (value) => {
 
-<h2 className="section-title">
+    return number(value)
+      .toLocaleString("en-IN");
 
-{
-selectedCategory
-?
-`${selectedCategory} Birds`
-:
-"Featured Birds"
-}
+  };
 
-</h2>
 
+  // =========================
+  // PRICE SYSTEM
+  // =========================
 
+  const getPrice = (
+    bird,
+    mode = "single"
+  ) => {
 
+    const pair =
+      mode === "pair";
 
-<div className="featured-grid">
 
+    const oldPrice = pair
 
-{
+      ? number(
+          bird.pairOldPrice ??
+          bird.pair_mrp ??
+          0
+        )
 
-categoryBirds.length === 0 ?
+      : number(
+          bird.singleOldPrice ??
+          bird.oldPrice ??
+          bird.mrp ??
+          bird.price ??
+          0
+        );
 
 
-(
+    const normalPrice = pair
 
-<div className="empty-admin">
+      ? number(
+          bird.pairPrice ??
+          bird.pair_price ??
+          0
+        )
 
-<div>🐦</div>
+      : number(
+          bird.singlePrice ??
+          bird.price ??
+          0
+        );
 
-<h3>
-No Birds Found
-</h3>
 
-<p>
-This category has no birds available.
-</p>
+    /*
+      AUTOMATIC DISCOUNT
 
-</div>
+      Example:
+      MRP = 100
+      Price = 85
 
-)
+      Discount = 15%
+    */
 
+    let finalPrice =
+      normalPrice || oldPrice;
 
-:
 
+    let discount = 0;
 
-categoryBirds.map((bird)=>(
 
+    if (
+      oldPrice > 0 &&
+      finalPrice > 0 &&
+      finalPrice < oldPrice
+    ) {
 
-<div
+      discount =
+        Math.round(
+          (
+            (oldPrice - finalPrice) /
+            oldPrice
+          ) * 100
+        );
 
-className="bird-card"
+    }
 
-key={bird.id}
 
->
+    return {
 
+      oldPrice,
 
+      finalPrice,
 
-{
-bird.image
+      discount,
 
-?
+      save:
+        Math.max(
+          0,
+          oldPrice - finalPrice
+        )
 
+    };
 
-<img
+  };
 
-className="bird-img"
 
-src={bird.image}
+  // =========================
+  // PRODUCT FILTER
+  // =========================
 
-alt={bird.name}
+  const birds = useMemo(() => {
 
-/>
+    let list = [...pets];
 
 
-:
+    // NON BIRD ANIMALS REMOVE
 
+    list =
+      list.filter((bird) => {
 
-<div className="bird-img no-image">
+        if (!bird)
+          return false;
 
-{bird.emoji || "🐦"}
 
-</div>
+        const type =
+          String(
+            bird.type || ""
+          )
+            .toLowerCase()
+            .trim();
 
 
-}
+        const name =
+          String(
+            bird.name || ""
+          )
+            .toLowerCase()
+            .trim();
 
 
+        const blocked = [
 
+          "rabbit",
+          "dog",
+          "cat",
+          "fish",
+          "hamster",
+          "mouse",
+          "rat",
+          "turtle"
 
-<h3>
+        ];
 
-{bird.name}
 
-</h3>
+        return !blocked.some(
+          (item) =>
+            type.includes(item) ||
+            name.includes(item)
+        );
 
+      });
 
 
+    // CATEGORY FILTER
 
-<p className="price">
+    if (selectedCategory) {
 
-₹{bird.price}
+      const cat =
+        selectedCategory
+          .toLowerCase()
+          .trim();
 
-</p>
 
+      list =
+        list.filter(
+          (bird) =>
+            String(
+              bird.type || ""
+            )
+              .toLowerCase()
+              .includes(cat)
+        );
 
+    }
 
 
+    return list;
 
-<div className="rating">
+  }, [
+    pets,
+    selectedCategory
+  ]);
 
-⭐⭐⭐⭐⭐
 
-<span>
+  // =========================
+  // STOCK CHECK
+  // =========================
 
-({bird.id * 20})
+  const outOfStock = (bird) => {
 
-</span>
+    const stock =
+      String(
+        bird?.stock ?? ""
+      )
+        .toLowerCase()
+        .trim();
 
-</div>
 
+    return (
 
+      stock === "out of stock" ||
 
+      stock === "false" ||
 
+      bird?.stock === false ||
 
-{/* STOCK */}
+      bird?.inStock === false
 
-{
+    );
 
-bird.stock === "Out of Stock"
+  };
 
-?
 
+  const getStockText = (bird) => {
 
-<p className="stock-red">
+    return outOfStock(bird)
 
-❌ Out of Stock
+      ? "Out of Stock"
 
-</p>
+      : "In Stock";
 
+  };
 
-:
 
+  // =========================
+  // IMAGE
+  // =========================
 
-<p className="stock-green">
+  const getImage = (bird) => {
 
-✅ In Stock
+    if (
+      bird.image &&
+      typeof bird.image === "string"
+    ) {
 
-</p>
+      return bird.image;
 
+    }
 
-}
+    return null;
 
+  };
 
 
+  // =========================
+  // ADD TO CART
+  // =========================
 
+  const addBirdToCart = (
+    bird,
+    mode
+  ) => {
 
-<div className="bird-buttons">
+    const price =
+      getPrice(
+        bird,
+        mode
+      );
 
 
+    addToCart({
 
+      ...bird,
 
+      price:
+        price.finalPrice,
 
-<button
+      originalPrice:
+        price.oldPrice,
 
+      discountPercent:
+        price.discount,
 
-disabled={
-bird.stock === "Out of Stock"
-}
+      discountAmount:
+        price.save,
 
+      purchaseType:
 
-onClick={()=>{
+        mode === "pair"
 
-if(
-bird.stock === "Out of Stock"
-){
+          ? "Pair"
 
-alert(
-"This bird is Out of Stock ❌"
-);
+          : "Single",
 
-return;
+      quantity: 1
 
-}
+    });
 
 
-addToCart(bird);
+    setSelectedBird(null);
 
+  };
 
-}}
 
+  // =========================
+  // OPTION BOX
+  // =========================
 
+  const OptionBox = ({
+    bird
+  }) => {
 
-style={{
 
-opacity:
+    const single =
+      getPrice(
+        bird,
+        "single"
+      );
 
-bird.stock === "Out of Stock"
 
-?
+    const pair =
+      getPrice(
+        bird,
+        "pair"
+      );
 
-0.5
 
-:
+    return (
 
-1,
+      <div
 
+        className="bird-option-overlay"
 
-cursor:
+        onClick={() =>
+          setSelectedBird(null)
+        }
 
-bird.stock === "Out of Stock"
+      >
 
-?
+        <div
 
-"not-allowed"
+          className="bird-option-box"
 
-:
+          onClick={
+            (e) =>
+              e.stopPropagation()
+          }
 
-"pointer"
+        >
 
+          <button
 
-}}
+            className="option-close"
 
+            onClick={() =>
+              setSelectedBird(null)
+            }
 
->
+          >
 
+            ×
 
-{
+          </button>
 
-bird.stock === "Out of Stock"
 
-?
+          <h3>
+            {bird.name}
+          </h3>
 
-"❌ Out of Stock"
 
-:
+          {/* SINGLE */}
 
-"🛒 Add Cart"
+          <button
 
-}
+            className="purchase-option"
 
+            onClick={() => {
 
-</button>
+              addBirdToCart(
+                bird,
+                "single"
+              );
 
+            }}
 
+          >
 
+            Single
 
+            <strong>
 
-<Link
+              ₹
+              {priceFormat(
+                single.finalPrice
+              )}
 
-className="details-btn"
+            </strong>
 
-to={`/bird/${bird.id}`}
+          </button>
 
->
 
-View Details
+          {/* PAIR */}
 
-</Link>
+          {
+            pair.finalPrice > 0 &&
 
+            <button
 
+              className="purchase-option"
 
+              onClick={() => {
 
-</div>
+                addBirdToCart(
+                  bird,
+                  "pair"
+                );
 
+              }}
 
+            >
 
-</div>
+              Pair
 
+              <strong>
 
+                ₹
+                {priceFormat(
+                  pair.finalPrice
+                )}
 
-))
+              </strong>
 
+            </button>
 
-}
+          }
 
 
+        </div>
 
-</div>
+      </div>
 
+    );
 
+  };
 
-</section>
 
+  // =========================
+  // EMPTY CHECK
+  // =========================
 
-);
+  if (!birds.length) {
 
+    return (
+
+      <section className="featured">
+
+        <div className="featured-empty">
+
+          <h2>
+            No Birds Found
+          </h2>
+
+          <p>
+            No birds are available.
+          </p>
+
+        </div>
+
+      </section>
+
+    );
+
+  }
+
+
+  // =========================
+  // MAIN DISPLAY
+  // =========================
+
+  return (
+
+    <section className="featured">
+
+      <div className="featured-grid">
+
+
+        {
+
+          birds.map((bird) => {
+
+
+            const single =
+              getPrice(
+                bird,
+                "single"
+              );
+
+
+            const pair =
+              getPrice(
+                bird,
+                "pair"
+              );
+
+
+            const image =
+              getImage(bird);
+
+
+            const birdOutOfStock =
+              outOfStock(bird);
+
+
+            return (
+
+              <div
+
+                className="bird-card"
+
+                key={bird.id}
+
+              >
+
+
+                {/* =====================
+                    IMAGE
+                ====================== */}
+
+                <div className="bird-image">
+
+
+                  {
+
+                    image ? (
+
+                      <img
+
+                        src={image}
+
+                        alt={bird.name}
+
+                      />
+
+                    ) : (
+
+                      <div className="image-fallback">
+
+                        {bird.emoji || "🐦"}
+
+                      </div>
+
+                    )
+
+                  }
+
+
+                  {/* 
+                    IMAGE KE UPAR
+                    % OFF BADGE
+                    JAAANBUJH KAR HATA DIYA HAI
+                  */}
+
+
+                </div>
+
+
+                {/* =====================
+                    CONTENT
+                ====================== */}
+
+                <div className="bird-content">
+
+
+                  <h3>
+                    {bird.name}
+                  </h3>
+
+
+                  <p>
+                    {bird.type}
+                  </p>
+
+
+                  {/* STOCK */}
+
+                  <p
+
+                    className={
+                      birdOutOfStock
+
+                        ? "stock-status out-of-stock"
+
+                        : "stock-status in-stock"
+                    }
+
+                  >
+
+                    {
+
+                      birdOutOfStock
+
+                        ? "❌ Out of Stock"
+
+                        : "✅ In Stock"
+
+                    }
+
+                  </p>
+
+
+                  {/* =====================
+                      SINGLE PRICE
+                  ====================== */}
+
+                  <div className="price-box">
+
+
+                    <span className="price-label">
+                      Single
+                    </span>
+
+
+                    {
+
+                      single.oldPrice >
+                      single.finalPrice &&
+
+                      <span className="old-price">
+
+                        ₹
+                        {priceFormat(
+                          single.oldPrice
+                        )}
+
+                      </span>
+
+                    }
+
+
+                    <span className="new-price">
+
+                      ₹
+                      {priceFormat(
+                        single.finalPrice
+                      )}
+
+                    </span>
+
+
+                    {
+
+                      single.discount > 0 &&
+
+                      <span className="price-discount">
+
+                        {single.discount}% OFF
+
+                      </span>
+
+                    }
+
+
+                  </div>
+
+
+                  {/* =====================
+                      PAIR PRICE
+                  ====================== */}
+
+                  {
+
+                    pair.finalPrice > 0 &&
+
+                    <div className="price-box">
+
+
+                      <span className="price-label">
+                        Pair
+                      </span>
+
+
+                      {
+
+                        pair.oldPrice >
+                        pair.finalPrice &&
+
+                        <span className="old-price">
+
+                          ₹
+                          {priceFormat(
+                            pair.oldPrice
+                          )}
+
+                        </span>
+
+                      }
+
+
+                      <span className="new-price">
+
+                        ₹
+                        {priceFormat(
+                          pair.finalPrice
+                        )}
+
+                      </span>
+
+
+                      {
+
+                        pair.discount > 0 &&
+
+                        <span className="price-discount">
+
+                          {pair.discount}% OFF
+
+                        </span>
+
+                      }
+
+
+                    </div>
+
+                  }
+
+
+                  {/* =====================
+                      ADD TO CART
+                  ====================== */}
+
+                  <button
+
+                    className="cart-btn"
+
+                    disabled={
+                      birdOutOfStock
+                    }
+
+                    onClick={() => {
+
+                      if (
+                        birdOutOfStock
+                      ) {
+
+                        return;
+
+                      }
+
+
+                      setSelectedBird(
+                        bird
+                      );
+
+                    }}
+
+                  >
+
+                    {
+
+                      birdOutOfStock
+
+                        ? "❌ Out of Stock"
+
+                        : "🛒 Add to Cart"
+
+                    }
+
+                  </button>
+
+
+                  {/* DETAILS */}
+
+                  <Link
+
+                    className="details-btn"
+
+                    to={`/bird/${bird.id}`}
+
+                  >
+
+                    View Details
+
+                  </Link>
+
+
+                </div>
+
+
+              </div>
+
+            );
+
+          })
+
+        }
+
+
+      </div>
+
+
+      {/* OPTION POPUP */}
+
+      {
+
+        selectedBird &&
+
+        <OptionBox
+
+          bird={selectedBird}
+
+        />
+
+      }
+
+
+    </section>
+
+  );
 
 }
 

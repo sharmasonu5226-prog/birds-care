@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { CategoryContext } from "../context/CategoryContext";
 
 function CategoryPage() {
+
   const {
     categories,
     addCategory,
@@ -9,413 +10,411 @@ function CategoryPage() {
     updateCategory,
   } = useContext(CategoryContext);
 
+
   const [catName, setCatName] = useState("");
   const [catEmoji, setCatEmoji] = useState("");
-  const [catImage, setCatImage] = useState(null);
+  const [catImage, setCatImage] = useState("");
 
   const [editCategory, setEditCategory] = useState({});
 
-  // =========================
-  // READ IMAGE
-  // =========================
 
   const readImage = (file, callback) => {
+
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      alert("Please sirf image file select karo.");
+      alert("Sirf image file select karo");
       return;
     }
 
+
     const reader = new FileReader();
+
 
     reader.onload = () => {
       callback(reader.result);
     };
 
-    reader.onerror = () => {
-      alert("Image read nahi ho paayi.");
-    };
 
     reader.readAsDataURL(file);
+
   };
 
-  // =========================
-  // ADD CATEGORY IMAGE
-  // =========================
 
-  const handleCategoryImage = (e) => {
-    const file = e.target.files?.[0];
 
-    if (!file) return;
+  const handleAddImage = (e) => {
 
-    readImage(file, (image) => {
-      setCatImage(image);
+    const file = e.target.files[0];
+
+    readImage(file, (img) => {
+      setCatImage(img);
     });
+
   };
 
-  // =========================
-  // EDIT CATEGORY IMAGE
-  // =========================
 
-  const handleEditCategoryImage = (e, id) => {
-    const file = e.target.files?.[0];
 
-    if (!file) return;
+  const handleEditImage = (e, id) => {
 
-    readImage(file, (image) => {
-      setEditCategory((prev) => ({
+    const file = e.target.files[0];
+
+    readImage(file, (img) => {
+
+      setEditCategory(prev => ({
         ...prev,
+
         [id]: {
           ...(prev[id] || {}),
-          image: image,
-        },
+          image: img
+        }
+
       }));
+
     });
+
   };
 
-  // =========================
-  // ADD CATEGORY
-  // =========================
 
-  const handleAddCategory = async () => {
+
+  const addNewCategory = async () => {
+
+
     if (!catName.trim()) {
-      alert("Enter category name");
+
+      alert("Category name enter karo");
       return;
+
     }
 
-    try {
-      await addCategory({
-        name: catName.trim(),
-        emoji: catEmoji.trim() || "🐦",
-        image: catImage || null,
-      });
 
-      setCatName("");
-      setCatEmoji("");
-      setCatImage(null);
+    await addCategory({
 
-      alert("Category Added");
-    } catch (error) {
-      console.error("Add category error:", error);
-      alert("Category add nahi hui.");
-    }
+      name: catName.trim(),
+
+      emoji: catEmoji || "🐦",
+
+      image: catImage || null
+
+    });
+
+
+    setCatName("");
+    setCatEmoji("");
+    setCatImage("");
+
+    alert("Category Added");
+
   };
 
-  // =========================
-  // CHANGE CATEGORY
-  // =========================
 
-  const changeCategory = (id, field, value) => {
-    setEditCategory((prev) => ({
+
+
+  const changeField = (id, field, value) => {
+
+
+    setEditCategory(prev => ({
+
       ...prev,
+
       [id]: {
+
         ...(prev[id] || {}),
-        [field]: value,
-      },
-    }));
-  };
 
-  // =========================
-  // UPDATE CATEGORY
-  // =========================
+        [field]: value
 
-  const handleUpdateCategory = async (category) => {
-    try {
-      const edited = editCategory[category.id] || {};
-
-      const updateData = {
-        name: edited.name ?? category.name,
-        emoji: edited.emoji ?? category.emoji,
-      };
-
-      // Image tabhi bhejna jab nayi image select ki gayi ho
-      if (edited.image !== undefined) {
-        updateData.image = edited.image;
       }
 
-      console.log("Category ID:", category.id);
-      console.log("Category update data:", updateData);
+    }));
 
-      await updateCategory(category.id, updateData);
 
-      setEditCategory((prev) => {
-        const copy = { ...prev };
-        delete copy[category.id];
-        return copy;
-      });
-
-      alert("Category Updated");
-    } catch (error) {
-      console.error("Category update error:", error);
-      alert("Category update nahi hui.");
-    }
   };
 
-  // =========================
-  // DELETE CATEGORY
-  // =========================
 
-  const handleDeleteCategory = async (id) => {
-    const confirmDelete = window.confirm(
-      "Kya aap ye category delete karna chahte ho?"
+
+
+  const updateCat = async (category) => {
+
+
+    const edit = editCategory[category.id] || {};
+
+
+    await updateCategory(
+
+      category.id,
+
+      {
+
+        name: edit.name ?? category.name,
+
+        emoji: edit.emoji ?? category.emoji,
+
+        image: edit.image ?? category.image
+
+      }
+
     );
 
-    if (!confirmDelete) {
-      return;
-    }
 
-    try {
+    alert("Category Updated");
+
+
+  };
+
+
+
+
+  const deleteCat = async (id) => {
+
+
+    const ok = window.confirm(
+      "Category delete karni hai?"
+    );
+
+
+    if (ok) {
+
       await removeCategory(id);
-    } catch (error) {
-      console.error("Delete category error:", error);
-      alert("Category delete nahi hui.");
+
     }
+
   };
 
-  // =========================
-  // GET CURRENT IMAGE
-  // =========================
 
-  const getCategoryImage = (category) => {
-    const editedImage =
-      editCategory[category.id]?.image;
 
-    if (editedImage) {
-      return editedImage;
-    }
 
-    if (category.image) {
-      return category.image;
-    }
+  const getImage = (category) => {
 
-    return null;
+
+    return (
+      editCategory[category.id]?.image ||
+      category.image ||
+      null
+    );
+
+
   };
 
-  // =========================
-  // UI
-  // =========================
+
+
 
   return (
-    <div className="admin-page">
 
-      <h1>Manage Categories</h1>
+    <div className="admin-page category-admin-page">
 
-      {/* =========================
-          ADD CATEGORY
-      ========================= */}
 
-      <div className="category-add-section">
+      <h1>
+        Manage Categories
+      </h1>
 
-        <h2>Add Category</h2>
+
+
+      <div className="category-add-box">
+
+
+        <h2>
+          Add Category
+        </h2>
+
 
         <input
           type="text"
           placeholder="Category Name"
           value={catName}
-          onChange={(e) =>
-            setCatName(e.target.value)
-          }
+          onChange={(e)=>setCatName(e.target.value)}
         />
+
 
         <input
           type="text"
           placeholder="Emoji"
           value={catEmoji}
-          onChange={(e) =>
-            setCatEmoji(e.target.value)
-          }
+          onChange={(e)=>setCatEmoji(e.target.value)}
         />
+
 
         <input
           type="file"
           accept="image/*"
-          onChange={handleCategoryImage}
+          onChange={handleAddImage}
         />
 
-        {/* ADD IMAGE PREVIEW */}
 
-        {catImage && (
-          <div style={{ marginTop: "10px" }}>
 
-            <p>Image Preview:</p>
+        {
+          catImage &&
 
-            <img
-              src={catImage}
-              alt="Category Preview"
-              width="150"
-              height="150"
-              style={{
-                objectFit: "cover",
-                borderRadius: "10px",
-                display: "block",
-              }}
-            />
+          <img
+            className="category-preview"
+            src={catImage}
+            alt="preview"
+          />
 
-          </div>
-        )}
+        }
 
-        <br />
 
-        <button onClick={handleAddCategory}>
+
+        <button onClick={addNewCategory}>
           Add Category
         </button>
 
+
       </div>
 
-      <hr />
 
-      {/* =========================
-          CATEGORY LIST
-      ========================= */}
+
+
 
       <div className="category-list">
 
-        {categories.length === 0 ? (
-          <p>No categories found.</p>
-        ) : (
-          categories.map((category) => {
 
-            const image =
-              getCategoryImage(category);
+        {
+          categories.length === 0 ?
+
+          <p>No categories found</p>
+
+
+          :
+
+
+          categories.map(category => {
+
+
+            const image = getImage(category);
+
+
 
             return (
+
               <div
-                key={category.id}
                 className="category-admin-card"
+                key={category.id}
               >
 
-                {/* =========================
-                    CATEGORY IMAGE
-                ========================= */}
 
-                {image ? (
+
+                {
+                  image ?
+
+
                   <img
+                    className="category-admin-image"
                     src={image}
                     alt={category.name}
-                    width="150"
-                    height="150"
-                    style={{
-                      objectFit: "cover",
-                      borderRadius: "10px",
-                      display: "block",
-                    }}
                   />
-                ) : (
-                  <div
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      border: "1px solid #ccc",
-                      borderRadius: "10px",
-                      fontSize: "50px",
-                    }}
-                  >
+
+
+                  :
+
+
+                  <div className="category-placeholder">
+
                     {category.emoji || "🐦"}
+
                   </div>
-                )}
 
-                <br />
 
-                {/* =========================
-                    CATEGORY NAME
-                ========================= */}
+                }
+
+
+
 
                 <input
-                  type="text"
+
                   value={
                     editCategory[category.id]?.name ??
                     category.name ??
                     ""
                   }
-                  onChange={(e) =>
-                    changeCategory(
+
+                  onChange={(e)=>
+                    changeField(
                       category.id,
                       "name",
                       e.target.value
                     )
                   }
+
                 />
 
-                <br />
 
-                {/* =========================
-                    CATEGORY EMOJI
-                ========================= */}
 
                 <input
-                  type="text"
+
                   value={
                     editCategory[category.id]?.emoji ??
                     category.emoji ??
                     ""
                   }
-                  onChange={(e) =>
-                    changeCategory(
+
+                  onChange={(e)=>
+                    changeField(
                       category.id,
                       "emoji",
                       e.target.value
                     )
                   }
+
                 />
 
-                <br />
 
-                {/* =========================
-                    CHANGE IMAGE
-                ========================= */}
 
                 <input
+
                   type="file"
+
                   accept="image/*"
-                  onChange={(e) =>
-                    handleEditCategoryImage(
+
+                  onChange={(e)=>
+                    handleEditImage(
                       e,
                       category.id
                     )
                   }
+
                 />
 
-                <br />
 
-                {/* =========================
-                    UPDATE BUTTON
-                ========================= */}
 
                 <button
                   onClick={() =>
-                    handleUpdateCategory(category)
+                    updateCat(category)
                   }
                 >
                   Update
                 </button>
 
-                {/* =========================
-                    DELETE BUTTON
-                ========================= */}
+
 
                 <button
+                  className="delete-category"
                   onClick={() =>
-                    handleDeleteCategory(category.id)
+                    deleteCat(category.id)
                   }
                 >
                   Delete
                 </button>
 
-                <hr />
+
 
               </div>
+
             );
+
+
           })
-        )}
+
+        }
+
 
       </div>
 
+
+
     </div>
+
   );
+
 }
+
 
 export default CategoryPage;

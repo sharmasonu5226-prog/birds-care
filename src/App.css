@@ -1,2611 +1,2034 @@
 /* =====================================================
-   ADMIN PANEL
-   ADMIN CSS - ORIGINAL
+   BIRDS CARE FINAL CSS PART 1
+   RESET + ADMIN DASHBOARD
 ===================================================== */
 
-.admin-page {
-  width: 100%;
-  min-height: 100vh;
-  padding: 50px 7%;
-  background: #f5f7f6;
-  box-sizing: border-box;
+
+*{
+  box-sizing:border-box;
 }
 
-.admin-header {
-  background: linear-gradient(135deg, #064e3b, #0f766e);
-  color: white;
-  border-radius: 22px;
-  padding: 35px 40px;
-  margin-bottom: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+html{
+  width:100%;
+  overflow-x:hidden;
 }
 
-.admin-header h1 {
-  margin: 0 0 8px;
-  font-size: 36px;
-  font-weight: 800;
+
+body{
+  margin:0;
+  width:100%;
+  min-width:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#eef1f0;
+  color:#18332d;
 }
 
-.admin-header p {
-  margin: 0;
-  font-size: 17px;
-  opacity: 0.9;
+
+img{
+  max-width:100%;
+  display:block;
 }
+
+
 
 /* =====================================================
-   WELCOME
+   ADMIN MAIN
 ===================================================== */
 
-.admin-welcome {
-  background: white;
-  border-radius: 18px;
-  padding: 30px;
-  margin-bottom: 28px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+
+.admin-page{
+
+  min-height:100vh;
+  width:100%;
+  background:#f5f7f6;
+  padding:25px;
+
 }
 
-.admin-welcome h2 {
-  margin: 0 0 10px;
-  font-size: 28px;
-  color: #123b35;
+
+
+.admin-page h1,
+.admin-page h2,
+.admin-page h3{
+
+  color:#123b35;
+
 }
 
-.admin-welcome p {
-  margin: 7px 0;
-  color: #666;
-  font-size: 16px;
-}
+
 
 /* =====================================================
-   MAIN ADMIN CARDS
+   ADMIN MENU
 ===================================================== */
 
-.admin-main-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 28px;
-  margin-bottom: 35px;
-}
-
-.admin-main-card {
-  background: white;
-  border-radius: 22px;
-  padding: 35px;
-  min-height: 250px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-  transition: 0.25s ease;
-}
-
-.admin-main-card:hover {
-  transform: translateY(-5px);
-  border-color: #0f766e;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.13);
-}
-
-.admin-main-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e6f5f1;
-  font-size: 38px;
-  margin-bottom: 20px;
-}
-
-.admin-main-card h2 {
-  margin: 0 0 10px;
-  color: #123b35;
-  font-size: 25px;
-}
-
-.admin-main-card p {
-  color: #666;
-  font-size: 16px;
-  line-height: 1.6;
-  margin: 0 0 15px;
-}
-
-.admin-main-card strong {
-  display: block;
-  color: #0f766e;
-  font-size: 17px;
-  margin-bottom: 22px;
-}
-
-.admin-main-card button {
-  border: none;
-  background: #0f766e;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 9px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* =====================================================
-   CATEGORY SHORTCUTS
-===================================================== */
-
-.admin-shortcuts {
-  background: white;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
-}
-
-.admin-shortcuts h2 {
-  margin: 0 0 20px;
-  color: #123b35;
-  font-size: 25px;
-}
-
-.admin-category-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.admin-category-buttons button {
-  background: #f1f8f6;
-  border: 1px solid #cde7df;
-  color: #145c51;
-  padding: 17px 20px;
-  border-radius: 12px;
-  font-size: 17px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: left;
-  transition: 0.2s ease;
-}
-
-.admin-category-buttons button:hover {
-  background: #0f766e;
-  color: white;
-}
-
-/* =====================================================
-   CONTENT
-===================================================== */
-
-.admin-content {
-  background: white;
-  border-radius: 22px;
-  padding: 35px;
-  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-}
-
-.admin-topbar {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 30px;
-  padding-bottom: 22px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.admin-topbar button {
-  border: none;
-  background: #e8f4f1;
-  color: #0f766e;
-  padding: 11px 18px;
-  border-radius: 9px;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.admin-topbar h2 {
-  margin: 0;
-  font-size: 29px;
-  color: #123b35;
-}
-
-.admin-topbar p {
-  margin: 5px 0 0;
-  color: #777;
-}
-
-/* =====================================================
-   FORM
-===================================================== */
-
-.admin-form-card {
-  background: #f7faf9;
-  border: 1px solid #dcece7;
-  border-radius: 18px;
-  padding: 28px;
-  margin-bottom: 35px;
-}
-
-.admin-form-card h3 {
-  margin: 0 0 22px;
-  color: #123b35;
-  font-size: 23px;
-}
-
-.admin-form-card form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 17px;
-}
-
-.admin-form-card input,
-.admin-form-card select,
-.admin-form-card textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 14px 15px;
-  border: 1px solid #ccd9d5;
-  border-radius: 9px;
-  background: white;
-  font-size: 15px;
-  outline: none;
-}
-
-.admin-form-card input:focus,
-.admin-form-card select:focus,
-.admin-form-card textarea:focus {
-  border-color: #0f766e;
-}
-
-.admin-form-card textarea {
-  min-height: 110px;
-  resize: vertical;
-  grid-column: span 2;
-}
-
-.admin-form-card input[type="file"] {
-  padding: 11px;
-}
-
-.admin-form-card form button {
-  background: #0f766e;
-  color: white;
-  border: none;
-  border-radius: 9px;
-  padding: 14px 20px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.admin-form-card form button:hover {
-  background: #095c54;
-}
-
-/* =====================================================
-   BIRDS HEADER
-===================================================== */
-
-.admin-birds-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 22px;
-}
-
-.admin-birds-header h2 {
-  margin: 0;
-  color: #123b35;
-  font-size: 25px;
-}
-
-.admin-birds-header span {
-  background: #e7f5f1;
-  color: #0f766e;
-  padding: 9px 15px;
-  border-radius: 20px;
-  font-weight: 700;
-}
-
-/* =====================================================
-   LIST GRID
-===================================================== */
-
-.admin-list-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 25px;
-}
-
-/* =====================================================
-   MANAGE CARD
-===================================================== */
-
-.admin-manage-card {
-  background: white;
-  border: 1px solid #e1e8e5;
-  border-radius: 18px;
-  padding: 22px;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
-}
-
-.admin-manage-image {
-  width: 100%;
-  height: 190px;
-  background: #f3f7f6;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin-bottom: 18px;
-}
-
-.admin-manage-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.admin-manage-image span {
-  font-size: 70px;
-}
-
-.admin-manage-card input,
-.admin-manage-card select,
-.admin-manage-card textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 13px;
-  margin-bottom: 12px;
-  border: 1px solid #ccd9d5;
-  border-radius: 8px;
-  font-size: 15px;
-  outline: none;
-}
-
-.admin-manage-card textarea {
-  min-height: 90px;
-  resize: vertical;
-}
-
-.admin-manage-card input:focus,
-.admin-manage-card select:focus,
-.admin-manage-card textarea:focus {
-  border-color: #0f766e;
-}
-
-.admin-manage-card input[type="file"] {
-  padding: 9px;
-}
-
-/* =====================================================
-   BUTTONS
-===================================================== */
-
-.admin-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 5px;
-}
-
-.admin-buttons button {
-  border: none;
-  border-radius: 8px;
-  padding: 12px;
-  background: #0f766e;
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.admin-buttons button:hover {
-  background: #095c54;
-}
-
-.admin-buttons .delete-btn {
-  background: #dc3545;
-}
-
-.admin-buttons .delete-btn:hover {
-  background: #b91c1c;
-}
-
-.open-category-btn {
-  width: 100%;
-  border: none;
-  background: #e8f4f1;
-  color: #0f766e;
-  padding: 13px;
-  margin-top: 12px;
-  border-radius: 9px;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.open-category-btn:hover {
-  background: #0f766e;
-  color: white;
-}
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
-.empty-admin {
-  text-align: center;
-  padding: 70px 20px;
-  background: #f8faf9;
-  border-radius: 18px;
-  border: 1px dashed #cbded8;
-}
-
-.empty-admin div {
-  font-size: 65px;
-  margin-bottom: 15px;
-}
-
-.empty-admin h3 {
-  margin: 0 0 8px;
-  color: #123b35;
-  font-size: 23px;
-}
-
-.empty-admin p {
-  margin: 0;
-  color: #777;
-  font-size: 15px;
-}
-
-/* =====================================================
-   MAIN WEBSITE
-===================================================== */
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  width: 100%;
-  overflow-x: hidden;
-}
-
-body {
-  margin: 0;
-  width: 100%;
-  min-width: 0;
-  font-family: Arial, Helvetica, sans-serif;
-
-  /* GREY BACKGROUND */
-  background: #eef1f0;
-
-  color: #18332d;
-  overflow-x: hidden;
-}
-
-img {
-  max-width: 100%;
-}
-
-/* =====================================================
-   HEADER
-   BIRDS CARE LOGO WALA BAR - GREEN
-===================================================== */
-
-.header {
-  width: 100%;
-
-  /* DARK GREEN HEADER */
-  background: #075c3b;
-
-  color: white;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
-  position: relative;
-  z-index: 20;
-}
-
-.main-header {
-  width: 100%;
-  max-width: 1400px;
-  margin: auto;
-  padding: 18px 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 25px;
-}
-
-/* =====================================================
-   LOGO
-===================================================== */
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 210px;
-}
-
-.logo > span {
-  font-size: 42px;
-  line-height: 1;
-}
-
-.logo h2 {
-  margin: 0;
-  font-size: 27px;
-  font-weight: 800;
-  color: white;
-}
-
-.logo small {
-  display: block;
-  margin-top: 3px;
-  color: #d8f2e5;
-  font-size: 12px;
-}
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-.search-box {
-  flex: 1;
-  max-width: 650px;
-  min-width: 0;
-  display: flex;
-  align-items: stretch;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-}
-
-.search-box select {
-  border: none;
-  border-right: 1px solid #ddd;
-  padding: 0 14px;
-  background: white;
-  color: #333;
-  font-size: 14px;
-  outline: none;
-}
-
-.search-box input {
-  flex: 1;
-  min-width: 0;
-  border: none;
-  padding: 13px 16px;
-  font-size: 15px;
-  outline: none;
-}
-
-.search-box button {
-  border: none;
-  background: #f59e0b;
-  color: white;
-  padding: 0 22px;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.search-box button:hover {
-  background: #d97706;
-}
-
-/* =====================================================
-   HEADER LINKS
-===================================================== */
-
-.header-links {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.header-links a {
-  color: white;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.header-links a:hover {
-  color: #ffd166;
-}
-
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
-.nav-menu {
-  width: 100%;
-
-  /* GREEN NAV BAR */
-  background: #064c34;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 45px;
-  padding: 13px 20px;
-}
-
-.nav-menu a {
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 700;
-  transition: 0.2s ease;
-}
-
-.nav-menu a:hover {
-  color: #ffd166;
-  transform: translateY(-1px);
-}
-
-/* =====================================================
-   MAIN
-===================================================== */
-
-main {
-  width: 100%;
-  min-height: 400px;
-}
-
-/* =====================================================
-   HERO
-===================================================== */
-
-.hero {
-  width: 100%;
-  min-height: 520px;
-  padding: 70px 7%;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-
-  /* LIGHT GREY BACKGROUND */
-  background:
-    linear-gradient(
-      90deg,
-      rgba(238, 241, 240, 0.98) 0%,
-      rgba(238, 241, 240, 0.94) 42%,
-      rgba(238, 241, 240, 0.72) 68%,
-      rgba(238, 241, 240, 0.45) 100%
-    );
-}
-
-.hero-content {
-  width: 52%;
-  max-width: 650px;
-  position: relative;
-  z-index: 3;
-}
-
-.hero h1 {
-  margin: 0 0 20px;
-  font-size: 54px;
-  line-height: 1.1;
-  color: #123b35;
-  font-weight: 800;
-}
-
-.hero h1 span {
-  color: #5c8d27;
-}
-
-.hero p {
-  margin: 0 0 28px;
-  font-size: 18px;
-  line-height: 1.7;
-  color: #53635e;
-}
-
-.hero button,
-.shop-now-btn {
-  border: none;
-  background: #0f766e;
-  color: white;
-  padding: 14px 27px;
-  border-radius: 9px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.hero button:hover,
-.shop-now-btn:hover {
-  background: #095c54;
-}
-
-/* =====================================================
-   HERO IMAGE
-===================================================== */
-
-.hero > img,
-.hero .hero-image,
-.hero .hero-img,
-.hero .hero-visual,
-.hero .hero-banner-image {
-  position: absolute;
-  z-index: 1;
-  right: 4%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: min(48%, 620px);
-  height: min(88%, 460px);
-  max-width: 620px;
-  max-height: 460px;
-  object-fit: contain;
-  object-position: center;
-  border-radius: 0;
-  opacity: 0.82;
-  pointer-events: none;
-}
-
-.hero > img {
-  width: min(48%, 620px);
-  height: auto;
-  max-height: 460px;
-}
-
-.hero .hero-image img,
-.hero .hero-img img,
-.hero .hero-visual img,
-.hero .hero-banner-image img {
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  object-position: center;
-}
-
-/* =====================================================
-   HERO BACKGROUND IMAGE SAFETY
-===================================================== */
-
-.hero picture {
-  position: absolute;
-  right: 4%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: min(48%, 620px);
-  height: min(88%, 460px);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.hero picture img {
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  object-position: center;
-  opacity: 0.82;
-}
-
-/* =====================================================
-   POPULAR CATEGORIES
-===================================================== */
-
-.popular-categories,
-.categories {
-  width: 100%;
-  padding: 55px 5%;
-
-  /* GREY */
-  background: #eef1f0;
-}
-
-.section-title {
-  margin: 0 0 10px;
-  text-align: center;
-  color: #123b35;
-  font-size: 32px;
-  font-weight: 800;
-}
-
-.section-subtitle {
-  text-align: center;
-  margin: 0 auto 32px;
-  color: #777;
-  font-size: 16px;
-}
-
-.category-grid,
-.categories-grid,
-.popular-grid {
-  width: 100%;
-  max-width: 1400px;
-  margin: 30px auto 0;
-
-  /* 6 CATEGORIES IN ONE ROW */
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-
-  gap: 22px;
-}
-
-/* =====================================================
-   CATEGORY CARD
-===================================================== */
-
-.category-card {
-  background: white;
-  border: 1px solid #e1ebe6;
-  border-radius: 18px;
-  padding: 22px 14px;
-  text-align: center;
-  cursor: pointer;
-  text-decoration: none;
-  color: #18332d;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
-  transition: 0.25s ease;
-}
-
-.category-card:hover {
-  transform: translateY(-6px);
-  border-color: #0f766e;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-}
-
-/* =====================================================
-   CATEGORY CIRCLE - BIGGER
-===================================================== */
-
-.category-card img {
-  width: 145px;
-  height: 145px;
-  max-width: 145px;
-
-  object-fit: cover;
-  border-radius: 50%;
-
-  margin: 0 auto 15px;
-  display: block;
-
-  /* CLEARER IMAGE */
-  border: 3px solid #f0f3f1;
-}
-
-.category-card .category-icon {
-  width: 145px;
-  height: 145px;
-  margin: 0 auto 15px;
-  border-radius: 50%;
-  background: #eaf6f1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 55px;
-}
-
-.category-card h3 {
-  margin: 5px 0;
-  color: #123b35;
-  font-size: 19px;
-}
-
-.category-card p {
-  margin: 5px 0 0;
-  color: #777;
-  font-size: 14px;
-}
-
-/* =====================================================
-   FEATURED BIRDS
-===================================================== */
-
-.featured {
-  width: 100%;
-  padding: 60px 5%;
 
-  /* GREY BACKGROUND */
-  background: #eef1f0;
-}
-
-/* =====================================================
-   FEATURED GRID - 5 CARDS IN ONE ROW
-===================================================== */
-
-.featured-grid {
-  width: 100%;
-  max-width: 1400px;
-  margin: 32px auto 0;
-
-  display: grid;
-
-  /* 5 IN ONE ROW */
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-
-  gap: 20px;
-}
-
-/* =====================================================
-   BIRD CARD
-===================================================== */
-
-.bird-card {
-  background: white;
-  border-radius: 18px;
-  padding: 14px;
-  border: 1px solid #e2ebe7;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-  overflow: hidden;
-  transition: 0.25s ease;
-}
-
-.bird-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 13px 30px rgba(0, 0, 0, 0.12);
-}
-
-/* =====================================================
-   BIRD IMAGE
-===================================================== */
-
-.bird-img {
-  width: 100%;
-  height: 205px;
-  border-radius: 13px;
-  object-fit: cover;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #edf5f1;
-}
-
-.bird-img.no-image {
-  font-size: 70px;
-}
-
-.bird-card h3 {
-  margin: 14px 0 7px;
-  font-size: 18px;
-  color: #123b35;
-}
-
-.price {
-  margin: 0 0 8px;
-  color: #0f766e;
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.rating {
-  color: #f59e0b;
-  font-size: 14px;
-  margin-bottom: 13px;
-}
-
-.rating span {
-  color: #777;
-  margin-left: 6px;
-  font-size: 12px;
-}
-
-.bird-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.bird-buttons button {
-  width: 100%;
-  border: none;
-  padding: 10px 7px;
-  border-radius: 8px;
-  background: #0f766e;
-  color: white;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.bird-buttons button:hover {
-  background: #095c54;
-}
-
-.bird-buttons .details-btn {
-  background: #e7f4ef;
-  color: #0f766e;
-}
-
-.bird-buttons .details-btn:hover {
-  background: #0f766e;
-  color: white;
-}
-
-/* =====================================================
-   ABOUT
-===================================================== */
-
-.about {
-  width: 100%;
-  padding: 70px 7%;
-  background: #f5f7f6;
-}
-
-.about-content {
-  width: 100%;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.about h2 {
-  margin: 0 0 15px;
-  color: #123b35;
-  font-size: 32px;
-}
-
-.about p {
-  color: #5f6b67;
-  line-height: 1.8;
-  font-size: 16px;
-}
-
-.about-grid {
-  margin-top: 35px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-}
-
-.about-card {
-  padding: 25px;
-  background: white;
-  border-radius: 15px;
-  border: 1px solid #dfebe5;
-}
-
-.about-card h3 {
-  margin: 10px 0;
-  color: #123b35;
-}
-
-.about-card p {
-  margin: 0;
-  font-size: 14px;
-}
-
-/* =====================================================
-   PRODUCTS PAGE
-===================================================== */
-
-.products-page {
-  width: 100%;
-  padding: 55px 5%;
-
-  /* GREY */
-  background: #eef1f0;
-
-  min-height: 600px;
-}
-
-.products-page h1 {
-  text-align: center;
-  color: #123b35;
-  font-size: 35px;
-  margin: 0 0 35px;
-}
-
-.products-grid {
-  width: 100%;
-  max-width: 1400px;
-  margin: auto;
-
-  display: grid;
-
-  /* 5 PRODUCTS IN ONE ROW */
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-
-  gap: 20px;
-}
-
-/* =====================================================
-   PRODUCT PAGE CARD
-===================================================== */
-
-.product-card {
-  background: white;
-  border-radius: 18px;
-  padding: 15px;
-  border: 1px solid #e2ebe7;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-}
-
-/* =====================================================
-   BIRD DETAILS
-===================================================== */
-
-.bird-details,
-.bird-detail {
-  width: calc(100% - 40px);
-  max-width: 1200px;
-  margin: 45px auto;
-  padding: 35px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-}
-
-.bird-details img,
-.bird-detail img {
-  max-width: 100%;
-  border-radius: 15px;
-}
-
-.bird-details h1,
-.bird-detail h1 {
-  color: #123b35;
-}
-
-.bird-details .price,
-.bird-detail .price {
-  color: #0f766e;
-  font-size: 25px;
-  font-weight: 800;
-}
-
-/* =====================================================
-   CART
-===================================================== */
-
-.cart-page {
-  width: 100%;
-  min-height: 600px;
-  padding: 55px 7%;
-  background: #eef1f0;
-}
-
-.cart-page h1 {
-  color: #123b35;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.cart-item {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto 18px;
-  padding: 20px;
-  background: white;
-  border-radius: 15px;
-  border: 1px solid #e1ebe6;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
-}
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-.footer {
-  width: 100%;
-  background: #073f2d;
-  color: white;
-  padding: 45px 7% 25px;
-}
-
-.footer-container {
-  width: 100%;
-  max-width: 1250px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 35px;
-}
-
-.footer h3 {
-  margin: 0 0 14px;
-  font-size: 20px;
-}
-
-.footer p {
-  color: #d4e8df;
-  line-height: 1.7;
-}
-
-.footer a {
-  color: #d4e8df;
-  text-decoration: none;
-}
-
-.footer a:hover {
-  color: #ffd166;
-}
-
-.footer-bottom {
-  width: 100%;
-  max-width: 1250px;
-  margin: 30px auto 0;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  text-align: center;
-  color: #b9d5ca;
-  font-size: 14px;
-}
-
-/* =====================================================
-   RESPONSIVE - ADMIN
-   ADMIN KO MOBILE PAR BHI SAHI RAKHA HAI
-===================================================== */
-
-@media (max-width: 900px) {
-  .admin-page {
-    padding: 35px 4%;
-  }
-
-  .admin-main-grid,
-  .admin-list-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .admin-form-card form {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-/* =====================================================
-   TABLET
-===================================================== */
-
-@media (max-width: 1100px) {
-  .main-header {
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    min-width: auto;
-  }
-
-  .search-box {
-    order: 3;
-    width: 100%;
-    max-width: none;
-  }
-
-  .category-grid,
-  .categories-grid,
-  .popular-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .featured-grid,
-  .products-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .hero {
-    min-height: 480px;
-    padding: 60px 6%;
-  }
-
-  .hero-content {
-    width: 68%;
-  }
+.admin-menu{
 
-  .hero h1 {
-    font-size: 44px;
-  }
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  background:white;
+  padding:18px;
+  border-radius:18px;
+  margin-bottom:25px;
+  box-shadow:0 5px 20px rgba(0,0,0,.08);
 
-  .hero > img,
-  .hero .hero-image,
-  .hero .hero-img,
-  .hero .hero-visual,
-  .hero .hero-banner-image {
-    right: 2%;
-    width: 44%;
-    max-width: 480px;
-    max-height: 380px;
-  }
-
-  .hero picture {
-    right: 2%;
-    width: 44%;
-    max-width: 480px;
-    max-height: 380px;
-  }
-}
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 650px) {
-
-  /* ---------------- ADMIN ---------------- */
-
-  .admin-page {
-    padding: 25px 4%;
-  }
-
-  .admin-header {
-    padding: 25px;
-  }
-
-  .admin-header h1 {
-    font-size: 28px;
-  }
-
-  .admin-main-grid,
-  .admin-list-grid,
-  .admin-category-buttons {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-content {
-    padding: 20px;
-  }
-
-  .admin-topbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .admin-form-card {
-    padding: 20px;
-  }
-
-  .admin-form-card form {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-form-card textarea {
-    grid-column: span 1;
-  }
-
-  .admin-birds-header {
-    align-items: flex-start;
-    gap: 12px;
-    flex-direction: column;
-  }
-
-  /* ---------------- HEADER ---------------- */
-
-  .main-header {
-    padding: 15px 4%;
-    gap: 15px;
-  }
-
-  .logo {
-    min-width: 0;
-  }
-
-  .logo h2 {
-    font-size: 23px;
-  }
-
-  .logo > span {
-    font-size: 34px;
-  }
-
-  .header-links {
-    gap: 10px;
-  }
-
-  .header-links a {
-    font-size: 13px;
-  }
-
-  /* ---------------- NAVIGATION ---------------- */
-
-  .nav-menu {
-    gap: 18px;
-    padding: 11px 10px;
-    overflow-x: auto;
-    justify-content: flex-start;
-  }
-
-  .nav-menu a {
-    white-space: nowrap;
-    font-size: 14px;
-  }
-
-  /* ---------------- SEARCH ---------------- */
-
-  .search-box {
-    height: 44px;
-  }
-
-  .search-box select {
-    max-width: 110px;
-    padding: 0 5px;
-    font-size: 12px;
-  }
-
-  .search-box input {
-    font-size: 13px;
-    padding: 10px;
-  }
-
-  .search-box button {
-    padding: 0 12px;
-  }
-
-  /* ---------------- HERO ---------------- */
-
-  .hero {
-    min-height: 650px;
-    padding: 45px 6% 35px;
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .hero-content {
-    width: 100%;
-    max-width: 100%;
-    padding-top: 10px;
-  }
-
-  .hero h1 {
-    font-size: 36px;
-    line-height: 1.12;
-  }
-
-  .hero p {
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  .hero > img,
-  .hero .hero-image,
-  .hero .hero-img,
-  .hero .hero-visual,
-  .hero .hero-banner-image {
-    position: absolute;
-    top: auto;
-    bottom: 20px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: 88%;
-    height: 250px;
-    max-width: 430px;
-    max-height: 250px;
-    object-fit: contain;
-    opacity: 0.78;
-  }
-
-  .hero > img {
-    height: auto;
-    max-height: 250px;
-  }
-
-  .hero picture {
-    top: auto;
-    bottom: 20px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: 88%;
-    height: 250px;
-    max-width: 430px;
-    max-height: 250px;
-  }
-
-  .hero picture img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    opacity: 0.78;
-  }
-
-  /* ---------------- SECTIONS ---------------- */
-
-  .popular-categories,
-  .categories,
-  .featured,
-  .about,
-  .products-page,
-  .cart-page {
-    padding: 45px 5%;
-  }
-
-  .section-title {
-    font-size: 27px;
-  }
-
-  .category-grid,
-  .categories-grid,
-  .popular-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 15px;
-  }
-
-  .featured-grid,
-  .products-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 15px;
-  }
-
-  .category-card img,
-  .category-card .category-icon {
-    width: 125px;
-    height: 125px;
-  }
-
-  .bird-img {
-    height: 180px;
-  }
-
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* ---------------- DETAILS ---------------- */
-
-  .bird-details,
-  .bird-detail {
-    width: calc(100% - 24px);
-    margin: 25px auto;
-    padding: 20px;
-  }
-
-  /* ---------------- BUTTONS ---------------- */
-
-  .bird-buttons {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  /* ---------------- FOOTER ---------------- */
-
-  .footer-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* =====================================================
-   VERY SMALL MOBILE
-===================================================== */
-
-@media (max-width: 420px) {
-
-  .logo small {
-    display: none;
-  }
-
-  .header-links {
-    gap: 7px;
-  }
-
-  .header-links a {
-    font-size: 12px;
-  }
-
-  .hero {
-    min-height: 610px;
-  }
-
-  .hero h1 {
-    font-size: 32px;
-  }
-
-  .hero > img,
-  .hero .hero-image,
-  .hero .hero-img,
-  .hero .hero-visual,
-  .hero .hero-banner-image {
-    height: 220px;
-    max-height: 220px;
-  }
-
-  .hero picture {
-    height: 220px;
-    max-height: 220px;
-  }
-
-  .search-box select {
-    max-width: 95px;
-  }
-
-  .bird-buttons {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* =====================================================
-   LOGIN PAGE
-===================================================== */
-
-.login-page {
-  width: 100%;
-  min-height: 650px;
-  padding: 60px 20px;
-  background: #f5faf7;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 450px;
-  background: white;
-  padding: 40px;
-  border-radius: 22px;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.10);
-  box-sizing: border-box;
-}
-
-.login-icon {
-  width: 75px;
-  height: 75px;
-  margin: 0 auto 20px;
-  border-radius: 20px;
-  background: #e7f5f1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-}
-
-.login-card h1 {
-  margin: 0;
-  text-align: center;
-  color: #123b35;
-  font-size: 32px;
-  font-weight: 800;
-}
-
-.login-subtitle {
-  text-align: center;
-  color: #777;
-  margin: 10px 0 30px;
-  font-size: 15px;
-}
-
-.login-card form {
-  display: flex;
-  flex-direction: column;
-}
-
-.login-card label {
-  margin-bottom: 7px;
-  color: #123b35;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.login-card input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 14px 15px;
-  margin-bottom: 18px;
-  border: 1px solid #ccd9d5;
-  border-radius: 9px;
-  background: white;
-  color: #333;
-  font-size: 15px;
-  outline: none;
-}
-
-.login-card input:focus {
-  border-color: #0f766e;
-  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.10);
 }
 
-.login-card button {
-  width: 100%;
-  border: none;
-  background: #0f766e;
-  color: white;
-  padding: 14px;
-  border-radius: 9px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 5px;
-}
-
-.login-card button:hover {
-  background: #095c54;
-}
-
-.login-back {
-  text-align: center;
-  margin: 25px 0 0;
-  color: #777;
-  font-size: 14px;
-}
-
-.login-back a {
-  color: #0f766e;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.login-back a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 650px) {
-  .login-page {
-    min-height: 600px;
-    padding: 35px 15px;
-  }
-
-  .login-card {
-    padding: 28px 22px;
-  }
-
-  .login-card h1 {
-    font-size: 27px;
-  }
-}
-
-/* =====================================================
-   CATEGORIES SECTION
-===================================================== */
 
-.categories-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 25px;
-  padding: 40px 20px;
-}
-
-.category-card {
-  text-decoration: none;
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
-  transition: 0.3s;
-  color: #222;
-}
-
-.category-card:hover {
-  transform: translateY(-5px);
-}
-
-.category-card img {
-  width: 145px;
-  height: 145px;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-  margin: auto;
-}
 
-.category-placeholder {
-  width: 145px;
-  height: 145px;
-  border-radius: 50%;
-  background: #f1f1f1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 60px;
-  margin: auto;
-}
+.admin-menu button{
 
-.category-card h3 {
-  margin-top: 15px;
-  font-size: 22px;
-}
+  background:#0f766e;
+  color:white;
+  border:none;
+  padding:12px 18px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
 
-.category-card p {
-  color: #666;
 }
-
-/* =====================================================
-   ADMIN DASHBOARD LAYOUT
-===================================================== */
 
-.admin-layout {
-  display: flex;
-  min-height: 100vh;
-  background: #f5f6fa;
-}
 
-/* =====================================================
-   SIDEBAR
-===================================================== */
+.admin-menu button:hover{
 
-.admin-sidebar {
-  width: 260px;
-  background: #111827;
-  color: white;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+  background:#075c3b;
 
-.admin-sidebar h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 24px;
 }
 
-.admin-sidebar button {
-  background: #1f2937;
-  color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  text-align: left;
-  transition: 0.3s;
-}
 
-.admin-sidebar button:hover {
-  background: #2563eb;
-}
 
 /* =====================================================
    ADMIN CONTENT
 ===================================================== */
 
-.admin-content {
-  flex: 1;
-  padding: 30px;
+
+.admin-content{
+
+  width:100%;
+  background:#f5f7f6;
+  padding:10px;
+
 }
 
-.admin-content h1 {
-  font-size: 30px;
-  margin-bottom: 25px;
-}
+
 
 /* =====================================================
-   DASHBOARD CARDS
+   DASHBOARD
 ===================================================== */
 
-.dashboard-cards {
-  display: flex;
-  gap: 25px;
+
+.dashboard-box{
+
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+
 }
 
-.dashboard-card {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  width: 220px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+
+.dashboard-card{
+
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 5px 20px rgba(0,0,0,.08);
+  text-align:center;
+
 }
 
-.dashboard-card h3 {
-  margin: 0;
-  font-size: 18px;
+
+
+.dashboard-card h2{
+
+  margin:0;
+  font-size:35px;
+  color:#0f766e;
+
 }
 
-.dashboard-card p {
-  font-size: 35px;
-  font-weight: bold;
-  margin-top: 15px;
+
+.dashboard-card p{
+
+  margin-top:10px;
+  font-weight:700;
+
 }
+
+
 
 /* =====================================================
-   ADD FORM BOX
+   ADMIN FORM
 ===================================================== */
 
-.add-box {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  margin-bottom: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+.admin-form-card{
+
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  margin-bottom:30px;
+  box-shadow:0 5px 20px rgba(0,0,0,.08);
+
 }
 
-.add-box input,
-.add-box select,
-.add-box textarea {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 15px;
+
+
+.admin-form-card input,
+.admin-form-card select,
+.admin-form-card textarea{
+
+
+ width:100%;
+ padding:13px;
+ margin-bottom:15px;
+ border:1px solid #ddd;
+ border-radius:10px;
+ font-size:15px;
+
 }
 
-.add-box textarea {
-  height: 100px;
-  resize: none;
+
+
+.admin-form-card textarea{
+
+ min-height:100px;
+
 }
 
-.add-box button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
+
+
+.admin-form-card button{
+
+
+ background:#0f766e;
+ color:white;
+ border:none;
+ padding:13px 25px;
+ border-radius:10px;
+ cursor:pointer;
+ font-weight:700;
+
 }
+
+
 
 /* =====================================================
-   BIRD ADMIN CARDS
+   PRODUCT LIST ADMIN
 ===================================================== */
 
-.bird-admin-card {
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  gap: 20px;
+
+.admin-list-grid{
+
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:25px;
+
 }
 
-.bird-admin-card img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 12px;
+
+
+.admin-manage-card{
+
+
+ background:white;
+ padding:20px;
+ border-radius:18px;
+ box-shadow:0 5px 20px rgba(0,0,0,.08);
+ text-align:center;
+
 }
 
-.bird-admin-card .no-image {
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #eee;
-  font-size: 50px;
-  border-radius: 12px;
+
+
+.admin-manage-card img{
+
+
+ width:150px;
+ height:150px;
+ object-fit:cover;
+ border-radius:15px;
+ margin:auto;
+
 }
 
-.bird-admin-card h3 {
-  margin: 0;
-  font-size: 20px;
+
+
+.admin-manage-card input,
+.admin-manage-card select,
+.admin-manage-card textarea{
+
+
+ width:100%;
+ padding:10px;
+ margin-bottom:10px;
+ border:1px solid #ddd;
+ border-radius:8px;
+
 }
 
-.bird-admin-card button {
-  margin-left: auto;
-  background: #dc2626;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
+
+
+.admin-manage-card button{
+
+
+ padding:10px 18px;
+ border:none;
+ border-radius:8px;
+ background:#0f766e;
+ color:white;
+ cursor:pointer;
+ font-weight:700;
+
 }
+
+
+
+.delete-btn{
+
+ background:#dc2626 !important;
+
+}
+
+
 
 /* =====================================================
-   CATEGORY CARDS
+   MOBILE ADMIN
 ===================================================== */
 
-.category-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
+
+@media(max-width:1000px){
+
+
+.dashboard-box{
+
+ grid-template-columns:repeat(2,1fr);
+
 }
 
-.category-admin-card {
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  text-align: center;
+
+
+.admin-list-grid{
+
+ grid-template-columns:repeat(2,1fr);
+
 }
 
-.category-admin-card img {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 50%;
+
 }
 
-.category-admin-card h3 {
-  margin: 15px 0;
+
+
+@media(max-width:600px){
+
+
+.admin-page{
+
+ padding:15px;
+
 }
 
-.category-admin-card button {
-  background: #dc2626;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
+
+.dashboard-box{
+
+ grid-template-columns:1fr;
+
 }
+
+
+
+.admin-list-grid{
+
+ grid-template-columns:1fr;
+
+}
+
+
+.admin-menu button{
+
+ width:100%;
+
+}
+
+
+}/* =====================================================
+   BIRDS CARE FINAL CSS PART 2
+   PRODUCTS + CATEGORY + HOME
+===================================================== */
+
 
 /* =====================================================
-   MOBILE RESPONSIVE
+   WEBSITE HEADER
 ===================================================== */
 
-@media (max-width: 768px) {
 
-  .admin-layout {
-    flex-direction: column;
-  }
+.header{
 
-  .admin-sidebar {
-    width: auto;
-  }
+ width:100%;
+ background:#075c3b;
+ color:white;
 
-  .dashboard-cards {
-    flex-direction: column;
-  }
-
-  .dashboard-card {
-    width: auto;
-  }
-
-  .bird-admin-card {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .bird-admin-card button {
-    margin: auto;
-  }
 }
+
+
+
+.main-header{
+
+ max-width:1400px;
+ margin:auto;
+ padding:18px 5%;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:20px;
+
+}
+
+
+
+.logo{
+
+ display:flex;
+ align-items:center;
+ gap:12px;
+
+}
+
+
+.logo span{
+
+ font-size:40px;
+
+}
+
+
+.logo h2{
+
+ margin:0;
+ font-size:28px;
+
+}
+
+
+.logo small{
+
+ color:#d8f2e5;
+
+}
+
+
+
+.header-links{
+
+ display:flex;
+ gap:20px;
+
+}
+
+
+.header-links a{
+
+ color:white;
+ text-decoration:none;
+ font-weight:700;
+
+}
+
+
+
+.nav-menu{
+
+ background:#064c34;
+ display:flex;
+ justify-content:center;
+ gap:40px;
+ padding:14px;
+ flex-wrap:wrap;
+
+}
+
+
+
+.nav-menu a{
+
+ color:white;
+ text-decoration:none;
+ font-weight:700;
+
+}
+
+
 
 /* =====================================================
-   ADMIN BIRD IMAGE
+   HERO SECTION
 ===================================================== */
 
-.bird-admin-card img,
-.category-admin-card img {
-  width: 100%;
-  height: 220px;
-  object-fit: contain;
-  border-radius: 10px;
-  background: #f5f5f5;
+
+.hero{
+
+ min-height:520px;
+ padding:70px 7%;
+ display:flex;
+ align-items:center;
+ position:relative;
+ overflow:hidden;
+ background:#eef1f0;
+
 }
+
+
+
+.hero-content{
+
+ width:55%;
+ z-index:2;
+
+}
+
+
+
+.hero h1{
+
+ font-size:52px;
+ color:#123b35;
+
+}
+
+
+
+.hero h1 span{
+
+ color:#5c8d27;
+
+}
+
+
+
+.hero p{
+
+ font-size:18px;
+ line-height:1.7;
+ color:#53635e;
+
+}
+
+
+
+.hero button,
+.shop-now-btn{
+
+
+ background:#0f766e;
+ color:white;
+ padding:14px 28px;
+ border:none;
+ border-radius:10px;
+ font-weight:bold;
+ cursor:pointer;
+ text-decoration:none;
+
+}
+
+
+
+.hero img{
+
+ position:absolute;
+ right:5%;
+ width:45%;
+ height:90%;
+ object-fit:contain;
+
+}
+
+
 
 /* =====================================================
-   ADMIN BIRD CARD FIX
+   CATEGORY SECTION
 ===================================================== */
 
-.admin-bird-card {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  padding: 20px;
-  margin: 20px 0;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+.categories,
+.popular-categories{
+
+
+ padding:55px 5%;
+ background:#eef1f0;
+
 }
 
-.admin-bird-card img {
-  width: 180px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 15px;
+
+
+.section-title{
+
+ text-align:center;
+ font-size:32px;
+ color:#123b35;
+
 }
 
-.admin-bird-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+
+
+.category-grid,
+.categories-container,
+.website-category-grid{
+
+
+ max-width:1400px;
+ margin:30px auto;
+
+ display:grid;
+ grid-template-columns:repeat(6,1fr);
+ gap:25px;
+
 }
 
-.admin-bird-info input,
-.admin-bird-info select {
-  width: 250px;
-  padding: 8px;
+
+
+.category-card,
+.website-category-card{
+
+
+ background:white;
+ padding:20px;
+ border-radius:18px;
+ text-align:center;
+ text-decoration:none;
+ color:#18332d;
+ box-shadow:0 5px 20px rgba(0,0,0,.06);
+
 }
 
-.admin-actions {
-  display: flex;
-  gap: 10px;
+
+
+.category-card img,
+.website-category-card img{
+
+
+ width:120px;
+ height:120px;
+ object-fit:cover;
+ border-radius:50%;
+ margin:auto;
+
 }
 
-.admin-actions button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+
+
+.category-card h3,
+.website-category-card h3{
+
+ color:#123b35;
+
 }
 
-@media (max-width: 700px) {
-  .admin-bird-card {
-    flex-direction: column;
-  }
-}
+
+
 
 /* =====================================================
-   STOCK
+   PRODUCTS PAGE
 ===================================================== */
 
-.stock-green {
-  color: green;
-  font-weight: bold;
+
+.products-page{
+
+
+ width:100%;
+ min-height:650px;
+ padding:55px 5%;
+ background:#eef1f0;
+
 }
 
-.stock-red {
-  color: red;
-  font-weight: bold;
+
+
+.products-page h1{
+
+ text-align:center;
+ color:#123b35;
+ font-size:36px;
+
 }
+
+
+
+.products-page input{
+
+
+ display:block;
+ width:600px;
+ max-width:100%;
+ margin:0 auto 35px;
+ padding:14px;
+ border-radius:10px;
+ border:1px solid #ddd;
+
+}
+
+
+
+/* PRODUCT GRID */
+
+
+.products-grid{
+
+
+ max-width:1400px;
+ margin:auto;
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:25px;
+
+}
+
+
+
+/* PRODUCT CARD */
+
+
+.product-card{
+
+
+ background:white;
+ padding:15px;
+ border-radius:20px;
+ box-shadow:0 7px 25px rgba(0,0,0,.07);
+
+}
+
+
+
+.product-image{
+
+
+ width:100%;
+ height:230px;
+ border-radius:15px;
+ overflow:hidden;
+ background:#f1f5f3;
+
+}
+
+
+
+.product-image img{
+
+
+ width:100%;
+ height:100%;
+ object-fit:cover;
+
+}
+
+
+
+.product-card h2{
+
+ color:#123b35;
+ font-size:20px;
+
+}
+
+
+
+.product-type{
+
+ color:#71807b;
+
+}
+
+
+
+.price{
+
+ color:#0f766e;
+ font-size:20px;
+ font-weight:bold;
+
+}
+
+
+
+.add-cart-button{
+
+
+ width:100%;
+ padding:12px;
+ background:#0f766e;
+ color:white;
+ border:none;
+ border-radius:10px;
+ cursor:pointer;
+ font-weight:bold;
+
+}
+
+
+
+.view-details-button{
+
+
+ display:block;
+ margin-top:10px;
+ padding:10px;
+ text-align:center;
+ background:#e7f4ef;
+ color:#0f766e;
+ border-radius:10px;
+ text-decoration:none;
+ font-weight:bold;
+
+}
+
+
+
 
 /* =====================================================
-   CHECKOUT PAGE
+   CATEGORY ADMIN WEBSITE FIX
 ===================================================== */
 
-.checkout-section {
-  min-height: 80vh;
-  padding: 50px 20px;
-  background: #f5f7fa;
+
+.category-admin-card img{
+
+
+ width:100px;
+ height:100px;
+ object-fit:cover;
+ border-radius:50%;
+ margin:auto;
+
 }
 
-.checkout-box {
-  width: 100%;
-  max-width: 650px;
-  margin: 0 auto;
-  background: #ffffff;
-  padding: 35px;
-  border-radius: 18px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+
+.category-list{
+
+
+ display:grid;
+ grid-template-columns:repeat(6,1fr);
+ gap:20px;
+
 }
 
-.checkout-box h1 {
-  text-align: center;
-  margin-bottom: 8px;
+
+
+
+
+/* =====================================================
+   RESPONSIVE PART 2
+===================================================== */
+
+
+@media(max-width:1200px){
+
+
+.products-grid{
+
+ grid-template-columns:repeat(3,1fr);
+
 }
 
-.checkout-subtitle {
-  text-align: center;
-  color: #777;
-  margin-bottom: 25px;
+
+.category-grid,
+.categories-container,
+.website-category-grid{
+
+ grid-template-columns:repeat(4,1fr);
+
 }
 
-.checkout-box form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+
 }
+
+
+
+@media(max-width:900px){
+
+
+.hero-content{
+
+ width:100%;
+
+}
+
+
+.hero img{
+
+ width:80%;
+ opacity:.3;
+
+}
+
+
+
+.products-grid{
+
+ grid-template-columns:repeat(2,1fr);
+
+}
+
+
+
+.category-grid,
+.categories-container,
+.website-category-grid{
+
+ grid-template-columns:repeat(3,1fr);
+
+}
+
+
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.main-header{
+
+ flex-direction:column;
+
+}
+
+
+
+.hero h1{
+
+ font-size:34px;
+
+}
+
+
+
+.products-grid{
+
+ grid-template-columns:repeat(2,1fr);
+
+}
+
+
+
+.category-grid,
+.categories-container,
+.website-category-grid{
+
+ grid-template-columns:repeat(2,1fr);
+
+}
+
+
+
+.product-image{
+
+ height:170px;
+
+}
+
+
+
+}/* =====================================================
+   BIRDS CARE FINAL CSS PART 3
+   CART + CHECKOUT + BILL + FOOTER + MOBILE
+===================================================== */
+
+
+
+/* =====================================================
+   BIRD DETAILS
+===================================================== */
+
+
+.bird-details,
+.bird-detail{
+
+
+ max-width:1200px;
+ margin:45px auto;
+ padding:35px;
+ background:white;
+ border-radius:20px;
+ box-shadow:0 7px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+.bird-details h1,
+.bird-detail h1{
+
+ color:#123b35;
+
+}
+
+
+
+.bird-details img,
+.bird-detail img{
+
+ max-width:100%;
+ border-radius:15px;
+
+}
+
+
+
+
+
+/* =====================================================
+   CART
+===================================================== */
+
+
+.cart-page{
+
+
+ min-height:600px;
+ padding:55px 7%;
+ background:#eef1f0;
+
+}
+
+
+
+.cart-page h1{
+
+ text-align:center;
+ color:#123b35;
+
+}
+
+
+
+.cart-item{
+
+
+ max-width:900px;
+ margin:0 auto 20px;
+ padding:20px;
+ background:white;
+ border-radius:15px;
+ box-shadow:0 5px 18px rgba(0,0,0,.06);
+
+}
+
+
+
+
+.cart-item img{
+
+
+ width:90px;
+ height:90px;
+ object-fit:cover;
+ border-radius:10px;
+
+}
+
+
+
+
+
+/* =====================================================
+   CHECKOUT
+===================================================== */
+
+
+.checkout-section{
+
+
+ min-height:80vh;
+ padding:50px 20px;
+ background:#f5f7fa;
+
+}
+
+
+
+
+.checkout-box{
+
+
+ max-width:650px;
+ margin:auto;
+ background:white;
+ padding:35px;
+ border-radius:18px;
+ box-shadow:0 8px 30px rgba(0,0,0,.08);
+
+}
+
+
+
+.checkout-box h1{
+
+ text-align:center;
+ color:#123b35;
+
+}
+
+
 
 .checkout-box input,
-.checkout-box textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 14px 16px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 16px;
-  outline: none;
+.checkout-box textarea,
+.checkout-box select{
+
+
+ width:100%;
+ padding:14px;
+ margin-bottom:15px;
+ border:1px solid #ddd;
+ border-radius:10px;
+ font-size:16px;
+
 }
 
-.checkout-box input:focus,
-.checkout-box textarea:focus {
-  border-color: #4caf50;
+
+
+.checkout-summary{
+
+
+ background:#f7f9fb;
+ padding:20px;
+ border-radius:12px;
+
 }
 
-.checkout-box textarea {
-  resize: vertical;
+
+
+.checkout-summary div{
+
+
+ display:flex;
+ justify-content:space-between;
+ padding:8px 0;
+
 }
 
-.checkout-summary {
-  margin-top: 10px;
-  padding: 20px;
-  background: #f7f9fb;
-  border-radius: 12px;
+
+
+.checkout-total{
+
+
+ font-size:22px;
+ font-weight:bold;
+
 }
 
-.checkout-summary > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 0;
+
+
+.checkout-box button{
+
+
+ width:100%;
+ padding:15px;
+ border:none;
+ border-radius:10px;
+ background:#198754;
+ color:white;
+ font-size:17px;
+ font-weight:bold;
+ cursor:pointer;
+
 }
 
-.checkout-summary hr {
-  border: 0;
-  border-top: 1px solid #ddd;
-  margin: 12px 0;
-}
 
-.checkout-total {
-  font-size: 20px;
-  font-weight: 700;
-}
 
-.discount-text {
-  color: #159447;
-}
 
-.payment-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 15px;
-  background: #fff8e1;
-  border: 1px solid #ffe082;
-  border-radius: 10px;
-}
-
-.payment-info span {
-  color: #777;
-  font-size: 14px;
-}
-
-.checkout-box button {
-  border: none;
-  padding: 15px;
-  border-radius: 10px;
-  background: #198754;
-  color: white;
-  font-size: 17px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.checkout-box button:hover {
-  background: #157347;
-}
-
-.checkout-box button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
 
 /* =====================================================
    BILL PAGE
 ===================================================== */
 
-.bill-page {
-  min-height: 80vh;
-  padding: 40px 20px;
-  background: #f1f3f6;
+
+.bill-page{
+
+
+ min-height:80vh;
+ padding:40px 20px;
+ background:#f1f3f6;
+
 }
 
-.bill-container {
-  width: 100%;
-  max-width: 950px;
-  margin: 0 auto;
-  background: white;
-  padding: 45px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.08);
+
+
+.bill-container{
+
+
+ max-width:950px;
+ margin:auto;
+ background:white;
+ padding:45px;
+ border-radius:12px;
+ box-shadow:0 8px 35px rgba(0,0,0,.08);
+
 }
 
-/* =====================================================
-   BILL HEADER
-===================================================== */
 
-.bill-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
+
+.bill-header{
+
+
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+
 }
 
-.bill-header h1 {
-  margin: 0;
-  font-size: 32px;
-  letter-spacing: 1px;
+
+
+.bill-header h1{
+
+ color:#123b35;
+
 }
 
-.bill-header p {
-  margin: 5px 0 0;
-  color: #777;
+
+
+.bill-line{
+
+
+ border-top:2px solid #222;
+ margin:25px 0;
+
 }
 
-.invoice-title {
-  text-align: right;
+
+
+.bill-info-grid{
+
+
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:30px;
+
 }
 
-.invoice-title h2 {
-  margin: 0;
-  font-size: 25px;
+
+
+.items-section table{
+
+
+ width:100%;
+ border-collapse:collapse;
+
 }
 
-.invoice-title p {
-  margin-top: 5px;
-}
 
-.bill-line {
-  border-top: 2px solid #222;
-  margin: 25px 0;
-}
-
-/* =====================================================
-   ORDER INFORMATION
-===================================================== */
-
-.bill-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-bottom: 25px;
-}
-
-.bill-info-grid h3,
-.customer-box h3,
-.items-section h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-.bill-info-grid p {
-  margin: 7px 0;
-}
-
-.status {
-  color: #168a45;
-  font-weight: 700;
-}
-
-/* =====================================================
-   CUSTOMER
-===================================================== */
-
-.customer-box {
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-}
-
-.customer-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.customer-grid p {
-  margin: 4px 0;
-}
-
-.address {
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-}
-
-.address p {
-  white-space: pre-line;
-  margin-bottom: 0;
-}
-
-/* =====================================================
-   ITEMS TABLE
-===================================================== */
-
-.table-wrapper {
-  overflow-x: auto;
-}
-
-.items-section table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.items-section th {
-  background: #f2f4f6;
-  font-weight: 700;
-}
 
 .items-section th,
-.items-section td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
+.items-section td{
+
+
+ border:1px solid #ddd;
+ padding:12px;
+
 }
 
-.items-section th:nth-child(1),
-.items-section td:nth-child(1) {
-  width: 50px;
-  text-align: center;
+
+
+.bill-bottom{
+
+
+ display:flex;
+ justify-content:space-between;
+ margin-top:25px;
+
 }
 
-.items-section th:nth-child(3),
-.items-section td:nth-child(3) {
-  text-align: center;
+
+
+.total-row{
+
+
+ font-size:22px;
+ font-weight:bold;
+
 }
 
-.items-section th:nth-child(4),
-.items-section td:nth-child(4),
-.items-section th:nth-child(5),
-.items-section td:nth-child(5) {
-  text-align: right;
+
+
+.bill-actions{
+
+
+ display:flex;
+ justify-content:center;
+ gap:15px;
+ margin-top:35px;
+
 }
+
+
+
+.bill-actions button{
+
+
+ padding:13px 25px;
+ border:none;
+ border-radius:8px;
+ cursor:pointer;
+ font-weight:bold;
+
+}
+
+
+
+.print-btn{
+
+
+ background:#222;
+ color:white;
+
+}
+
+
+
+.shop-btn{
+
+
+ background:#198754;
+ color:white;
+
+}
+
+
+
 
 /* =====================================================
-   ITEM
+   FOOTER
 ===================================================== */
 
-.bill-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+
+.footer{
+
+
+ background:#073f2d;
+ color:white;
+ padding:45px 7%;
+
 }
 
-.bill-item img {
-  width: 55px;
-  height: 55px;
-  object-fit: cover;
-  border-radius: 7px;
-  border: 1px solid #ddd;
+
+
+.footer-container{
+
+
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:35px;
+
 }
+
+
+
+.footer a{
+
+
+ color:white;
+ text-decoration:none;
+
+}
+
+
+
+
 
 /* =====================================================
-   BILL BOTTOM
+   FINAL MOBILE RESPONSIVE
 ===================================================== */
 
-.bill-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 40px;
-  margin-top: 30px;
+
+
+@media(max-width:900px){
+
+
+
+.bill-info-grid{
+
+ grid-template-columns:1fr;
+
 }
 
-.thank-you {
-  flex: 1;
+
+
+.footer-container{
+
+ grid-template-columns:1fr;
+
 }
 
-.thank-you h3 {
-  margin-top: 0;
+
+
+.bill-container{
+
+ padding:25px;
+
 }
 
-.thank-you p {
-  color: #777;
-  margin: 5px 0;
+
+
 }
 
-.totals {
-  width: 350px;
-  max-width: 100%;
+
+
+@media(max-width:600px){
+
+
+
+.cart-page,
+.products-page,
+.categories,
+.popular-categories{
+
+ padding:35px 15px;
+
 }
 
-.totals > div {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
+
+
+.hero{
+
+ min-height:550px;
+
 }
 
-.total-row {
-  border-top: 2px solid #222;
-  margin-top: 10px;
-  padding-top: 15px !important;
-  font-size: 21px;
-  font-weight: 800;
+
+
+.hero img{
+
+ width:90%;
+ right:5%;
+
 }
 
-/* =====================================================
-   BILL BUTTONS
-===================================================== */
 
-.bill-actions {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 40px;
+
+.product-card h2{
+
+ font-size:17px;
+
 }
 
-.bill-actions button {
-  border: none;
-  padding: 13px 25px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
+
+
+.product-image{
+
+ height:160px;
+
 }
 
-.print-btn {
-  background: #222;
-  color: white;
+
+
+.checkout-box{
+
+ padding:20px;
+
 }
 
-.shop-btn {
-  background: #198754;
-  color: white;
+
+
+.bill-header,
+.bill-bottom{
+
+
+ flex-direction:column;
+ gap:15px;
+
 }
 
-.bill-actions button:hover {
-  opacity: 0.9;
+
+
+.bill-actions{
+
+
+ flex-direction:column;
+
 }
 
-/* =====================================================
-   NO BILL
-===================================================== */
 
-.bill-empty {
-  max-width: 500px;
-  margin: 50px auto;
-  background: white;
-  padding: 40px;
-  text-align: center;
-  border-radius: 15px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+
+.bill-actions button{
+
+
+ width:100%;
+
 }
 
-.bill-empty button {
-  margin-top: 15px;
-  border: none;
-  padding: 12px 25px;
-  background: #198754;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
+
+
+.footer{
+
+ padding:35px 20px;
+
 }
 
-/* =====================================================
-   BILL MOBILE
-===================================================== */
 
-@media (max-width: 700px) {
+}/* ==========================================
+   BIRDS CARE ADMIN DASHBOARD FINAL CSS
+========================================== */
 
-  .checkout-box {
-    padding: 22px;
-  }
 
-  .bill-page {
-    padding: 15px;
-  }
+.admin-layout{
 
-  .bill-container {
-    padding: 20px;
-  }
+    display:flex;
+    min-height:100vh;
+    background:#f5f7f6;
 
-  .bill-header {
-    flex-direction: column;
-  }
-
-  .invoice-title {
-    text-align: left;
-  }
-
-  .bill-info-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .customer-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .bill-bottom {
-    flex-direction: column;
-  }
-
-  .totals {
-    width: 100%;
-  }
-
-  .bill-actions {
-    flex-direction: column;
-  }
-
-  .bill-actions button {
-    width: 100%;
-  }
 }
 
-/* =====================================================
-   PRINT BILL
-===================================================== */
 
-@media print {
+/* ==============================
+      SIDEBAR
+============================== */
 
-  body {
-    background: white !important;
-  }
 
-  header,
-  footer,
-  .bill-actions {
-    display: none !important;
-  }
+.admin-sidebar{
 
-  .bill-page {
-    padding: 0 !important;
-    background: white !important;
-  }
+    width:250px;
 
-  .bill-container {
-    max-width: none !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    padding: 20px !important;
-  }
+    background:#111827;
+
+    color:white;
+
+    padding:25px 15px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+
+.admin-sidebar h2{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    font-size:26px;
+
+    color:white;
+
+}
+
+
+
+.admin-sidebar button{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#1f2937;
+
+    color:white;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+
+
+.admin-sidebar button:hover{
+
+    background:#0f766e;
+
+}
+
+
+
+
+
+
+/* ==============================
+      MAIN CONTENT
+============================== */
+
+
+.admin-content{
+
+    flex:1;
+
+    padding:30px;
+
+    background:#f5f7f6;
+
+}
+
+
+
+.admin-content h1{
+
+    color:#123b35;
+
+    margin-bottom:25px;
+
+    font-size:32px;
+
+}
+
+
+
+
+
+
+/* ==============================
+      DASHBOARD CARDS
+============================== */
+
+
+.dashboard-cards{
+
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+
+}
+
+
+
+.dashboard-card{
+
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.08);
+
+
+}
+
+
+
+.dashboard-card h3{
+
+
+    color:#555;
+
+    margin:0;
+
+}
+
+
+
+.dashboard-card p{
+
+
+    font-size:40px;
+
+    font-weight:bold;
+
+    color:#0f766e;
+
+    margin-top:15px;
+
+
+}
+
+
+
+
+
+
+/* ==============================
+      FORM BOX
+============================== */
+
+
+.admin-form-card{
+
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.08);
+
+    margin-bottom:30px;
+
+
+}
+
+
+
+.admin-form-card input,
+.admin-form-card select,
+.admin-form-card textarea{
+
+
+    width:100%;
+
+    padding:13px;
+
+    margin-bottom:15px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+
+}
+
+
+
+.admin-form-card textarea{
+
+    min-height:100px;
+
+}
+
+
+
+
+.admin-form-card button{
+
+
+    background:#0f766e;
+
+    color:white;
+
+    border:none;
+
+    padding:13px 25px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+
+}
+
+
+
+
+
+
+/* ==============================
+      PRODUCT GRID
+============================== */
+
+
+.admin-list-grid{
+
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+
+}
+
+
+
+
+.admin-manage-card{
+
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.08);
+
+    text-align:center;
+
+
+}
+
+
+
+
+.admin-product-image{
+
+
+    width:150px;
+
+    height:150px;
+
+    object-fit:cover;
+
+    border-radius:15px;
+
+    margin-bottom:15px;
+
+
+}
+
+
+
+
+.admin-manage-card input,
+.admin-manage-card textarea,
+.admin-manage-card select{
+
+
+    width:100%;
+
+    padding:10px;
+
+    margin-bottom:10px;
+
+    border-radius:8px;
+
+    border:1px solid #ddd;
+
+
+}
+
+
+
+
+.admin-manage-card button{
+
+
+    width:100%;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#0f766e;
+
+    color:white;
+
+    cursor:pointer;
+
+    margin-top:8px;
+
+
+}
+
+
+
+.delete-btn,
+.delete-category{
+
+
+    background:#dc2626!important;
+
+
+}
+
+
+
+
+
+
+
+/* ==============================
+      CATEGORY
+============================== */
+
+
+.category-list{
+
+
+    display:grid;
+
+    grid-template-columns:repeat(6,1fr);
+
+    gap:20px;
+
+
+}
+
+
+
+.category-admin-card{
+
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,.08);
+
+
+}
+
+
+
+
+.category-admin-card img,
+.category-placeholder{
+
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    margin:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:40px;
+
+
+}
+
+
+
+
+.category-admin-card button{
+
+
+    padding:10px 15px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    color:white;
+
+    background:#dc2626;
+
+
+}
+
+
+
+
+
+
+/* ==============================
+      MOBILE
+============================== */
+
+
+@media(max-width:900px){
+
+
+.admin-layout{
+
+    flex-direction:column;
+
+}
+
+
+
+.admin-sidebar{
+
+    width:100%;
+
+    min-height:auto;
+
+}
+
+
+
+.dashboard-cards{
+
+    grid-template-columns:1fr 1fr;
+
+}
+
+
+
+.admin-list-grid{
+
+    grid-template-columns:1fr 1fr;
+
+}
+
+
+
+.category-list{
+
+    grid-template-columns:repeat(3,1fr);
+
+}
+
+
+}
+
+
+
+
+@media(max-width:600px){
+
+
+.admin-content{
+
+    padding:15px;
+
+}
+
+
+
+.dashboard-cards{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.admin-list-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.category-list{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+
 }

@@ -1,0 +1,964 @@
+/* =====================================================
+   FEATURED BIRDS FINAL CSS
+===================================================== */
+
+.featured {
+  width: 100%;
+  padding: 55px 32px 70px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADING
+===================================================== */
+
+.featured-heading {
+  max-width: 1210px;
+  margin: 0 auto 28px;
+}
+
+.featured-title {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #111827;
+}
+
+.featured-subtitle {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.featured-grid {
+  width: 100%;
+  max-width: 1210px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.bird-card {
+  min-width: 0;
+
+  background: #fff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,0.08);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  box-sizing: border-box;
+}
+
+
+.bird-card:hover {
+
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.12);
+}
+
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.bird-image {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 188px;
+
+  background: #f1f3f2;
+
+  overflow: hidden;
+}
+
+
+.bird-image img {
+
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+.image-fallback {
+
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 75px;
+
+  background: #edf6f1;
+}
+
+
+/* =====================================================
+   BADGES
+===================================================== */
+
+.stock {
+
+  position: absolute;
+
+  top: 13px;
+
+  left: 13px;
+
+  z-index: 3;
+
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  background: #1fa34a;
+
+  color:#fff;
+
+  font-size:12px;
+
+  font-weight:800;
+
+  line-height:1;
+}
+
+
+.stock-out {
+
+  background:#dc2626;
+}
+
+
+
+.discount {
+
+  position:absolute;
+
+  top:13px;
+
+  right:13px;
+
+  z-index:3;
+
+  padding:8px 11px;
+
+  border-radius:8px;
+
+  background:#f43f4d;
+
+  color:#fff;
+
+  font-size:12px;
+
+  font-weight:800;
+
+  line-height:1;
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+
+.bird-content {
+
+  padding:15px 14px 16px;
+
+  box-sizing:border-box;
+}
+
+
+.bird-content h3 {
+
+  margin:0 0 6px;
+
+  color:#111827;
+
+  font-size:18px;
+
+  font-weight:800;
+
+  line-height:1.25;
+
+  min-height:23px;
+}
+
+
+.bird-type {
+
+  margin:0 0 12px;
+
+  color:#6b7280;
+
+  font-size:14px;
+
+  min-height:18px;
+}
+
+
+/* =====================================================
+   PRICE
+===================================================== */
+
+
+.price-box {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  flex-wrap:nowrap;
+
+  min-height:28px;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+}
+
+
+.old-price {
+
+  color:#6b7280;
+
+  font-size:12px;
+
+  font-weight:700;
+
+  text-decoration:line-through;
+
+  white-space:nowrap;
+}
+
+
+.new-price {
+
+  color:#15803d;
+
+  font-size:18px;
+
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+
+.save-box {
+
+  margin-left:auto;
+
+  padding:6px 9px;
+
+  border-radius:8px;
+
+  background:#dcfce7;
+
+  color:#15803d;
+
+  font-size:11px;
+
+  font-weight:800;
+
+  white-space:nowrap;
+}
+
+
+.discount-text {
+
+  display:inline-block;
+
+  margin-top:5px;
+
+  color:#dc2626;
+
+  font-size:12px;
+
+  font-weight:700;
+
+  line-height:1;
+
+  white-space:nowrap;
+}/* =====================================================
+   RATING
+===================================================== */
+
+.rating {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  margin-top:12px;
+
+  margin-bottom:12px;
+}
+
+
+.stars {
+
+  color:#f59e0b;
+
+  font-size:17px;
+
+  letter-spacing:1px;
+}
+
+
+.reviews {
+
+  color:#777;
+
+  font-size:12px;
+
+  font-weight:600;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+
+.card-buttons {
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:10px;
+}
+
+
+.cart-btn,
+.details-btn {
+
+  min-height:38px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:8px;
+
+  font-size:13px;
+
+  font-weight:800;
+
+  text-decoration:none;
+
+  box-sizing:border-box;
+}
+
+
+.cart-btn {
+
+  border:none;
+
+  background:#159447;
+
+  color:#fff;
+
+  cursor:pointer;
+
+  padding:9px 7px;
+}
+
+
+.cart-btn:hover:not(:disabled) {
+
+  background:#08783e;
+}
+
+
+.cart-btn:disabled {
+
+  background:#9ca3af;
+
+  cursor:not-allowed;
+}
+
+
+.details-btn {
+
+  border:1px solid #d1d5db;
+
+  background:#fff;
+
+  color:#374151;
+
+  padding:9px 7px;
+}
+
+
+.details-btn:hover {
+
+  background:#f3f4f6;
+
+  border-color:#9ca3af;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+
+.featured-empty {
+
+  min-height:300px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+}
+
+
+.empty-bird {
+
+  font-size:70px;
+
+  margin-bottom:10px;
+}
+
+
+.featured-empty h2 {
+
+  margin:0;
+
+  color:#111827;
+
+  font-size:28px;
+}
+
+
+.featured-empty p {
+
+  color:#777;
+}
+
+
+/* =====================================================
+   OPTION MODAL
+===================================================== */
+
+
+.bird-option-overlay {
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:9999;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:rgba(0,0,0,0.55);
+
+  box-sizing:border-box;
+}
+
+
+.bird-option-box {
+
+  position:relative;
+
+  width:100%;
+
+  max-width:430px;
+
+  padding:30px;
+
+  background:#fff;
+
+  border-radius:20px;
+
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+
+  text-align:center;
+
+  box-sizing:border-box;
+}
+
+
+.option-close {
+
+  position:absolute;
+
+  top:10px;
+
+  right:13px;
+
+  width:34px;
+
+  height:34px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#f3f4f6;
+
+  color:#333;
+
+  font-size:25px;
+
+  cursor:pointer;
+}
+
+
+.option-icon {
+
+  font-size:55px;
+
+  margin-bottom:5px;
+}
+
+
+.bird-option-box h3 {
+
+  margin:5px 0;
+
+  color:#111827;
+
+  font-size:23px;
+}
+
+
+.option-subtitle {
+
+  margin:5px 0 22px;
+
+  color:#777;
+
+  font-size:14px;
+}
+
+
+.purchase-options {
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:12px;
+}
+
+
+.purchase-option {
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  min-height:115px;
+
+  padding:15px;
+
+  border:2px solid #dce8e1;
+
+  border-radius:14px;
+
+  background:#f8fffb;
+
+  color:#123b35;
+
+  cursor:pointer;
+
+  transition:.2s ease;
+
+  box-sizing:border-box;
+}
+
+
+.purchase-option:hover {
+
+  border-color:#159447;
+
+  background:#eaf8ef;
+
+  transform:translateY(-2px);
+}
+
+
+.purchase-option span {
+
+  font-size:15px;
+
+  font-weight:800;
+}
+
+
+.purchase-option strong {
+
+  margin-top:8px;
+
+  color:#15803d;
+
+  font-size:20px;
+}
+
+
+.purchase-option small {
+
+  margin-top:4px;
+
+  color:#15803d;
+
+  font-size:11px;
+
+  font-weight:700;
+}
+
+
+.pair-option {
+
+  border-color:#b8d9c4;
+} /* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width:1100px){
+
+  .featured-grid{
+
+    grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  }
+
+  .bird-image{
+
+    height:190px;
+
+  }
+
+}
+
+
+/* =====================================================
+   FINAL MOBILE - 2 CARDS
+===================================================== */
+
+@media (max-width:600px){
+
+  .featured{
+
+    padding:25px 12px 45px !important;
+
+  }
+
+
+  .featured-heading{
+
+    margin-bottom:15px !important;
+
+  }
+
+
+  .featured-title{
+
+    font-size:24px !important;
+
+  }
+
+
+  .featured-subtitle{
+
+    font-size:12px !important;
+
+  }
+
+
+
+  /* TWO CARD */
+
+  .featured-grid{
+
+    grid-template-columns:
+    repeat(2,minmax(0,1fr)) !important;
+
+    gap:12px !important;
+
+  }
+
+
+
+  /* CARD */
+
+  .bird-card{
+
+    border-radius:10px !important;
+
+  }
+
+
+
+  /* IMAGE */
+
+  .bird-image{
+
+    height:150px !important;
+
+  }
+
+
+  .bird-image img{
+
+    width:100% !important;
+
+    height:100% !important;
+
+    object-fit:cover !important;
+
+  }
+
+
+
+  /* BADGES */
+
+  .stock{
+
+    top:6px !important;
+
+    left:6px !important;
+
+    padding:4px 7px !important;
+
+    font-size:8px !important;
+
+  }
+
+
+  .discount{
+
+    top:6px !important;
+
+    right:6px !important;
+
+    padding:4px 7px !important;
+
+    font-size:8px !important;
+
+  }
+
+
+
+  /* CONTENT */
+
+  .bird-content{
+
+    padding:8px !important;
+
+  }
+
+
+
+  .bird-content h3{
+
+    margin:0 0 3px !important;
+
+    font-size:15px !important;
+
+    min-height:auto !important;
+
+    line-height:1.2 !important;
+
+  }
+
+
+
+  .bird-type{
+
+    margin:0 0 5px !important;
+
+    font-size:11px !important;
+
+    min-height:auto !important;
+
+  }
+
+
+
+  /* PRICE */
+
+  .price-box{
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    gap:4px !important;
+
+    flex-wrap:wrap !important;
+
+    overflow:visible !important;
+
+    min-height:auto !important;
+
+  }
+
+
+
+  .old-price{
+
+    font-size:10px !important;
+
+  }
+
+
+
+  .new-price{
+
+    font-size:20px !important;
+
+    font-weight:900 !important;
+
+  }
+
+
+
+  /* SAVE HIDE */
+
+  .save-box{
+
+    display:none !important;
+
+  }
+
+
+
+  /* OFF */
+
+  .discount-text{
+
+    display:block !important;
+
+    width:100% !important;
+
+    margin:2px 0 5px !important;
+
+    font-size:10px !important;
+
+    font-weight:700 !important;
+
+    color:#dc2626 !important;
+
+  }
+
+
+
+  /* RATING */
+
+  .rating{
+
+    margin:5px 0 !important;
+
+    gap:3px !important;
+
+  }
+
+
+
+  .stars{
+
+    font-size:10px !important;
+
+  }
+
+
+  .reviews{
+
+    font-size:8px !important;
+
+  }
+
+
+
+  /* BUTTON */
+
+  .card-buttons{
+
+    grid-template-columns:1fr !important;
+
+    gap:5px !important;
+
+  }
+
+
+
+  .cart-btn,
+  .details-btn{
+
+    min-height:32px !important;
+
+    padding:7px !important;
+
+    font-size:11px !important;
+
+    border-radius:6px !important;
+
+  }
+
+}

@@ -1,216 +1,186 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { CartContext } from "../context/CartContext";
 
-
 function Cart() {
-
   const {
     cart,
     removeFromCart,
     clearCart,
     updateItemOptions,
-    updateQuantity
+    updatePairOptions,
+    updateQuantity,
   } = useContext(CartContext);
-
 
   const navigate = useNavigate();
 
+  const [showCheckout, setShowCheckout] = useState(false);
 
-  const [showCheckout, setShowCheckout] =
-    useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [pincode, setPincode] = useState("");
 
+  const [isOrdering, setIsOrdering] = useState(false);
 
-  // =========================
-  // CUSTOMER DETAILS
-  // =========================
-
-  const [name, setName] =
-    useState("");
-
-  const [phone, setPhone] =
-    useState("");
-
-  const [email, setEmail] =
-    useState("");
-
-  const [address, setAddress] =
-    useState("");
-
-  const [city, setCity] =
-    useState("");
-
-  const [pincode, setPincode] =
-    useState("");
-
-
-  const [isOrdering, setIsOrdering] =
-    useState(false);
-
-
-  // =========================
-  // OUT OF STOCK
-  // =========================
-
-  const outOfStockItems =
-    cart.filter(
-      (item) =>
-        item.stock === "Out of Stock" ||
-        item.stock === false ||
-        item.inStock === false
-    );
-
-
-  const hasOutOfStock =
-    outOfStockItems.length > 0;
-
-
-  // =========================
-  // CHECK ALL OPTIONS
-  // =========================
-
-  const incompleteItems =
-    cart.filter(
-      (item) =>
-        !item.age ||
-        !item.gender ||
-        Number(item.quantity) < 1
-    );
-
-
-  const hasIncompleteOptions =
-    incompleteItems.length > 0;
-
-
-  // =========================
-  // GET PRICE
-  // =========================
+  // =====================================================
+  // PRICE
+  // =====================================================
 
   const getPrice = (item) => {
-
     return (
       Number(
-        String(item.price || 0)
+        String(item?.price ?? 0)
           .replace("₹", "")
           .replace(/,/g, "")
           .trim()
       ) || 0
     );
-
   };
 
-
-  // =========================
-  // GET QUANTITY
-  // =========================
+  // =====================================================
+  // QUANTITY
+  // =====================================================
 
   const getQuantity = (item) => {
+    const qty = Number(item?.quantity ?? item?.qty ?? 1);
 
-    return Number(item.quantity) > 0
-      ? Number(item.quantity)
-      : 1;
-
+    return qty > 0 ? qty : 1;
   };
 
+  // =====================================================
+  // STOCK
+  // =====================================================
 
-  // =========================
-  // TOTAL
-  // =========================
+  const isOutOfStock = (item) => {
+    return (
+      item?.stock === "Out of Stock" ||
+      item?.stock === false ||
+      item?.inStock === false
+    );
+  };
 
-  const total = cart.reduce(
-    (sum, item) => {
-
-      const price =
-        getPrice(item);
-
-      const quantity =
-        getQuantity(item);
-
-      return (
-        sum +
-        price * quantity
-      );
-
-    },
-    0
+  const hasOutOfStock = cart.some((item) =>
+    isOutOfStock(item)
   );
 
+  // =====================================================
+  // TOTALS
+  // =====================================================
 
-  // =========================
-  // PLACE ORDER
-  // =========================
+  const subtotal = cart.reduce((sum, item) => {
+    return (
+      sum +
+      getPrice(item) * getQuantity(item)
+    );
+  }, 0);
 
-  const handleOrder = async (e) => {
+  const adminDiscount =
+    Number(
+      localStorage.getItem("birdsCareDiscount") || 0
+    ) || 0;
 
-    e.preventDefault();
+  const discountAmount =
+    (subtotal * adminDiscount) / 100;
 
+  const shippingCharge =
+    Number(
+      localStorage.getItem("shippingCharge") ||
+        localStorage.getItem("birdsCareShipping") ||
+        0
+    ) || 0;
 
-    // =========================
-    // EMPTY CART
-    // =========================
+  const finalTotal = Math.max(
+    0,
+    subtotal -
+      discountAmount +
+      shippingCharge
+  );
 
+  // =====================================================
+  // CHECK AGE / GENDER
+  // =====================================================
+
+  const hasIncompleteOptions = cart.some((item) => {
+    const isPair =
+      item.purchaseType === "Pair";
+
+    if (isPair) {
+      return (
+        !item.bird1Gender ||
+        !item.bird1Age ||
+        !item.bird2Gender ||
+        !item.bird2Age
+      );
+    }
+
+    return (
+      !item.gender ||
+      !item.age
+    );
+  });
+
+  // =====================================================
+  // OPEN CHECKOUT
+  // =====================================================
+
+  const handlePlaceOrder = () => {
     if (cart.length === 0) {
-
-      alert(
-        "Your cart is empty 🛒"
-      );
-
+      alert("Your cart is empty 🛒");
       return;
     }
-
-
-    // =========================
-    // OPTIONS CHECK
-    // =========================
-
-    if (hasIncompleteOptions) {
-
-      alert(
-        "❌ Please select Age, Gender and Quantity for every bird."
-      );
-
-      return;
-    }
-
-
-    // =========================
-    // STOCK CHECK
-    // =========================
 
     if (hasOutOfStock) {
-
       alert(
-        "❌ Out of Stock bird cart me hai.\n\n" +
-        "Please Out of Stock bird ko remove karein."
+        "❌ Out of Stock bird cart me hai."
       );
-
       return;
     }
 
+    if (hasIncompleteOptions) {
+      alert(
+        "❌ Please select Age and Gender for every bird."
+      );
+      return;
+    }
 
-    // =========================
-    // CUSTOMER VALIDATION
-    // =========================
+    setShowCheckout(true);
+  };
 
-    const cleanName =
-      name.trim();
+  // =====================================================
+  // ORDER
+  // =====================================================
 
-    const cleanPhone =
-      phone.trim();
+  const handleOrder = async (e) => {
+    e.preventDefault();
 
-    const cleanEmail =
-      email.trim();
+    if (cart.length === 0) {
+      alert("Your cart is empty 🛒");
+      return;
+    }
 
-    const cleanAddress =
-      address.trim();
+    if (hasIncompleteOptions) {
+      alert(
+        "❌ Please select Age and Gender for every bird."
+      );
+      return;
+    }
 
-    const cleanCity =
-      city.trim();
+    if (hasOutOfStock) {
+      alert(
+        "❌ Out of Stock bird cart me hai."
+      );
+      return;
+    }
 
-    const cleanPincode =
-      pincode.trim();
-
+    const cleanName = name.trim();
+    const cleanPhone = phone.trim();
+    const cleanEmail = email.trim();
+    const cleanAddress = address.trim();
+    const cleanCity = city.trim();
+    const cleanPincode = pincode.trim();
 
     if (
       !cleanName ||
@@ -220,815 +190,399 @@ function Cart() {
       !cleanCity ||
       !cleanPincode
     ) {
-
-      alert(
-        "❌ Please fill Name, Mobile, Gmail, Address, City and Pincode."
-      );
-
+      alert("❌ Please fill all details.");
       return;
     }
-
-
-    // =========================
-    // EMAIL VALIDATION
-    // =========================
-
-    const emailPattern =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
-    if (!emailPattern.test(cleanEmail)) {
-
-      alert(
-        "❌ Please enter a valid Gmail / Email address."
-      );
-
-      return;
-    }
-
-
-    // =========================
-    // MOBILE VALIDATION
-    // =========================
-
-    const mobileDigits =
-      cleanPhone.replace(/\D/g, "");
-
-
-    if (
-      mobileDigits.length !== 10
-    ) {
-
-      alert(
-        "❌ Please enter a valid 10 digit mobile number."
-      );
-
-      return;
-    }
-
-
-    // =========================
-    // PINCODE VALIDATION
-    // =========================
-
-    const pincodeDigits =
-      cleanPincode.replace(/\D/g, "");
-
-
-    if (
-      pincodeDigits.length !== 6
-    ) {
-
-      alert(
-        "❌ Please enter a valid 6 digit pincode."
-      );
-
-      return;
-    }
-
 
     setIsOrdering(true);
 
-
-    // =========================
-    // ORDER ID
-    // =========================
-
-    const orderId =
-      `BC-${Date.now()}`;
-
-
-    const orderDate =
-      new Date().toLocaleString(
-        "en-IN"
-      );
-
-
-    // =========================
-    // ORDER DATA
-    // =========================
-    //
-    // IMPORTANT:
-    // Server ko customerName,
-    // phone, email etc DIRECT
-    // chahiye.
-    //
-    // customer: { ... }
-    // ke andar nahi bhejna.
-    // =========================
-
     const order = {
+      orderId: `BC-${Date.now()}`,
 
-      orderId,
+      orderDate: new Date().toISOString(),
 
-      orderDate,
+      customerName: cleanName,
 
-      customerName:
-        cleanName,
+      phone: cleanPhone,
 
-      phone:
-        cleanPhone,
+      email: cleanEmail,
 
-      email:
-        cleanEmail,
+      address: cleanAddress,
 
-      address:
-        cleanAddress,
+      city: cleanCity,
 
-      city:
-        cleanCity,
+      pincode: cleanPincode,
 
-      pincode:
-        pincodeDigits,
+      items: cart,
 
-      items:
-        cart,
+      subtotal,
 
-      subtotal:
-        total,
+      discountPercentage: adminDiscount,
 
-      discount:
-        0,
+      discount: discountAmount,
 
-      deliveryCharge:
-        0,
+      shippingCharge,
 
-      total:
-        total,
+      deliveryCharge: shippingCharge,
 
-      paymentMethod:
-        "Cash on Delivery",
+      total: finalTotal,
 
-      paymentStatus:
-        "Pending",
+      paymentMethod: "Cash on Delivery",
 
-      status:
-        "Order Placed"
+      paymentStatus: "Pending",
 
+      orderStatus: "Confirmed",
+
+      status: "Order Placed",
     };
 
-
-    // =========================
-    // SAVE ORDER LOCALLY
-    // =========================
+    // ===================================================
+    // SAVE LOCAL ORDER
+    // ===================================================
 
     try {
+      localStorage.setItem(
+        "birdsCareLastOrder",
+        JSON.stringify(order)
+      );
 
-      const oldOrders =
-        JSON.parse(
-          localStorage.getItem(
-            "orders"
-          )
-        ) || [];
-
+      const oldOrders = JSON.parse(
+        localStorage.getItem("orders") || "[]"
+      );
 
       localStorage.setItem(
         "orders",
         JSON.stringify([
           ...oldOrders,
-          order
+          order,
         ])
       );
-
-    } catch (storageError) {
-
+    } catch (error) {
       console.error(
-        "Order local save error:",
-        storageError
+        "Local order error:",
+        error
       );
-
     }
 
-
-    // =========================
-    // SEND SERVER
-    // =========================
+    // ===================================================
+    // SEND SERVER ORDER
+    // ===================================================
 
     try {
+      const response = await fetch(
+        "http://localhost:5000/api/send-order",
+        {
+          method: "POST",
 
-      const response =
-        await fetch(
-          "http://10.206.203.228:5000/api/send-order",
-          {
-            method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
 
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify(order)
-          }
-        );
-
-
-      // =========================
-      // SERVER RESPONSE
-      // =========================
+          body: JSON.stringify(order),
+        }
+      );
 
       let result = {};
 
       try {
-
-        result =
-          await response.json();
-
-      } catch (jsonError) {
-
-        console.error(
-          "Server JSON error:",
-          jsonError
-        );
-
-        throw new Error(
-          "Server ne valid response nahi diya."
-        );
-
+        result = await response.json();
+      } catch {
+        result = {};
       }
-
 
       console.log(
         "SERVER RESPONSE:",
         result
       );
-
-
-      // =========================
-      // SERVER ERROR
-      // =========================
-
-      if (
-        !response.ok ||
-        !result.success
-      ) {
-
-        throw new Error(
-          result.message ||
-          "Order email send nahi hua."
-        );
-
-      }
-
-
-      // =========================
-      // CLEAR CART
-      // =========================
-
-      clearCart();
-
-
-      // =========================
-      // RESET FORM
-      // =========================
-
-      setName("");
-
-      setPhone("");
-
-      setEmail("");
-
-      setAddress("");
-
-      setCity("");
-
-      setPincode("");
-
-
-      setShowCheckout(false);
-
-
-      // =========================
-      // EMAIL STATUS
-      // =========================
-
-      if (
-        result.customerEmailSent
-      ) {
-
-        alert(
-          "🎉 Order placed successfully!\n\n" +
-          "📧 Store aur customer dono Gmail par order email bhej diya gaya."
-        );
-
-      } else {
-
-        alert(
-          "🎉 Order placed successfully!\n\n" +
-          "📧 Store Gmail par order aa gaya.\n\n" +
-          "⚠️ Customer Gmail par confirmation nahi bheja ja saka."
-        );
-
-      }
-
-
-      // =========================
-      // HOME
-      // =========================
-
-      navigate("/");
-
-
     } catch (error) {
-
-      console.error(
-        "ORDER ERROR:",
+      console.log(
+        "Server error:",
         error
       );
-
-
-      alert(
-        "❌ Order email send nahi hua.\n\n" +
-        error.message +
-        "\n\n" +
-        "Server terminal me error check karein."
-      );
-
-    } finally {
-
-      setIsOrdering(false);
-
     }
 
+    // ===================================================
+    // FINISH ORDER
+    // ===================================================
+
+    clearCart();
+
+    setName("");
+    setPhone("");
+    setEmail("");
+    setAddress("");
+    setCity("");
+    setPincode("");
+
+    setShowCheckout(false);
+
+    setIsOrdering(false);
+
+    alert(
+      "🎉 Order placed successfully!"
+    );
+
+    navigate("/bill");
   };
 
-
-  // =========================
+  // =====================================================
   // EMPTY CART
-  // =========================
+  // =====================================================
 
   if (cart.length === 0) {
-
     return (
+      <div style={pageStyle}>
+        <div style={emptyCardStyle}>
+          <div style={emptyIconStyle}>
+            🛒
+          </div>
+
+          <h2>
+            Your Cart is Empty
+          </h2>
+
+          <p>
+            Add some birds to your cart.
+          </p>
+
+          <button
+            type="button"
+            style={mainButtonStyle}
+            onClick={() =>
+              navigate("/products")
+            }
+          >
+            🐦 Browse Birds
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // =====================================================
+  // MAIN
+  // =====================================================
+
+  return (
+    <div style={pageStyle}>
+
+      {/* =================================================
+          MOBILE RESPONSIVE STYLE
+      ================================================= */}
+
+      <style>
+        {`
+          .birds-care-cart-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 330px);
+            gap: 18px;
+            align-items: start;
+          }
+
+          .birds-care-summary {
+            width: 100%;
+          }
+
+          @media (max-width: 800px) {
+            .birds-care-cart-grid {
+              grid-template-columns: 1fr !important;
+              width: 100%;
+            }
+
+            .birds-care-summary {
+              width: 100% !important;
+              order: 2;
+            }
+
+            .birds-care-products {
+              width: 100%;
+              order: 1;
+            }
+          }
+
+          @media (max-width: 500px) {
+            .birds-care-page {
+              padding: 10px !important;
+            }
+
+            .birds-care-header {
+              flex-direction: column;
+              align-items: flex-start !important;
+            }
+
+            .birds-care-cart-card {
+              padding: 12px !important;
+            }
+
+            .birds-care-product-box {
+              align-items: flex-start !important;
+            }
+
+            .birds-care-product-image {
+              width: 75px !important;
+              height: 75px !important;
+            }
+
+            .birds-care-product-name {
+              font-size: 18px !important;
+            }
+
+            .birds-care-mobile-bottom {
+              flex-direction: column;
+              align-items: stretch !important;
+            }
+
+            .birds-care-item-total {
+              justify-content: space-between !important;
+            }
+
+            .birds-care-options-grid {
+              grid-template-columns: 1fr !important;
+            }
+
+            .birds-care-summary-card {
+              padding: 16px !important;
+            }
+
+            .birds-care-main-button {
+              min-height: 52px;
+              font-size: 17px !important;
+            }
+          }
+        `}
+      </style>
 
       <div
-        style={{
-          minHeight: "100vh",
-          background: "#f7faf8",
-          padding: "50px 7%",
-          boxSizing: "border-box"
-        }}
+        className="birds-care-page"
+        style={containerStyle}
       >
 
-        <div
-          style={{
-            maxWidth: "1100px",
-            margin: "0 auto"
-          }}
-        >
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
-          <h1
-            style={{
-              textAlign: "center",
-              color: "#123b35",
-              marginBottom: "35px"
-            }}
-          >
+        <div
+          className="birds-care-header"
+          style={headerStyle}
+        >
+          <h1 style={pageTitleStyle}>
             Your Cart 🛒
           </h1>
 
-
-          <div
-            style={{
-              background: "white",
-              borderRadius: "18px",
-              padding: "60px 25px",
-              textAlign: "center",
-              boxShadow:
-                "0 7px 25px rgba(0,0,0,0.08)"
-            }}
-          >
-
-            <div
-              style={{
-                fontSize: "65px",
-                marginBottom: "15px"
-              }}
-            >
-              🛒
-            </div>
-
-
-            <h2
-              style={{
-                color: "#123b35"
-              }}
-            >
-              Cart is Empty
-            </h2>
-
-
-            <p
-              style={{
-                color: "#777",
-                marginBottom: "25px"
-              }}
-            >
-              Add some beautiful birds
-              to your cart.
-            </p>
-
-
-            <button
-              onClick={() =>
-                navigate("/products")
-              }
-              style={buttonStyle}
-            >
-              Browse Birds
-            </button>
-
-          </div>
-
+          <span style={itemsCountStyle}>
+            {cart.length} Item
+            {cart.length > 1 ? "s" : ""}
+          </span>
         </div>
 
-      </div>
+        {/* =================================================
+            MAIN GRID
+        ================================================= */}
 
-    );
+        <div className="birds-care-cart-grid">
 
-  }
+          {/* =================================================
+              ALL CART PRODUCTS
+          ================================================= */}
 
+          <div
+            className="birds-care-products"
+          >
 
-  // =========================
-  // MAIN PAGE
-  // =========================
+            {cart.map((item) => {
+              const price = getPrice(item);
 
-  return (
+              const qty = getQuantity(item);
 
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#f7faf8",
-        padding: "50px 7%",
-        boxSizing: "border-box"
-      }}
-    >
+              const amount = price * qty;
 
-      <div
-        style={{
-          maxWidth: "1100px",
-          margin: "0 auto"
-        }}
-      >
+              const isPair =
+                item.purchaseType === "Pair";
 
-        <h1
-          style={{
-            textAlign: "center",
-            color: "#123b35",
-            marginBottom: "35px"
-          }}
-        >
-          Your Cart 🛒
-        </h1>
-
-
-        {/* =========================
-            CART ITEMS
-        ========================= */}
-
-        <div
-          style={{
-            display: "grid",
-            gap: "20px"
-          }}
-        >
-
-          {cart.map((item) => {
-
-            const isOutOfStock =
-              item.stock === "Out of Stock" ||
-              item.stock === false ||
-              item.inStock === false;
-
-
-            const itemQuantity =
-              getQuantity(item);
-
-
-            const itemPrice =
-              getPrice(item);
-
-
-            const itemTotal =
-              itemPrice *
-              itemQuantity;
-
-
-            return (
-
-              <div
-                key={item.id}
-                style={{
-                  background: "white",
-                  borderRadius: "18px",
-                  padding: "22px",
-                  boxShadow:
-                    "0 5px 18px rgba(0,0,0,0.07)"
-                }}
-              >
-
+              return (
                 <div
-                  style={{
-                    display: "flex",
-                    gap: "20px",
-                    alignItems: "flex-start",
-                    flexWrap: "wrap"
-                  }}
+                  key={item.id}
+                  className="birds-care-cart-card"
+                  style={cartCardStyle}
                 >
 
-                  {/* IMAGE */}
+                  {/* =================================================
+                      PRODUCT
+                  ================================================= */}
 
-                  {item.image &&
-                  (
-                    item.image.startsWith("http") ||
-                    item.image.startsWith("data:image")
-                  ) ? (
+                  <div
+                    className="birds-care-product-box"
+                    style={productBoxStyle}
+                  >
 
                     <img
                       src={item.image}
-                      alt={
-                        item.name ||
-                        "Bird"
-                      }
-                      style={{
-                        width: "130px",
-                        height: "110px",
-                        objectFit: "cover",
-                        borderRadius: "12px",
-                        background: "#edf5f1"
-                      }}
+                      alt={item.name}
+                      className="birds-care-product-image"
+                      style={productImageStyle}
                     />
-
-                  ) : (
 
                     <div
                       style={{
-                        width: "130px",
-                        height: "110px",
-                        borderRadius: "12px",
-                        background: "#edf5f1",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "50px"
+                        flex: 1,
+                        minWidth: 0,
                       }}
                     >
-                      {item.emoji || "🐦"}
+
+                      <h2
+                        className="birds-care-product-name"
+                        style={productNameStyle}
+                      >
+                        {item.name}
+                      </h2>
+
+                      <span
+                        style={
+                          isPair
+                            ? pairBadgeStyle
+                            : singleBadgeStyle
+                        }
+                      >
+                        {isPair
+                          ? "Pair (2 Birds)"
+                          : "Single Bird"}
+                      </span>
+
+                      <div
+                        style={
+                          productPriceStyle
+                        }
+                      >
+                        ₹
+                        {price.toLocaleString(
+                          "en-IN"
+                        )}
+                      </div>
+
                     </div>
-
-                  )}
-
-
-                  {/* DETAILS */}
-
-                  <div
-                    style={{
-                      flex: 1,
-                      minWidth: "230px"
-                    }}
-                  >
-
-                    <h2
-                      style={{
-                        margin: "0 0 8px",
-                        color: "#123b35"
-                      }}
-                    >
-                      {item.name}
-                    </h2>
-
-
-                    <p
-                      style={{
-                        color: "#0f766e",
-                        fontWeight: "800",
-                        fontSize: "19px",
-                        margin: "0 0 8px"
-                      }}
-                    >
-                      ₹
-                      {itemPrice.toLocaleString(
-                        "en-IN"
-                      )}
-                    </p>
-
-
-                    <p
-                      style={{
-                        margin: 0,
-                        color:
-                          isOutOfStock
-                            ? "#dc2626"
-                            : "#16a34a",
-                        fontWeight: "800"
-                      }}
-                    >
-                      {isOutOfStock
-                        ? "❌ Out of Stock"
-                        : "✅ In Stock"}
-                    </p>
-
                   </div>
 
-
-                  {/* REMOVE */}
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      removeFromCart(
-                        item.id
-                      )
-                    }
-                    style={{
-                      border: "none",
-                      background: "#dc3545",
-                      color: "white",
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      fontWeight: "700",
-                      cursor: "pointer"
-                    }}
-                  >
-                    ❌ Remove
-                  </button>
-
-                </div>
-
-
-                {/* =========================
-                    SELECTIONS
-                ========================= */}
-
-                <div
-                  style={{
-                    marginTop: "22px",
-                    paddingTop: "20px",
-                    borderTop:
-                      "1px solid #e5e7eb"
-                  }}
-                >
-
-                  <h3
-                    style={{
-                      marginTop: 0,
-                      color: "#123b35"
-                    }}
-                  >
-                    Select Bird Details
-                  </h3>
-
+                  {/* =================================================
+                      QUANTITY + TOTAL
+                  ================================================= */}
 
                   <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns:
-                        "repeat(auto-fit, minmax(200px, 1fr))",
-                      gap: "18px"
-                    }}
+                    className="birds-care-mobile-bottom"
+                    style={
+                      mobileBottomStyle
+                    }
                   >
 
-                    {/* AGE */}
-
                     <div>
-
-                      <label
-                        style={labelStyle}
-                      >
-                        Age *
-                      </label>
-
+                      <small>
+                        Quantity
+                      </small>
 
                       <div
-                        style={{
-                          display: "flex",
-                          gap: "8px"
-                        }}
-                      >
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateItemOptions(
-                              item.id,
-                              "Young",
-                              item.gender
-                            )
-                          }
-                          style={{
-                            ...optionButtonStyle,
-                            ...(item.age === "Young"
-                              ? selectedOptionStyle
-                              : {})
-                          }}
-                        >
-                          🐣 Young
-                        </button>
-
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateItemOptions(
-                              item.id,
-                              "Adult",
-                              item.gender
-                            )
-                          }
-                          style={{
-                            ...optionButtonStyle,
-                            ...(item.age === "Adult"
-                              ? selectedOptionStyle
-                              : {})
-                          }}
-                        >
-                          🐦 Adult
-                        </button>
-
-                      </div>
-
-                    </div>
-
-
-                    {/* GENDER */}
-
-                    <div>
-
-                      <label
-                        style={labelStyle}
-                      >
-                        Gender *
-                      </label>
-
-
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "8px"
-                        }}
-                      >
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateItemOptions(
-                              item.id,
-                              item.age,
-                              "Male"
-                            )
-                          }
-                          style={{
-                            ...optionButtonStyle,
-                            ...(item.gender === "Male"
-                              ? selectedOptionStyle
-                              : {})
-                          }}
-                        >
-                          ♂ Male
-                        </button>
-
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateItemOptions(
-                              item.id,
-                              item.age,
-                              "Female"
-                            )
-                          }
-                          style={{
-                            ...optionButtonStyle,
-                            ...(item.gender === "Female"
-                              ? selectedOptionStyle
-                              : {})
-                          }}
-                        >
-                          ♀ Female
-                        </button>
-
-                      </div>
-
-                    </div>
-
-
-                    {/* QUANTITY */}
-
-                    <div>
-
-                      <label
-                        style={labelStyle}
-                      >
-                        Quantity *
-                      </label>
-
-
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "15px"
-                        }}
+                        style={
+                          quantityBoxStyle
+                        }
                       >
 
                         <button
@@ -1036,618 +590,1050 @@ function Cart() {
                           onClick={() =>
                             updateQuantity(
                               item.id,
-                              itemQuantity - 1
+                              qty - 1
                             )
                           }
-                          style={quantityButtonStyle}
+                          style={
+                            quantityButtonStyle
+                          }
                         >
-                          −
+                          -
                         </button>
 
-
-                        <strong
-                          style={{
-                            fontSize: "18px"
-                          }}
+                        <span
+                          style={
+                            quantityNumberStyle
+                          }
                         >
-                          {itemQuantity}
-                        </strong>
-
+                          {qty}
+                        </span>
 
                         <button
                           type="button"
                           onClick={() =>
                             updateQuantity(
                               item.id,
-                              itemQuantity + 1
+                              qty + 1
                             )
                           }
-                          style={quantityButtonStyle}
+                          style={
+                            quantityButtonStyle
+                          }
                         >
                           +
                         </button>
 
                       </div>
-
                     </div>
 
+                    <div
+                      className="birds-care-item-total"
+                      style={
+                        itemTotalAreaStyle
+                      }
+                    >
+
+                      <small>
+                        Total
+                      </small>
+
+                      <strong
+                        style={
+                          itemTotalStyle
+                        }
+                      >
+                        ₹
+                        {amount.toLocaleString(
+                          "en-IN"
+                        )}
+                      </strong>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          removeFromCart(
+                            item.id
+                          )
+                        }
+                        style={
+                          removeButtonStyle
+                        }
+                      >
+                        🗑 Remove
+                      </button>
+
+                    </div>
                   </div>
 
+                  {/* =================================================
+                      SINGLE BIRD DETAILS
+                  ================================================= */}
 
-                  {/* SELECTION WARNING */}
-
-                  {(!item.age ||
-                    !item.gender) && (
-
-                    <p
-                      style={{
-                        color: "#dc2626",
-                        fontWeight: "700",
-                        marginBottom: 0
-                      }}
+                  {!isPair && (
+                    <div
+                      style={
+                        detailsCardStyle
+                      }
                     >
-                      ⚠️ Please select Age and
-                      Gender before placing order.
-                    </p>
 
+                      <h3
+                        style={
+                          detailsTitleStyle
+                        }
+                      >
+                        🐦 Bird Details
+                      </h3>
+
+                      <div
+                        className="birds-care-options-grid"
+                        style={
+                          optionsGridStyle
+                        }
+                      >
+
+                        <select
+                          value={
+                            item.gender || ""
+                          }
+                          onChange={(e) =>
+                            updateItemOptions(
+                              item.id,
+                              undefined,
+                              e.target.value
+                            )
+                          }
+                          style={selectStyle}
+                        >
+                          <option value="">
+                            Select Gender
+                          </option>
+
+                          <option value="Male">
+                            Male
+                          </option>
+
+                          <option value="Female">
+                            Female
+                          </option>
+                        </select>
+
+                        <select
+                          value={
+                            item.age || ""
+                          }
+                          onChange={(e) =>
+                            updateItemOptions(
+                              item.id,
+                              e.target.value,
+                              undefined
+                            )
+                          }
+                          style={selectStyle}
+                        >
+                          <option value="">
+                            Select Age
+                          </option>
+
+                          <option value="Young">
+                            Young
+                          </option>
+
+                          <option value="Adult">
+                            Adult
+                          </option>
+                        </select>
+
+                      </div>
+                    </div>
                   )}
 
+                  {/* =================================================
+                      PAIR DETAILS
+                  ================================================= */}
 
-                  {/* ITEM TOTAL */}
+                  {isPair && (
+                    <div
+                      style={
+                        pairDetailsContainerStyle
+                      }
+                    >
 
-                  <div
-                    style={{
-                      marginTop: "18px",
-                      padding: "14px",
-                      background: "#f0fdf4",
-                      borderRadius: "10px",
-                      fontWeight: "800",
-                      color: "#123b35"
-                    }}
-                  >
-                    Item Total: ₹
-                    {itemTotal.toLocaleString(
-                      "en-IN"
-                    )}
-                  </div>
+                      <h3
+                        style={
+                          detailsTitleStyle
+                        }
+                      >
+                        🐦🐦 Pair Bird Details
+                      </h3>
+
+                      {/* =================================================
+                          BIRD 1
+                      ================================================= */}
+
+                      <div
+                        style={
+                          pairBirdCardStyle
+                        }
+                      >
+
+                        <h4
+                          style={
+                            pairBirdTitleStyle
+                          }
+                        >
+                          🐦 Bird 1
+                        </h4>
+
+                        <div
+                          className="birds-care-options-grid"
+                          style={
+                            optionsGridStyle
+                          }
+                        >
+
+                          <select
+                            value={
+                              item.bird1Gender ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              updatePairOptions(
+                                item.id,
+                                1,
+                                undefined,
+                                e.target.value
+                              )
+                            }
+                            style={selectStyle}
+                          >
+                            <option value="">
+                              Select Gender
+                            </option>
+
+                            <option value="Male">
+                              Male
+                            </option>
+
+                            <option value="Female">
+                              Female
+                            </option>
+                          </select>
+
+                          <select
+                            value={
+                              item.bird1Age ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              updatePairOptions(
+                                item.id,
+                                1,
+                                e.target.value,
+                                undefined
+                              )
+                            }
+                            style={selectStyle}
+                          >
+                            <option value="">
+                              Select Age
+                            </option>
+
+                            <option value="Young">
+                              Young
+                            </option>
+
+                            <option value="Adult">
+                              Adult
+                            </option>
+                          </select>
+
+                        </div>
+                      </div>
+
+                      {/* =================================================
+                          BIRD 2
+                      ================================================= */}
+
+                      <div
+                        style={
+                          pairBirdCardStyle
+                        }
+                      >
+
+                        <h4
+                          style={
+                            pairBirdTitleStyle
+                          }
+                        >
+                          🐦 Bird 2
+                        </h4>
+
+                        <div
+                          className="birds-care-options-grid"
+                          style={
+                            optionsGridStyle
+                          }
+                        >
+
+                          <select
+                            value={
+                              item.bird2Gender ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              updatePairOptions(
+                                item.id,
+                                2,
+                                undefined,
+                                e.target.value
+                              )
+                            }
+                            style={selectStyle}
+                          >
+                            <option value="">
+                              Select Gender
+                            </option>
+
+                            <option value="Male">
+                              Male
+                            </option>
+
+                            <option value="Female">
+                              Female
+                            </option>
+                          </select>
+
+                          <select
+                            value={
+                              item.bird2Age ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              updatePairOptions(
+                                item.id,
+                                2,
+                                e.target.value,
+                                undefined
+                              )
+                            }
+                            style={selectStyle}
+                          >
+                            <option value="">
+                              Select Age
+                            </option>
+
+                            <option value="Young">
+                              Young
+                            </option>
+
+                            <option value="Adult">
+                              Adult
+                            </option>
+                          </select>
+
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
 
                 </div>
-
-              </div>
-
-            );
-
-          })}
-
-        </div>
-
-
-        {/* =========================
-            ORDER SUMMARY
-        ========================= */}
-
-        <div
-          style={{
-            background: "white",
-            marginTop: "25px",
-            padding: "25px",
-            borderRadius: "16px",
-            boxShadow:
-              "0 5px 18px rgba(0,0,0,0.07)"
-          }}
-        >
-
-          <h2
-            style={{
-              color: "#123b35",
-              marginTop: 0
-            }}
-          >
-            Total: ₹
-            {total.toLocaleString(
-              "en-IN"
-            )}
-          </h2>
-
-
-          {/* INCOMPLETE WARNING */}
-
-          {hasIncompleteOptions && (
-
-            <div
-              style={{
-                background: "#fff7ed",
-                color: "#c2410c",
-                padding: "15px",
-                borderRadius: "10px",
-                marginBottom: "18px",
-                fontWeight: "700"
-              }}
-            >
-              ⚠️ Please select Age, Gender and
-              Quantity for every bird before
-              placing the order.
-            </div>
-
-          )}
-
-
-          {/* OUT OF STOCK */}
-
-          {hasOutOfStock && (
-
-            <div
-              style={{
-                background: "#fee2e2",
-                color: "#b91c1c",
-                padding: "15px",
-                borderRadius: "10px",
-                marginBottom: "18px",
-                fontWeight: "700"
-              }}
-            >
-              ❌ Cart me Out of Stock bird hai.
-              <br />
-              Please us bird ko remove karein.
-            </div>
-
-          )}
-
-
-          <div
-            style={{
-              display: "flex",
-              gap: "12px",
-              flexWrap: "wrap"
-            }}
-          >
-
-            {/* PLACE ORDER */}
-
-            <button
-              type="button"
-              disabled={
-                hasIncompleteOptions ||
-                hasOutOfStock ||
-                isOrdering
-              }
-              onClick={() => {
-
-                if (
-                  hasIncompleteOptions
-                ) {
-
-                  alert(
-                    "❌ Please select Age, Gender and Quantity for every bird."
-                  );
-
-                  return;
-                }
-
-
-                if (hasOutOfStock) {
-
-                  alert(
-                    "❌ Out of Stock bird ko pehle remove karein."
-                  );
-
-                  return;
-                }
-
-
-                setShowCheckout(true);
-
-              }}
-              style={{
-                border: "none",
-                background:
-                  hasIncompleteOptions ||
-                  hasOutOfStock ||
-                  isOrdering
-                    ? "#94a3b8"
-                    : "#0f766e",
-                color: "white",
-                padding: "14px 25px",
-                borderRadius: "9px",
-                fontSize: "16px",
-                fontWeight: "700",
-                cursor:
-                  hasIncompleteOptions ||
-                  hasOutOfStock ||
-                  isOrdering
-                    ? "not-allowed"
-                    : "pointer"
-              }}
-            >
-              🛍️ Place Order
-            </button>
-
-
-            {/* CLEAR */}
-
-            <button
-              type="button"
-              onClick={() => {
-
-                if (
-                  window.confirm(
-                    "Are you sure you want to clear the cart?"
-                  )
-                ) {
-
-                  clearCart();
-
-                }
-
-              }}
-              style={{
-                border: "none",
-                background: "#dc3545",
-                color: "white",
-                padding: "14px 25px",
-                borderRadius: "9px",
-                fontSize: "16px",
-                fontWeight: "700",
-                cursor: "pointer"
-              }}
-            >
-              Clear Cart
-            </button>
+              );
+            })}
 
           </div>
 
-        </div>
-
-
-        {/* =========================
-            CHECKOUT POPUP
-        ========================= */}
-
-        {showCheckout && (
+          {/* =================================================
+              BILL SUMMARY
+              IMPORTANT:
+              YE CART PRODUCTS KE BAAD HAI
+          ================================================= */}
 
           <div
-            style={{
-              position: "fixed",
-              inset: 0,
-              background:
-                "rgba(0,0,0,0.55)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "20px",
-              zIndex: 9999
-            }}
+            className="birds-care-summary"
+            style={summaryWrapperStyle}
           >
 
             <div
-              style={{
-                width: "100%",
-                maxWidth: "500px",
-                maxHeight: "90vh",
-                overflowY: "auto",
-                background: "white",
-                borderRadius: "18px",
-                padding: "30px",
-                boxSizing: "border-box"
-              }}
+              className="birds-care-summary-card"
+              style={summaryCardStyle}
+            >
+
+              <h2
+                style={
+                  summaryTitleStyle
+                }
+              >
+                🧾 Bill Summary
+              </h2>
+
+              {/* SUBTOTAL */}
+
+              <div
+                style={
+                  summaryRowStyle
+                }
+              >
+                <span>
+                  Subtotal
+                </span>
+
+                <b>
+                  ₹
+                  {subtotal.toLocaleString(
+                    "en-IN"
+                  )}
+                </b>
+              </div>
+
+              {/* DISCOUNT */}
+
+              <div
+                style={
+                  summaryRowStyle
+                }
+              >
+                <span>
+                  Discount ({adminDiscount}%)
+                </span>
+
+                <b>
+                  - ₹
+                  {discountAmount.toLocaleString(
+                    "en-IN"
+                  )}
+                </b>
+              </div>
+
+              {/* SHIPPING */}
+
+              <div
+                style={
+                  summaryRowStyle
+                }
+              >
+                <span>
+                  Shipping
+                </span>
+
+                <b>
+                  {shippingCharge === 0
+                    ? "FREE"
+                    : `₹${shippingCharge.toLocaleString(
+                        "en-IN"
+                      )}`}
+                </b>
+              </div>
+
+              <hr
+                style={{
+                  border: 0,
+                  borderTop:
+                    "1px solid #d1d5db",
+                  margin:
+                    "18px 0",
+                }}
+              />
+
+              {/* FINAL TOTAL */}
+
+              <h2
+                style={
+                  finalTotalRowStyle
+                }
+              >
+                Total ₹
+                {finalTotal.toLocaleString(
+                  "en-IN"
+                )}
+              </h2>
+
+              {/* WARNING */}
+
+              {hasIncompleteOptions && (
+                <div
+                  style={
+                    warningStyle
+                  }
+                >
+                  ⚠️ Please select Age and
+                  Gender for all birds
+                  before placing order.
+                </div>
+              )}
+
+              {/* STOCK WARNING */}
+
+              {hasOutOfStock && (
+                <div
+                  style={
+                    warningStyle
+                  }
+                >
+                  ❌ Out of Stock bird cart
+                  me hai.
+                </div>
+              )}
+
+              {/* =================================================
+                  PLACE ORDER
+                  YE SABSE LAST ME RAHEGA
+              ================================================= */}
+
+              <button
+                type="button"
+                className="birds-care-main-button"
+                style={{
+                  ...mainButtonStyle,
+                  opacity:
+                    hasIncompleteOptions ||
+                    hasOutOfStock
+                      ? 0.55
+                      : 1,
+                  cursor:
+                    hasIncompleteOptions ||
+                    hasOutOfStock
+                      ? "not-allowed"
+                      : "pointer",
+                }}
+                disabled={
+                  hasIncompleteOptions ||
+                  hasOutOfStock
+                }
+                onClick={
+                  handlePlaceOrder
+                }
+              >
+                🛍 Place Order
+              </button>
+
+              {/* CLEAR CART */}
+
+              <button
+                type="button"
+                style={
+                  clearButtonStyle
+                }
+                onClick={clearCart}
+              >
+                🗑 Clear Cart
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* =====================================================
+          CHECKOUT POPUP
+      ===================================================== */}
+
+      {showCheckout && (
+        <div
+          style={overlayStyle}
+        >
+
+          <div
+            style={
+              checkoutModalStyle
+            }
+          >
+
+            <div
+              style={
+                checkoutHeaderStyle
+              }
             >
 
               <h2
                 style={{
-                  marginTop: 0,
-                  color: "#123b35"
+                  margin: 0,
                 }}
               >
-                Place Your Order 📦
+                📦 Place Your Order
               </h2>
 
-
-              <p
-                style={{
-                  color: "#777"
-                }}
+              <button
+                type="button"
+                style={
+                  closeButtonStyle
+                }
+                onClick={() =>
+                  setShowCheckout(false)
+                }
               >
-                Total Amount: ₹
-                {total.toLocaleString(
-                  "en-IN"
-                )}
-              </p>
-
-
-              <form
-                onSubmit={handleOrder}
-              >
-
-                {/* NAME */}
-
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  value={name}
-                  onChange={(e) =>
-                    setName(
-                      e.target.value
-                    )
-                  }
-                  required
-                  autoComplete="name"
-                  style={inputStyle}
-                />
-
-
-                {/* MOBILE */}
-
-                <input
-                  type="tel"
-                  placeholder="Mobile Number"
-                  value={phone}
-                  onChange={(e) =>
-                    setPhone(
-                      e.target.value
-                    )
-                  }
-                  required
-                  autoComplete="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  style={inputStyle}
-                />
-
-
-                {/* GMAIL / EMAIL */}
-
-                <input
-                  type="email"
-                  placeholder="Gmail / Email Address"
-                  value={email}
-                  onChange={(e) =>
-                    setEmail(
-                      e.target.value
-                    )
-                  }
-                  required
-                  autoComplete="email"
-                  style={inputStyle}
-                />
-
-
-                {/* ADDRESS */}
-
-                <textarea
-                  placeholder="Full Delivery Address"
-                  value={address}
-                  onChange={(e) =>
-                    setAddress(
-                      e.target.value
-                    )
-                  }
-                  required
-                  autoComplete="street-address"
-                  style={{
-                    ...inputStyle,
-                    minHeight: "90px"
-                  }}
-                />
-
-
-                {/* CITY */}
-
-                <input
-                  type="text"
-                  placeholder="City"
-                  value={city}
-                  onChange={(e) =>
-                    setCity(
-                      e.target.value
-                    )
-                  }
-                  required
-                  autoComplete="address-level2"
-                  style={inputStyle}
-                />
-
-
-                {/* PINCODE */}
-
-                <input
-                  type="text"
-                  placeholder="Pincode"
-                  value={pincode}
-                  onChange={(e) =>
-                    setPincode(
-                      e.target.value
-                    )
-                  }
-                  required
-                  autoComplete="postal-code"
-                  inputMode="numeric"
-                  maxLength={6}
-                  style={inputStyle}
-                />
-
-
-                {/* BUTTON */}
-
-                <button
-                  type="submit"
-                  disabled={isOrdering}
-                  style={{
-                    width: "100%",
-                    border: "none",
-                    background:
-                      isOrdering
-                        ? "#94a3b8"
-                        : "#0f766e",
-                    color: "white",
-                    padding: "14px",
-                    borderRadius: "9px",
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    cursor:
-                      isOrdering
-                        ? "not-allowed"
-                        : "pointer"
-                  }}
-                >
-                  {isOrdering
-                    ? "⏳ Sending Order..."
-                    : "✅ Confirm Order"}
-                </button>
-
-
-                {/* CANCEL */}
-
-                <button
-                  type="button"
-                  disabled={isOrdering}
-                  onClick={() =>
-                    setShowCheckout(false)
-                  }
-                  style={{
-                    width: "100%",
-                    marginTop: "10px",
-                    border:
-                      "1px solid #ccd9d5",
-                    background: "white",
-                    color: "#555",
-                    padding: "13px",
-                    borderRadius: "9px",
-                    fontSize: "15px",
-                    fontWeight: "700",
-                    cursor:
-                      isOrdering
-                        ? "not-allowed"
-                        : "pointer"
-                  }}
-                >
-                  Cancel
-                </button>
-
-              </form>
+                ×
+              </button>
 
             </div>
 
+            <form
+              onSubmit={handleOrder}
+            >
+
+              {/* NAME */}
+
+              <input
+                style={inputStyle}
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) =>
+                  setName(
+                    e.target.value
+                  )
+                }
+                required
+              />
+
+              {/* PHONE */}
+
+              <input
+                style={inputStyle}
+                placeholder="Mobile Number"
+                value={phone}
+                onChange={(e) =>
+                  setPhone(
+                    e.target.value
+                  )
+                }
+                inputMode="numeric"
+                required
+              />
+
+              {/* EMAIL */}
+
+              <input
+                style={inputStyle}
+                placeholder="Email"
+                type="email"
+                value={email}
+                onChange={(e) =>
+                  setEmail(
+                    e.target.value
+                  )
+                }
+                required
+              />
+
+              {/* ADDRESS */}
+
+              <textarea
+                style={{
+                  ...inputStyle,
+                  minHeight: "90px",
+                  resize: "vertical",
+                }}
+                placeholder="Address"
+                value={address}
+                onChange={(e) =>
+                  setAddress(
+                    e.target.value
+                  )
+                }
+                required
+              />
+
+              {/* CITY */}
+
+              <input
+                style={inputStyle}
+                placeholder="City"
+                value={city}
+                onChange={(e) =>
+                  setCity(
+                    e.target.value
+                  )
+                }
+                required
+              />
+
+              {/* PINCODE */}
+
+              <input
+                style={inputStyle}
+                placeholder="Pincode"
+                value={pincode}
+                onChange={(e) =>
+                  setPincode(
+                    e.target.value
+                  )
+                }
+                inputMode="numeric"
+                required
+              />
+
+              {/* CONFIRM */}
+
+              <button
+                type="submit"
+                style={
+                  mainButtonStyle
+                }
+                disabled={
+                  isOrdering
+                }
+              >
+                {isOrdering
+                  ? "⏳ Placing Order..."
+                  : "✅ Confirm Order"}
+              </button>
+
+            </form>
           </div>
-
-        )}
-
-      </div>
-
+        </div>
+      )}
     </div>
-
   );
-
 }
 
-
-// =========================
+// =========================================================
 // STYLES
-// =========================
+// =========================================================
 
-const buttonStyle = {
-
-  border: "none",
-
-  background: "#0f766e",
-
-  color: "white",
-
-  padding: "13px 25px",
-
-  borderRadius: "9px",
-
-  fontSize: "15px",
-
-  fontWeight: "700",
-
-  cursor: "pointer"
-
-};
-
-
-const inputStyle = {
-
-  width: "100%",
-
+const pageStyle = {
+  minHeight: "100vh",
+  background: "#f8fafc",
+  padding: "15px",
   boxSizing: "border-box",
+};
 
-  padding: "13px",
+const containerStyle = {
+  width: "100%",
+  maxWidth: "1200px",
+  margin: "0 auto",
+};
 
+const headerStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: "15px",
+  marginBottom: "15px",
+};
+
+const pageTitleStyle = {
+  margin: 0,
+  fontSize: "clamp(28px, 5vw, 42px)",
+  fontWeight: "800",
+  color: "#123c3a",
+};
+
+const itemsCountStyle = {
+  background: "#dcfce7",
+  color: "#166534",
+  padding: "8px 14px",
+  borderRadius: "20px",
+  whiteSpace: "nowrap",
+  fontWeight: "600",
+};
+
+const cartCardStyle = {
+  background: "#ffffff",
+  borderRadius: "16px",
+  padding: "16px",
   marginBottom: "14px",
-
-  border: "1px solid #ccd9d5",
-
-  borderRadius: "9px",
-
-  fontSize: "15px"
-
+  boxShadow:
+    "0 2px 12px rgba(0,0,0,0.05)",
+  boxSizing: "border-box",
+  width: "100%",
 };
 
-
-const labelStyle = {
-
-  display: "block",
-
-  marginBottom: "8px",
-
-  color: "#123b35",
-
-  fontWeight: "700"
-
+const productBoxStyle = {
+  display: "flex",
+  gap: "14px",
+  alignItems: "center",
 };
 
-
-const optionButtonStyle = {
-
-  border: "1px solid #ccd9d5",
-
-  background: "white",
-
-  color: "#123b35",
-
-  padding: "10px 14px",
-
-  borderRadius: "8px",
-
-  cursor: "pointer",
-
-  fontWeight: "700"
-
+const productImageStyle = {
+  width: "90px",
+  height: "90px",
+  borderRadius: "12px",
+  objectFit: "cover",
+  flexShrink: 0,
 };
 
-
-const selectedOptionStyle = {
-
-  background: "#0f766e",
-
-  color: "white",
-
-  borderColor: "#0f766e"
-
+const productNameStyle = {
+  margin: "0 0 6px",
+  fontSize: "22px",
+  fontWeight: "800",
+  color: "#111827",
+  wordBreak: "break-word",
 };
 
+const productPriceStyle = {
+  marginTop: "8px",
+  color: "#047857",
+  fontSize: "21px",
+  fontWeight: "800",
+};
+
+const singleBadgeStyle = {
+  display: "inline-block",
+  background: "#ede9fe",
+  color: "#5b21b6",
+  padding: "5px 9px",
+  borderRadius: "12px",
+  fontSize: "12px",
+  fontWeight: "600",
+};
+
+const pairBadgeStyle = {
+  display: "inline-block",
+  background: "#dbeafe",
+  color: "#1d4ed8",
+  padding: "5px 9px",
+  borderRadius: "12px",
+  fontSize: "12px",
+  fontWeight: "600",
+};
+
+const mobileBottomStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "end",
+  gap: "15px",
+  marginTop: "15px",
+};
+
+const quantityBoxStyle = {
+  display: "flex",
+  alignItems: "center",
+  border: "1px solid #d1d5db",
+  borderRadius: "10px",
+  overflow: "hidden",
+  marginTop: "5px",
+  background: "#fff",
+};
 
 const quantityButtonStyle = {
-
   width: "38px",
-
   height: "38px",
-
   border: "none",
-
-  background: "#0f766e",
-
-  color: "white",
-
-  borderRadius: "8px",
-
-  fontSize: "22px",
-
-  fontWeight: "700",
-
-  cursor: "pointer"
-
+  background: "#fff",
+  fontSize: "20px",
+  cursor: "pointer",
 };
 
+const quantityNumberStyle = {
+  width: "38px",
+  height: "38px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontWeight: "600",
+};
+
+const itemTotalAreaStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  flexWrap: "wrap",
+  justifyContent: "flex-end",
+};
+
+const itemTotalStyle = {
+  color: "#047857",
+  fontSize: "18px",
+};
+
+const removeButtonStyle = {
+  border: "none",
+  background: "transparent",
+  color: "#dc2626",
+  fontSize: "15px",
+  cursor: "pointer",
+  padding: "4px",
+};
+
+const detailsCardStyle = {
+  marginTop: "15px",
+  padding: "14px",
+  background: "#f8fafc",
+  borderRadius: "12px",
+  border: "1px solid #eef2f7",
+};
+
+const pairDetailsContainerStyle = {
+  marginTop: "15px",
+  padding: "14px",
+  background: "#f8fafc",
+  borderRadius: "12px",
+  border: "1px solid #eef2f7",
+};
+
+const detailsTitleStyle = {
+  margin: "0 0 12px",
+  color: "#123c3a",
+  fontSize: "19px",
+};
+
+const pairBirdCardStyle = {
+  background: "#ffffff",
+  borderRadius: "10px",
+  padding: "12px",
+  marginTop: "10px",
+  border: "1px solid #e5e7eb",
+};
+
+const pairBirdTitleStyle = {
+  margin: "0 0 10px",
+  color: "#374151",
+  fontSize: "16px",
+};
+
+const optionsGridStyle = {
+  display: "grid",
+  gridTemplateColumns:
+    "repeat(auto-fit, minmax(150px, 1fr))",
+  gap: "10px",
+};
+
+const selectStyle = {
+  width: "100%",
+  height: "44px",
+  borderRadius: "9px",
+  border: "1px solid #d1d5db",
+  padding: "5px 10px",
+  background: "#ffffff",
+  fontSize: "15px",
+  boxSizing: "border-box",
+};
+
+const summaryWrapperStyle = {
+  width: "100%",
+};
+
+const summaryCardStyle = {
+  background: "#ffffff",
+  padding: "20px",
+  borderRadius: "16px",
+  boxShadow:
+    "0 2px 12px rgba(0,0,0,0.05)",
+  boxSizing: "border-box",
+  width: "100%",
+};
+
+const summaryTitleStyle = {
+  marginTop: 0,
+  marginBottom: "20px",
+  color: "#123c3a",
+};
+
+const summaryRowStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: "15px",
+  marginBottom: "14px",
+  fontSize: "16px",
+};
+
+const finalTotalRowStyle = {
+  color: "#047857",
+  fontSize: "25px",
+  margin: "15px 0",
+};
+
+const warningStyle = {
+  background: "#fff7ed",
+  color: "#c2410c",
+  border: "1px solid #fed7aa",
+  padding: "10px",
+  borderRadius: "9px",
+  fontSize: "13px",
+  lineHeight: "1.4",
+  marginTop: "10px",
+};
+
+const mainButtonStyle = {
+  width: "100%",
+  background: "#087f78",
+  color: "#ffffff",
+  border: "none",
+  padding: "13px 15px",
+  borderRadius: "10px",
+  fontWeight: "700",
+  fontSize: "16px",
+  marginTop: "10px",
+  boxSizing: "border-box",
+  cursor: "pointer",
+};
+
+const clearButtonStyle = {
+  width: "100%",
+  background: "#ffffff",
+  color: "#dc2626",
+  border: "1px solid #dc2626",
+  padding: "12px 15px",
+  borderRadius: "10px",
+  fontSize: "15px",
+  marginTop: "10px",
+  cursor: "pointer",
+  boxSizing: "border-box",
+};
+
+const overlayStyle = {
+  position: "fixed",
+  inset: 0,
+  zIndex: 9999,
+  background: "rgba(0,0,0,0.55)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "15px",
+  boxSizing: "border-box",
+  overflowY: "auto",
+};
+
+const checkoutModalStyle = {
+  background: "#ffffff",
+  width: "100%",
+  maxWidth: "440px",
+  maxHeight: "90vh",
+  overflowY: "auto",
+  padding: "20px",
+  borderRadius: "16px",
+  boxSizing: "border-box",
+};
+
+const checkoutHeaderStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: "10px",
+  marginBottom: "10px",
+};
+
+const closeButtonStyle = {
+  border: "none",
+  background: "transparent",
+  fontSize: "30px",
+  lineHeight: 1,
+  cursor: "pointer",
+};
+
+const inputStyle = {
+  width: "100%",
+  padding: "12px",
+  marginTop: "10px",
+  border: "1px solid #d1d5db",
+  borderRadius: "9px",
+  boxSizing: "border-box",
+  fontSize: "15px",
+};
+
+const emptyCardStyle = {
+  background: "#ffffff",
+  padding: "40px 20px",
+  borderRadius: "16px",
+  textAlign: "center",
+  maxWidth: "500px",
+  margin: "40px auto",
+};
+
+const emptyIconStyle = {
+  fontSize: "50px",
+};
 
 export default Cart;

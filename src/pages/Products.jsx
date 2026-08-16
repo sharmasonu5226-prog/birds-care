@@ -1,407 +1,749 @@
-import { useContext, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import {
+  useContext,
+  useState
+} from "react";
+
+import {
+  Link,
+  useSearchParams
+} from "react-router-dom";
 
 import { CartContext } from "../context/CartContext";
 import { PetContext } from "../context/PetContext";
 
-function Products() {
-  const { addToCart } = useContext(CartContext);
-  const { pets } = useContext(PetContext);
 
-  const [search, setSearch] = useState("");
 
-  const [searchParams] = useSearchParams();
+function Products(){
 
-  const categoryType = searchParams.get("type");
+  const {
+    addToCart
+  } = useContext(CartContext);
 
-  // =========================
-  // FILTER PRODUCTS
-  // =========================
 
-  const filteredPets = pets.filter((bird) => {
-    const nameMatch = bird.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
 
-    const categoryMatch =
-      !categoryType ||
-      bird.type === categoryType;
+  const {
+    pets
+  } = useContext(PetContext);
 
-    return nameMatch && categoryMatch;
-  });
 
-  return (
-    <div className="products-page">
 
-      {/* =========================
-          PAGE TITLE
-      ========================= */}
+  const [search,setSearch] =
+    useState("");
 
-      <h1>
-        {categoryType
-          ? categoryType
-          : "All Birds"}
-      </h1>
 
-      {/* =========================
-          SEARCH
-      ========================= */}
 
-      <input
-        type="text"
-        placeholder="Search Bird..."
-        value={search}
-        onChange={(e) =>
-          setSearch(e.target.value)
-        }
-      />
+  const [searchParams] =
+    useSearchParams();
 
-      {/* =========================
-          NO PRODUCTS
-      ========================= */}
 
-      {filteredPets.length === 0 ? (
 
-        <div className="no-products">
-          <h2>No Birds Found</h2>
-        </div>
+  const categoryType =
+    searchParams.get("type");
 
-      ) : (
 
-        <div className="products-grid">
 
-          {filteredPets.map((bird) => (
 
-            <BirdCard
-              key={bird.id}
-              bird={bird}
-              addToCart={addToCart}
-            />
+  const filteredPets =
+    Array.isArray(pets)
 
-          ))}
+    ?
 
-        </div>
+    pets.filter((bird)=>{
 
-      )}
 
-    </div>
-  );
+      const nameMatch =
+        String(bird.name || "")
+        .toLowerCase()
+        .includes(
+          search.toLowerCase()
+        );
+
+
+
+      const categoryMatch =
+        !categoryType ||
+        String(bird.type || "")
+        .toLowerCase()
+        ===
+        String(categoryType)
+        .toLowerCase();
+
+
+
+      return (
+        nameMatch &&
+        categoryMatch
+      );
+
+
+    })
+
+    :
+
+    [];
+
+
+
+
+return(
+
+<div className="products-page">
+
+
+<h1>
+{
+categoryType ||
+"All Birds"
+}
+</h1>
+
+
+
+<input
+
+type="text"
+
+placeholder="Search Bird..."
+
+value={search}
+
+onChange={(e)=>
+setSearch(e.target.value)
 }
 
-// =================================================
-// PRODUCT CARD
-// =================================================
+/>
+
+
+
+
+{
+filteredPets.length===0
+
+?
+
+<div className="no-products">
+
+<h2>
+No Birds Found
+</h2>
+
+</div>
+
+
+:
+
+<div className="products-grid">
+
+
+{
+filteredPets.map((bird)=>(
+
+<BirdCard
+
+key={bird.id}
+
+bird={bird}
+
+addToCart={addToCart}
+
+/>
+
+))
+
+}
+
+
+</div>
+
+}
+
+
+</div>
+
+);
+
+
+}
+
+
+
+
+
+function getNumber(value){
+
+const num =
+Number(value);
+
+
+return Number.isFinite(num)
+?
+num
+:
+0;
+
+}
+
+
+
+
+
+function getDiscount(oldPrice,newPrice){
+
+if(
+oldPrice<=0 ||
+newPrice<=0 ||
+oldPrice<=newPrice
+){
+
+return 0;
+
+}
+
+
+return Math.round(
+(
+(oldPrice-newPrice)
+/
+oldPrice
+)
+*
+100
+);
+
+}
+
+
+
+
 
 function BirdCard({
-  bird,
-  addToCart
-}) {
-  const [age, setAge] =
-    useState("Young");
-
-  const [gender, setGender] =
-    useState("Male");
-
-  const [quantity, setQuantity] =
-    useState(1);
-
-  // =========================
-  // QUANTITY
-  // =========================
-
-  const increaseQuantity = () => {
-    setQuantity(
-      (previous) =>
-        previous + 1
-    );
-  };
-
-  const decreaseQuantity = () => {
-    setQuantity(
-      (previous) =>
-        previous > 1
-          ? previous - 1
-          : 1
-    );
-  };
-
-  // =========================
-  // TOTAL
-  // =========================
-
-  const totalPrice =
-    Number(bird.price || 0) *
-    quantity;
-
-  // =========================
-  // ADD TO CART
-  // =========================
-
-  const handleAddToCart = () => {
-    addToCart(
-      bird,
-      {
-        age,
-        gender,
-        quantity
-      }
-    );
-  };
-
-  const isOutOfStock =
-    (bird.stock || "In Stock") ===
-    "Out of Stock";
-
-  return (
-    <div className="product-card">
-
-      {/* =========================
-          IMAGE
-      ========================= */}
-
-      <div className="product-image">
-
-        {bird.image ? (
-
-          <img
-            src={bird.image}
-            alt={bird.name}
-          />
-
-        ) : (
-
-          <div className="product-emoji">
-            {bird.emoji || "🐦"}
-          </div>
-
-        )}
-
-      </div>
-
-      {/* =========================
-          NAME
-      ========================= */}
-
-      <h2>
-        {bird.name}
-      </h2>
-
-      {/* =========================
-          TYPE
-      ========================= */}
-
-      <p className="product-type">
-        {bird.type}
-      </p>
-
-      {/* =========================
-          PRICE
-      ========================= */}
-
-      <h3 className="product-price">
-        ₹{bird.price}
-      </h3>
-
-      {/* =========================
-          STOCK
-      ========================= */}
-
-      <p
-        className={
-          isOutOfStock
-            ? "stock-red"
-            : "stock-green"
-        }
-      >
-        {bird.stock || "In Stock"}
-      </p>
-
-      {/* =========================
-          AGE
-      ========================= */}
-
-      <div className="product-selection">
-
-        <strong>
-          Select Age
-        </strong>
-
-        <div className="option-buttons">
-
-          <button
-            type="button"
-            className={
-              age === "Young"
-                ? "selected-option"
-                : ""
-            }
-            onClick={() =>
-              setAge("Young")
-            }
-          >
-            🐣 Young
-          </button>
-
-          <button
-            type="button"
-            className={
-              age === "Adult"
-                ? "selected-option"
-                : ""
-            }
-            onClick={() =>
-              setAge("Adult")
-            }
-          >
-            🐦 Adult
-          </button>
-
-        </div>
-
-      </div>
-
-      {/* =========================
-          GENDER
-      ========================= */}
-
-      <div className="product-selection">
-
-        <strong>
-          Select Gender
-        </strong>
-
-        <div className="option-buttons">
-
-          <button
-            type="button"
-            className={
-              gender === "Male"
-                ? "selected-option"
-                : ""
-            }
-            onClick={() =>
-              setGender("Male")
-            }
-          >
-            ♂ Male
-          </button>
-
-          <button
-            type="button"
-            className={
-              gender === "Female"
-                ? "selected-option"
-                : ""
-            }
-            onClick={() =>
-              setGender("Female")
-            }
-          >
-            ♀ Female
-          </button>
-
-        </div>
-
-      </div>
-
-      {/* =========================
-          QUANTITY
-      ========================= */}
-
-      <div className="product-selection">
-
-        <strong>
-          Quantity
-        </strong>
-
-        <div className="quantity-control">
-
-          <button
-            type="button"
-            onClick={decreaseQuantity}
-          >
-            −
-          </button>
-
-          <span>
-            {quantity}
-          </span>
-
-          <button
-            type="button"
-            onClick={increaseQuantity}
-          >
-            +
-          </button>
-
-        </div>
-
-      </div>
-
-      {/* =========================
-          SUMMARY
-      ========================= */}
-
-      <div className="product-summary">
-
-        <p>
-          Age:{" "}
-          <strong>
-            {age}
-          </strong>
-        </p>
-
-        <p>
-          Gender:{" "}
-          <strong>
-            {gender}
-          </strong>
-        </p>
-
-        <p>
-          Quantity:{" "}
-          <strong>
-            {quantity}
-          </strong>
-        </p>
-
-        <p>
-          Total:{" "}
-          <strong>
-            ₹{totalPrice}
-          </strong>
-        </p>
-
-      </div>
-
-      {/* =========================
-          ADD TO CART
-      ========================= */}
-
-      <button
-        type="button"
-        className="add-cart-button"
-        disabled={isOutOfStock}
-        onClick={handleAddToCart}
-      >
-        {isOutOfStock
-          ? "Out of Stock"
-          : "🛒 Add To Cart"}
-      </button>
-
-      {/* =========================
-          VIEW DETAILS
-      ========================= */}
-
-      <Link
-        to={`/product/${bird.id}`}
-        className="view-details-button"
-      >
-        View Details
-      </Link>
-
-    </div>
-  );
+bird,
+addToCart
+}){
+
+
+const singleOldPrice =
+getNumber(
+bird.singleOldPrice ??
+bird.price
+);
+
+
+
+const singlePrice =
+getNumber(
+bird.singlePrice ??
+bird.price
+);
+
+
+
+const pairOldPrice =
+getNumber(
+bird.pairOldPrice ??
+singleOldPrice * 2
+);
+
+
+
+const pairPrice =
+getNumber(
+bird.pairPrice ??
+singlePrice * 2
+);
+
+
+
+const singleDiscount =
+getDiscount(
+singleOldPrice,
+singlePrice
+);
+
+
+
+const pairDiscount =
+getDiscount(
+pairOldPrice,
+pairPrice
+);
+
+
+
+const stock =
+String(
+bird.stock ||
+"In Stock"
+);
+
+
+
+const outStock =
+stock.toLowerCase()
+===
+"out of stock";
+
+
+
+const [
+showPair,
+setShowPair
+]=useState(false);
+
+
+
+const [bird1Age,setBird1Age]=
+useState("Young");
+
+
+const [bird1Gender,setBird1Gender]=
+useState("Male");
+
+
+const [bird2Age,setBird2Age]=
+useState("Young");
+
+
+const [bird2Gender,setBird2Gender]=
+useState("Female");
+
+
+
+
+
+const addSingle=()=>{
+
+
+if(outStock)return;
+
+
+addToCart(
+
+{
+
+...bird,
+
+price:singlePrice,
+
+originalPrice:singleOldPrice,
+
+singleOldPrice,
+
+singlePrice,
+
+pairOldPrice,
+
+pairPrice,
+
+purchaseType:"Single",
+
+age:"Young",
+
+gender:"Male"
+
+},
+
+{
+quantity:1
 }
+
+);
+
+
+};// ===============================
+// ADD PAIR
+// ===============================
+
+const addPair = ()=>{
+
+
+if(outStock)
+return;
+
+
+
+addToCart(
+
+{
+
+...bird,
+
+
+price:
+pairPrice,
+
+
+originalPrice:
+pairOldPrice,
+
+
+singleOldPrice,
+
+singlePrice,
+
+
+pairOldPrice,
+
+pairPrice,
+
+
+purchaseType:
+"Pair",
+
+
+
+pairBirds:[
+
+{
+
+birdNumber:1,
+
+age:bird1Age,
+
+gender:bird1Gender
+
+},
+
+
+{
+
+birdNumber:2,
+
+age:bird2Age,
+
+gender:bird2Gender
+
+}
+
+]
+
+
+},
+
+{
+quantity:1
+}
+
+);
+
+
+
+setShowPair(false);
+
+
+};
+
+
+
+
+
+return (
+
+<div className="product-card">
+
+
+
+<div className="product-image">
+
+
+{
+
+bird.image ?
+
+
+<img
+
+src={bird.image}
+
+alt={bird.name}
+
+/>
+
+
+:
+
+
+<div className="product-emoji">
+
+{bird.emoji || "🐦"}
+
+</div>
+
+
+}
+
+
+</div>
+
+
+
+
+<h2>
+{bird.name}
+</h2>
+
+
+<p>
+{bird.type}
+</p>
+
+
+
+
+
+<div className="price-box">
+
+
+<h3>
+🐦 Single Bird
+</h3>
+
+
+
+{
+singleDiscount > 0 &&
+
+<span className="old-price">
+₹{singleOldPrice}
+</span>
+
+}
+
+
+
+<strong>
+₹{singlePrice}
+</strong>
+
+
+
+{
+singleDiscount > 0 &&
+
+<span className="discount">
+{singleDiscount}% OFF
+</span>
+
+}
+
+
+
+<button
+
+disabled={outStock}
+
+onClick={addSingle}
+
+>
+
+{
+outStock
+?
+"Out of Stock"
+:
+"🛒 Add Single"
+}
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div className="price-box">
+
+
+<h3>
+🐦🐦 Pair (2 Birds)
+</h3>
+
+
+
+{
+pairDiscount > 0 &&
+
+<span className="old-price">
+₹{pairOldPrice}
+</span>
+
+}
+
+
+
+<strong>
+₹{pairPrice}
+</strong>
+
+
+
+{
+pairDiscount > 0 &&
+
+<span className="discount">
+{pairDiscount}% OFF
+</span>
+
+}
+
+
+
+
+
+{
+
+!showPair ?
+
+
+<button
+
+disabled={outStock}
+
+onClick={()=>
+setShowPair(true)
+}
+
+>
+
+🛒 Select Pair
+
+</button>
+
+
+
+:
+
+
+<div className="pair-options">
+
+
+<h4>Bird 1</h4>
+
+
+<button onClick={()=>setBird1Age("Young")}>
+🐣 Young
+</button>
+
+
+<button onClick={()=>setBird1Age("Adult")}>
+🐦 Adult
+</button>
+
+
+<button onClick={()=>setBird1Gender("Male")}>
+♂ Male
+</button>
+
+
+<button onClick={()=>setBird1Gender("Female")}>
+♀ Female
+</button>
+
+
+
+
+
+<h4>Bird 2</h4>
+
+
+<button onClick={()=>setBird2Age("Young")}>
+🐣 Young
+</button>
+
+
+<button onClick={()=>setBird2Age("Adult")}>
+🐦 Adult
+</button>
+
+
+<button onClick={()=>setBird2Gender("Male")}>
+♂ Male
+</button>
+
+
+<button onClick={()=>setBird2Gender("Female")}>
+♀ Female
+</button>
+
+
+
+
+<button onClick={addPair}>
+🛒 Add Pair
+</button>
+
+
+
+<button onClick={()=>setShowPair(false)}>
+Cancel
+</button>
+
+
+
+</div>
+
+
+}
+
+
+
+</div>
+
+
+
+
+
+<p
+
+className={
+outStock
+?
+"stock-red"
+:
+"stock-green"
+}
+
+>
+
+{
+outStock
+?
+"Out of Stock"
+:
+"In Stock"
+}
+
+</p>
+
+
+
+
+
+<Link
+
+to={`/product/${bird.id}`}
+
+className="view-details-button"
+
+>
+
+View Details
+
+</Link>
+
+
+
+
+</div>
+
+
+);
+
+
+}
+
+
 
 export default Products;

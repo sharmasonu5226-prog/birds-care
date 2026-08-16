@@ -11,6 +11,7 @@ function Checkout() {
   const navigate = useNavigate();
 
 
+
   const {
     cart,
     clearCart
@@ -23,25 +24,22 @@ function Checkout() {
   // =========================
 
 
-  const [form, setForm] = useState({
+  const [form,setForm] = useState({
 
-    name: "",
-
-    mobile: "",
-
-    email: "",
-
-    address: "",
-
-    city: "",
-
-    pincode: "",
+    name:"",
+    mobile:"",
+    email:"",
+    address:"",
+    city:"",
+    pincode:"",
 
   });
 
 
 
-  const [loading,setLoading] = useState(false);
+  const [loading,setLoading] =
+  useState(false);
+
 
 
 
@@ -52,53 +50,37 @@ function Checkout() {
 
   const getPrice = (item)=>{
 
+    return Number(
 
-    return (
+      String(item?.price || 0)
 
-      Number(
+      .replace("₹","")
 
-        String(item?.price ?? 0)
+      .replace(/,/g,"")
 
-        .replace("₹","")
+      .trim()
 
-        .replace(/,/g,"")
-
-        .trim()
-
-      )
-
-      || 0
-
-    );
-
+    ) || 0;
 
   };
 
 
 
-  // =========================
-  // QUANTITY
-  // =========================
-
 
   const getQuantity = (item)=>{
 
-
-    const qty = Number(
-
-      item?.quantity ??
-
-      item?.qty ??
-
+    const qty =
+    Number(
+      item?.quantity ||
+      item?.qty ||
       1
-
     );
 
 
     return qty > 0 ? qty : 1;
 
-
   };
+
 
 
 
@@ -111,17 +93,11 @@ function Checkout() {
 
     (sum,item)=>{
 
-
       return (
-
         sum +
-
         getPrice(item) *
-
         getQuantity(item)
-
       );
-
 
     },
 
@@ -132,60 +108,67 @@ function Checkout() {
 
 
 
+
   // =========================
-  // DISCOUNT
+  // ADMIN DISCOUNT
   // =========================
 
 
-  const discount = cart.reduce(
+  const adminDiscount =
 
-    (sum,item)=>{
+  Number(
 
-
-      const itemDiscount =
-
-      Number(
-
-        item?.discount ?? 0
-
-      ) || 0;
-
-
-
-      return (
-
-        sum +
-
-        itemDiscount *
-
-        getQuantity(item)
-
-      );
-
-
-    },
-
-    0
+    localStorage.getItem(
+      "birdsCareDiscount"
+    ) || 0
 
   );
 
 
 
+
+
+  const discount =
+
+  Math.round(
+
+    (subtotal * adminDiscount) / 100
+
+  );
+
+
+
+
+
+
   // =========================
-  // DELIVERY
+  // ADMIN SHIPPING
   // =========================
 
 
-  const deliveryCharge = 0;
+  const deliveryCharge =
+
+  Number(
+
+    localStorage.getItem(
+      "birdsCareShipping"
+    ) || 0
+
+  );
+
+
+
 
 
 
   // =========================
-  // TOTAL
+  // FINAL TOTAL
   // =========================
 
 
-  const total = Math.max(
+  const total =
+
+  Math.max(
 
     0,
 
@@ -199,20 +182,18 @@ function Checkout() {
 
 
 
+
   // =========================
   // INPUT CHANGE
   // =========================
 
 
-  const changeHandler = (e)=>{
+  const changeHandler=(e)=>{
 
 
     const {
-
       name,
-
       value
-
     } = e.target;
 
 
@@ -226,12 +207,8 @@ function Checkout() {
     }));
 
 
-  };
-
-
-
-  // =========================
-  // SUBMIT START
+  };  // =========================
+  // SUBMIT ORDER
   // =========================
 
 
@@ -251,6 +228,7 @@ function Checkout() {
       return;
 
     }
+
 
 
 
@@ -280,10 +258,12 @@ function Checkout() {
 
 
 
+
     try{
 
 
       setLoading(true);
+
 
 
 
@@ -293,11 +273,16 @@ function Checkout() {
 
 
 
+
       const orderDate =
 
       new Date()
 
-      .toLocaleString("en-IN");
+      .toLocaleString(
+        "en-IN"
+      );
+
+
 
 
 
@@ -314,12 +299,16 @@ function Checkout() {
         "Confirmed",
 
 
+
         paymentMethod:
         "Cash on Delivery",
 
 
+
         paymentStatus:
         "Pending",
+
+
 
 
         customer:{
@@ -329,20 +318,25 @@ function Checkout() {
           form.name.trim(),
 
 
+
           mobile:
           form.mobile.trim(),
+
 
 
           email:
           form.email.trim(),
 
 
+
           address:
           form.address.trim(),
 
 
+
           city:
           form.city.trim(),
+
 
 
           pincode:
@@ -352,85 +346,35 @@ function Checkout() {
         },
 
 
+
+
         items:cart,
+
 
 
         subtotal,
 
 
+
         discount,
+
+
+
+        discountPercent:
+        adminDiscount,
+
 
 
         deliveryCharge,
 
 
+
         total,
 
 
-      };      // =========================
-      // SEND EMAIL SERVER
-      // =========================
 
+      };
 
-      const response = await fetch(
-  "http://10.206.203.228:5000/api/send-order",
-
-        {
-
-          method:"POST",
-
-
-          headers:{
-
-            "Content-Type":
-            "application/json",
-
-          },
-
-
-          body:JSON.stringify(
-
-            billData
-
-          ),
-
-        }
-
-      );
-
-
-
-      const data = await response.json();
-
-
-
-      console.log(
-
-        "SERVER RESPONSE:",
-
-        data
-
-      );
-
-
-
-      if(
-
-        !response.ok ||
-
-        !data.success
-
-      ){
-
-        throw new Error(
-
-          data.message ||
-
-          "Email send failed"
-
-        );
-
-      }
 
 
 
@@ -442,79 +386,69 @@ function Checkout() {
 
 
       const {
-
         error
-
       } = await supabase
 
       .from("orders")
 
       .insert([
 
-
         {
 
 
           order_id:
-
           orderId,
 
 
-          order_status:
 
+          order_status:
           "Confirmed",
 
 
-          payment_method:
 
+          payment_method:
           "Cash on Delivery",
 
 
-          payment_status:
 
+          payment_status:
           "Pending",
 
 
 
-          customer_name:
 
+          customer_name:
           form.name.trim(),
 
 
 
           customer_mobile:
-
           form.mobile.trim(),
 
 
 
           customer_email:
-
           form.email.trim(),
 
 
 
           customer_address:
-
           form.address.trim(),
 
 
 
           customer_city:
-
           form.city.trim(),
 
 
 
           customer_pincode:
-
           form.pincode.trim(),
 
 
 
-          items:
 
-          cart,
+          items:cart,
 
 
 
@@ -527,7 +461,6 @@ function Checkout() {
 
 
           delivery_charge:
-
           deliveryCharge,
 
 
@@ -535,10 +468,11 @@ function Checkout() {
           total,
 
 
+
         }
 
-
       ]);
+
 
 
 
@@ -548,18 +482,13 @@ function Checkout() {
 
 
         console.log(
-
           "SUPABASE ERROR:",
-
           error
-
         );
 
 
         throw new Error(
-
-          "Order database me save nahi hua"
-
+          "Order save nahi hua"
         );
 
 
@@ -570,7 +499,7 @@ function Checkout() {
 
 
       // =========================
-      // SAVE BILL LOCAL
+      // SAVE BILL
       // =========================
 
 
@@ -579,12 +508,13 @@ function Checkout() {
         "birdsCareLastOrder",
 
         JSON.stringify(
-
           billData
-
         )
 
       );
+
+
+
 
 
 
@@ -598,23 +528,13 @@ function Checkout() {
 
 
 
-      console.log(
-
-        "BILL SAVED:",
-
-        savedBill
-
-      );
-
 
 
       if(!savedBill){
 
 
         throw new Error(
-
           "Bill save nahi hua"
-
         );
 
 
@@ -624,10 +544,6 @@ function Checkout() {
 
 
 
-      // =========================
-      // CLEAR CART
-      // =========================
-
 
       clearCart();
 
@@ -636,9 +552,7 @@ function Checkout() {
 
 
       alert(
-
         "Order placed successfully 🎉"
-
       );
 
 
@@ -646,33 +560,28 @@ function Checkout() {
 
 
       navigate(
-
         "/bill"
-
       );
-
 
 
 
     }
 
+
+
     catch(error){
 
 
-
       console.error(
-
         "ORDER ERROR:",
-
         error
-
       );
 
 
 
       alert(
 
-        "Order failed ❌\n\n"+
+        "Order failed ❌\n\n" +
 
         error.message
 
@@ -680,6 +589,7 @@ function Checkout() {
 
 
     }
+
 
 
     finally{
@@ -695,7 +605,6 @@ function Checkout() {
   // PAGE
   // =========================
 
-
   return (
 
     <section className="checkout-section">
@@ -710,9 +619,11 @@ function Checkout() {
 
 
 
+
         <form
           onSubmit={submitOrder}
         >
+
 
 
 
@@ -734,6 +645,8 @@ function Checkout() {
 
 
 
+
+
           <input
 
             name="mobile"
@@ -749,6 +662,8 @@ function Checkout() {
             required
 
           />
+
+
 
 
 
@@ -770,6 +685,8 @@ function Checkout() {
 
 
 
+
+
           <textarea
 
             name="address"
@@ -783,6 +700,8 @@ function Checkout() {
             required
 
           />
+
+
 
 
 
@@ -804,13 +723,13 @@ function Checkout() {
 
 
 
+
+
           <input
 
             name="pincode"
 
             type="text"
-
-            inputMode="numeric"
 
             placeholder="Pincode"
 
@@ -825,6 +744,9 @@ function Checkout() {
 
 
 
+
+
+
           {/* ORDER SUMMARY */}
 
 
@@ -834,6 +756,8 @@ function Checkout() {
             <h3>
               Order Summary
             </h3>
+
+
 
 
 
@@ -859,14 +783,21 @@ function Checkout() {
 
 
 
+
+
+
             <p>
 
               <span>
-                Discount
+                Discount ({adminDiscount}%)
               </span>
 
 
-              <strong>
+              <strong
+                style={{
+                  color:"green"
+                }}
+              >
 
                 - ₹
                 {discount.toLocaleString(
@@ -881,10 +812,13 @@ function Checkout() {
 
 
 
+
+
+
             <p>
 
               <span>
-                Delivery
+                Shipping
               </span>
 
 
@@ -905,11 +839,13 @@ function Checkout() {
 
                 }
 
-
               </strong>
 
 
             </p>
+
+
+
 
 
 
@@ -919,11 +855,13 @@ function Checkout() {
 
 
 
+
+
             <h2>
 
 
               <span>
-                Grand Total
+                Final Total
               </span>
 
 
@@ -943,7 +881,12 @@ function Checkout() {
 
 
 
+
+
           </div>
+
+
+
 
 
 
@@ -968,12 +911,13 @@ function Checkout() {
 
               :
 
-              "Place Order"
+              "Confirm Order"
 
             }
 
 
           </button>
+
 
 
 
@@ -996,14 +940,16 @@ function Checkout() {
 
 
 
+
         </form>
+
 
 
       </div>
 
 
-    </section>
 
+    </section>
 
   );
 

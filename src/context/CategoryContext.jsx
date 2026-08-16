@@ -1,481 +1,472 @@
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+} from "react";
+
 import { supabase } from "../supabaseClient";
 
-export const CategoryContext = createContext(null);
+
+export const CategoryContext =
+  createContext(null);
+
 
 function CategoryProvider({ children }) {
-  const defaultCategories = [
-    {
-      name: "Parrot",
-      emoji: "🦜",
-      image: null,
-    },
-    {
-      name: "Love Bird",
-      emoji: "🐥",
-      image: null,
-    },
-    {
-      name: "Cockatiel",
-      emoji: "🕊️",
-      image: null,
-    },
-    {
-      name: "Budgie",
-      emoji: "🐤",
-      image: null,
-    },
-    {
-      name: "Finch",
-      emoji: "🐦",
-      image: null,
-    },
-  ];
 
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const [categories, setCategories] =
+    useState([]);
+
+
+  const [loading, setLoading] =
+    useState(true);
+
 
   // =========================
-  // LOAD CATEGORIES
+  // LOCAL SAVE
   // =========================
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
+  const saveLocal = (data) => {
+
+    localStorage.setItem(
+      "categories",
+      JSON.stringify(data)
+    );
+
+  };
+
+
+  // =========================
+  // LOAD CATEGORY
+  // =========================
 
   const loadCategories = async () => {
+
     try {
-      const { data, error } = await supabase
+
+      setLoading(true);
+
+      const {
+        data,
+        error
+      } = await supabase
+
         .from("categories")
+
         .select("*")
-        .order("id", { ascending: true });
+
+        .order("id", {
+          ascending: true
+        });
+
 
       if (error) {
-        console.error("Supabase category load error:", error);
 
-        const saved = localStorage.getItem("categories");
-
-        if (saved) {
-          try {
-            setCategories(JSON.parse(saved));
-          } catch {
-            setCategories(defaultCategories);
-          }
-        } else {
-          setCategories(defaultCategories);
-        }
-
-        setLoading(false);
-        return;
-      }
-
-      // =========================
-      // DATABASE EMPTY
-      // =========================
-
-      if (!data || data.length === 0) {
-        const saved = localStorage.getItem("categories");
-
-        let localCategories = [];
-
-        if (saved) {
-          try {
-            localCategories = JSON.parse(saved);
-          } catch (error) {
-            console.error("Local category error:", error);
-          }
-        }
-
-        const categoriesToUpload =
-          localCategories.length > 0
-            ? localCategories
-            : defaultCategories;
-
-        const cleanCategories = categoriesToUpload.map((category) => ({
-          name: category.name,
-          emoji: category.emoji || "🐦",
-          image: category.image || null,
-        }));
-
-        const {
-          data: insertedData,
-          error: insertError,
-        } = await supabase
-          .from("categories")
-          .insert(cleanCategories)
-          .select("*");
-
-        if (insertError) {
-          console.error(
-            "Supabase category insert error:",
-            insertError
-          );
-
-          setCategories(categoriesToUpload);
-          setLoading(false);
-          return;
-        }
-
-        setCategories(insertedData || []);
-
-        localStorage.setItem(
-          "categories",
-          JSON.stringify(insertedData || [])
+        console.log(
+          "Category load error",
+          error
         );
 
-        setLoading(false);
+        const local =
+          JSON.parse(
+            localStorage.getItem(
+              "categories"
+            )
+          ) || [];
+
+        setCategories(local);
+
         return;
       }
 
-      // =========================
-      // DATABASE HAS DATA
-      // =========================
+
+      if (!data || data.length === 0) {
+
+        setCategories([]);
+
+        saveLocal([]);
+
+        return;
+      }
+
 
       setCategories(data);
 
-      localStorage.setItem(
-        "categories",
-        JSON.stringify(data)
-      );
+      saveLocal(data);
+
+
     } catch (error) {
-      console.error("Category loading error:", error);
 
-      const saved = localStorage.getItem("categories");
+      console.log(
+        "Category error",
+        error
+      );
 
-      if (saved) {
-        try {
-          setCategories(JSON.parse(saved));
-        } catch {
-          setCategories(defaultCategories);
-        }
-      } else {
-        setCategories(defaultCategories);
-      }
+    } finally {
+
+      setLoading(false);
+
     }
 
-    setLoading(false);
   };
+
+
+  useEffect(() => {
+
+    loadCategories();
+
+  }, []);
+
 
   // =========================
   // ADD CATEGORY
   // =========================
 
   const addCategory = async (category) => {
-    const newCategory = {
-      name: category.name,
-      emoji: category.emoji || "🐦",
-      image: category.image || null,
-    };
 
-    const {
-      data,
-      error,
-    } = await supabase
-      .from("categories")
-      .insert([newCategory])
-      .select("*")
-      .maybeSingle();
+    try {
 
-    if (error) {
-      console.error("Add category error:", error);
-      alert("Category add nahi hui.");
-      return;
-    }
+      const cleanData = {
 
-    if (!data) {
-      console.error(
-        "Category insert hua lekin data nahi mila."
+        name:
+          String(category.name || "").trim(),
+
+        emoji:
+          category.emoji || "🐦",
+
+        image:
+          category.image || null,
+
+      };
+
+
+      if (!cleanData.name) {
+
+        console.log(
+          "Category name missing"
+        );
+
+        return {
+          error: "Category name required"
+        };
+
+      }
+
+
+      const {
+        data,
+        error
+      } = await supabase
+
+        .from("categories")
+
+        .insert([
+          cleanData
+        ])
+
+        .select("*")
+        .single();
+
+
+      if (error) {
+
+        console.log(
+          "Add category error",
+          error
+        );
+
+        return {
+          error
+        };
+
+      }
+
+
+      const updated = [
+        ...categories,
+        data
+      ];
+
+
+      setCategories(updated);
+
+      saveLocal(updated);
+
+
+      return data;
+
+
+    } catch (error) {
+
+      console.log(
+        "Add category catch error",
+        error
       );
 
-      alert("Category add nahi hui.");
-      return;
+      return {
+        error
+      };
+
     }
 
-    const updatedCategories = [
-      ...categories,
-      data,
-    ];
-
-    setCategories(updatedCategories);
-
-    localStorage.setItem(
-      "categories",
-      JSON.stringify(updatedCategories)
-    );
   };
+
 
   // =========================
   // DELETE CATEGORY
   // =========================
 
   const removeCategory = async (id) => {
-    const { error } = await supabase
+
+  try {
+
+    if (id === undefined || id === null) {
+
+      alert("Category ID nahi mila ❌");
+
+      return {
+        error: "Category ID missing"
+      };
+
+    }
+
+
+    // Pehle screen se turant remove karo
+    const oldCategories = [...categories];
+
+    const updated = categories.filter(
+      (item) =>
+        String(item.id) !== String(id)
+    );
+
+
+    setCategories(updated);
+
+    saveLocal(updated);
+
+
+    // Ab Supabase se delete karo
+    const {
+      error
+    } = await supabase
+
       .from("categories")
+
       .delete()
-      .eq("id", id);
+
+      .eq(
+        "id",
+        id
+      );
+
 
     if (error) {
-      console.error(
+
+      console.log(
         "Delete category error:",
         error
       );
 
-      alert("Category delete nahi hui.");
-      return;
-    }
 
-    const updatedCategories =
-      categories.filter(
-        (item) =>
-          String(item.id) !== String(id)
+      // Agar database delete fail ho
+      // to purani list wapas lao
+      setCategories(oldCategories);
+
+      saveLocal(oldCategories);
+
+
+      alert(
+        "Category delete nahi hui ❌\n\n" +
+        error.message
       );
 
-    setCategories(updatedCategories);
 
-    localStorage.setItem(
-      "categories",
-      JSON.stringify(updatedCategories)
+      return {
+        error
+      };
+
+    }
+
+
+    console.log(
+      "Category deleted:",
+      id
     );
-  };
+
+
+    alert(
+      "Category Deleted Successfully ✅"
+    );
+
+
+    return true;
+
+
+  } catch (error) {
+
+
+    console.log(
+      "Delete category catch error:",
+      error
+    );
+
+
+    alert(
+      "Category delete nahi hui ❌"
+    );
+
+
+    return {
+      error
+    };
+
+  }
+
+};
+
 
   // =========================
   // UPDATE CATEGORY
   // =========================
 
-  const updateCategory = async (id, data) => {
+  const updateCategory = async (
+    id,
+    updateData
+  ) => {
+
     try {
-      const existingCategory =
-        categories.find(
-          (item) =>
-            String(item.id) === String(id)
-        );
 
-      if (!existingCategory) {
-        console.error(
-          "Category not found:",
+      const {
+        data,
+        error
+      } = await supabase
+
+        .from("categories")
+
+        .update(updateData)
+
+        .eq(
+          "id",
           id
-        );
-
-        alert("Category nahi mili.");
-        return;
-      }
-
-      // =========================
-      // PREPARE UPDATE DATA
-      // =========================
-
-      const updatedData = {};
-
-      if (data?.name !== undefined) {
-        updatedData.name = data.name;
-      }
-
-      if (data?.emoji !== undefined) {
-        updatedData.emoji = data.emoji;
-      }
-
-      if (data?.image !== undefined) {
-        updatedData.image =
-          data.image || null;
-      }
-
-      console.log(
-        "Updating category:",
-        id
-      );
-
-      console.log(
-        "Update data:",
-        updatedData
-      );
-
-      // Agar kuch bhi update nahi karna
-      if (
-        Object.keys(updatedData).length === 0
-      ) {
-        console.warn(
-          "No category data to update."
-        );
-
-        return;
-      }
-
-      // =========================
-      // UPDATE DATABASE
-      // =========================
-
-      const {
-        error: updateError,
-      } = await supabase
-        .from("categories")
-        .update(updatedData)
-        .eq("id", id);
-
-      if (updateError) {
-        console.error(
-          "Supabase category update error:",
-          updateError
-        );
-
-        alert(
-          "Category update nahi hui."
-        );
-
-        return;
-      }
-
-      // =========================
-      // GET UPDATED CATEGORY
-      // =========================
-
-      const {
-        data: updatedCategory,
-        error: fetchError,
-      } = await supabase
-        .from("categories")
-        .select("*")
-        .eq("id", id)
-        .maybeSingle();
-
-      if (fetchError) {
-        console.error(
-          "Updated category fetch error:",
-          fetchError
-        );
-
-        // Database update ho chuka hai,
-        // local state ko manually update kar do.
-
-        const localUpdatedCategory = {
-          ...existingCategory,
-          ...updatedData,
-          id: existingCategory.id,
-        };
-
-        const updatedCategories =
-          categories.map((item) =>
-            String(item.id) === String(id)
-              ? localUpdatedCategory
-              : item
-          );
-
-        setCategories(updatedCategories);
-
-        localStorage.setItem(
-          "categories",
-          JSON.stringify(
-            updatedCategories
-          )
-        );
-
-        return;
-      }
-
-      // =========================
-      // UPDATED CATEGORY NOT FOUND
-      // =========================
-
-      if (!updatedCategory) {
-        console.error(
-          "Category update ke baad row nahi mili."
-        );
-
-        // Local state ko bhi update kar do
-        // kyunki database update successful ho sakta hai.
-
-        const localUpdatedCategory = {
-          ...existingCategory,
-          ...updatedData,
-          id: existingCategory.id,
-        };
-
-        const updatedCategories =
-          categories.map((item) =>
-            String(item.id) === String(id)
-              ? localUpdatedCategory
-              : item
-          );
-
-        setCategories(updatedCategories);
-
-        localStorage.setItem(
-          "categories",
-          JSON.stringify(
-            updatedCategories
-          )
-        );
-
-        return;
-      }
-
-      // =========================
-      // UPDATE REACT STATE
-      // =========================
-
-      const updatedCategories =
-        categories.map((item) =>
-          String(item.id) === String(id)
-            ? updatedCategory
-            : item
-        );
-
-      setCategories(updatedCategories);
-
-      // =========================
-      // UPDATE LOCAL STORAGE
-      // =========================
-
-      localStorage.setItem(
-        "categories",
-        JSON.stringify(
-          updatedCategories
         )
-      );
+
+        .select("*")
+        .single();
+
+
+      if (error) {
+
+        console.log(
+          "Update category error",
+          error
+        );
+
+        return {
+          error
+        };
+
+      }
+
+
+      const updated =
+        categories.map(
+          (item) =>
+
+            String(item.id) ===
+            String(id)
+
+              ? data
+
+              : item
+        );
+
+
+      setCategories(updated);
+
+      saveLocal(updated);
+
+
+      return data;
+
+
+    } catch (error) {
 
       console.log(
-        "Category successfully updated:",
-        updatedCategory
-      );
-    } catch (error) {
-      console.error(
-        "Category update unexpected error:",
+        "Update category catch error",
         error
       );
 
-      alert(
-        "Category update nahi hui."
-      );
+      return {
+        error
+      };
+
     }
+
   };
+
+
+  // =========================
+  // REFRESH
+  // =========================
+
+  const refreshCategories =
+    async () => {
+
+      await loadCategories();
+
+    };
+
 
   // =========================
   // LOADING
   // =========================
 
   if (loading) {
+
     return (
       <div>
         Loading categories...
       </div>
     );
+
   }
+
 
   // =========================
   // PROVIDER
   // =========================
 
   return (
+
     <CategoryContext.Provider
+
       value={{
+
         categories,
+
+        loading,
+
         addCategory,
+
         removeCategory,
+
         updateCategory,
+
+        loadCategories,
+
+        refreshCategories,
+
       }}
+
     >
+
       {children}
+
     </CategoryContext.Provider>
+
   );
+
 }
+
 
 export default CategoryProvider;

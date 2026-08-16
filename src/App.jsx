@@ -25,19 +25,25 @@ import AdminLogin from "./pages/AdminLogin";
 // =========================
 
 function ProtectedAdmin() {
+
   const isAdmin =
     localStorage.getItem("admin") === "true";
 
+
   if (!isAdmin) {
+
     return (
       <Navigate
         to="/admin-login"
         replace
       />
     );
+
   }
 
+
   return <Admin />;
+
 }
 
 
@@ -46,15 +52,16 @@ function ProtectedAdmin() {
 // =========================
 
 function App() {
+
   return (
+
     <>
+
       <Header />
+
 
       <Routes>
 
-        {/* =========================
-            HOME
-        ========================= */}
 
         <Route
           path="/"
@@ -62,19 +69,11 @@ function App() {
         />
 
 
-        {/* =========================
-            PRODUCTS
-        ========================= */}
-
         <Route
           path="/products"
           element={<Products />}
         />
 
-
-        {/* =========================
-            BIRD DETAILS
-        ========================= */}
 
         <Route
           path="/product/:id"
@@ -82,19 +81,11 @@ function App() {
         />
 
 
-        {/* =========================
-            CART
-        ========================= */}
-
         <Route
           path="/cart"
           element={<Cart />}
         />
 
-
-        {/* =========================
-            CHECKOUT
-        ========================= */}
 
         <Route
           path="/checkout"
@@ -102,19 +93,11 @@ function App() {
         />
 
 
-        {/* =========================
-            BILL
-        ========================= */}
-
         <Route
           path="/bill"
           element={<Bill />}
         />
 
-
-        {/* =========================
-            ADMIN LOGIN
-        ========================= */}
 
         <Route
           path="/admin-login"
@@ -122,19 +105,11 @@ function App() {
         />
 
 
-        {/* =========================
-            ADMIN PANEL
-        ========================= */}
-
         <Route
           path="/admin"
           element={<ProtectedAdmin />}
         />
 
-
-        {/* =========================
-            UNKNOWN URL
-        ========================= */}
 
         <Route
           path="*"
@@ -146,11 +121,18 @@ function App() {
           }
         />
 
+
       </Routes>
 
+
       <Footer />
+
+
     </>
+
   );
+
 }
+
 
 export default App;

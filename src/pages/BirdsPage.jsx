@@ -3,541 +3,993 @@ import { useContext, useState } from "react";
 import { PetContext } from "../context/PetContext";
 import { CategoryContext } from "../context/CategoryContext";
 
-function BirdsPage() {
+
+function BirdsPage(){
+
   const {
     pets,
     addPet,
     deletePet,
-    updatePet,
+    updatePet
   } = useContext(PetContext);
 
-  const { categories } = useContext(CategoryContext);
 
-  // =========================
-  // ADD BIRD STATES
-  // =========================
+  const {
+    categories
+  } = useContext(CategoryContext);
 
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [type, setType] = useState("");
-  const [image, setImage] = useState("");
-  const [description, setDescription] = useState("");
-  const [stock, setStock] = useState("In Stock");
 
-  // =========================
-  // EDIT BIRD
-  // =========================
 
-  const [editBird, setEditBird] = useState({});
+  const [name,setName] = useState("");
 
-  // =========================
-  // READ IMAGE
-  // =========================
+  const [singleOldPrice,setSingleOldPrice] = useState("");
 
-  const readImage = (file, callback) => {
-    const reader = new FileReader();
+  const [singlePrice,setSinglePrice] = useState("");
 
-    reader.onload = () => {
-      callback(reader.result);
-    };
+  const [pairOldPrice,setPairOldPrice] = useState("");
 
-    reader.readAsDataURL(file);
-  };
+  const [pairPrice,setPairPrice] = useState("");
 
-  // =========================
-  // ADD BIRD IMAGE
-  // =========================
+  const [type,setType] = useState("");
 
-  const handleBirdImage = (e) => {
-    const file = e.target.files[0];
+  const [image,setImage] = useState("");
 
-    if (!file) return;
+  const [description,setDescription] = useState("");
 
-    readImage(file, (img) => {
-      setImage(img);
-    });
-  };
+  const [stock,setStock] = useState("In Stock");
 
-  // =========================
-  // EDIT BIRD IMAGE
-  // =========================
 
-  const handleEditBirdImage = (e, id) => {
-    const file = e.target.files[0];
 
-    if (!file) return;
+  const [editBird,setEditBird] = useState({});
 
-    readImage(file, (img) => {
-      setEditBird((prev) => ({
-        ...prev,
-        [id]: {
-          ...(prev[id] || {}),
-          image: img,
-        },
-      }));
-    });
-  };
 
-  // =========================
-  // ADD BIRD
-  // =========================
 
-  const handleAddBird = (e) => {
-    e.preventDefault();
 
-    if (!name || !price || !type) {
-      alert("Fill all bird details");
-      return;
+  const calculateDiscount = (
+    oldPrice,
+    newPrice
+  )=>{
+
+    const oldValue = Number(oldPrice)||0;
+
+    const newValue = Number(newPrice)||0;
+
+
+    if(
+      oldValue<=0 ||
+      newValue<=0 ||
+      oldValue<=newValue
+    ){
+
+      return 0;
+
     }
 
-    addPet({
-      name,
-      price,
-      type,
-      image: image || "",
-      description,
-      stock,
-    });
 
-    setName("");
-    setPrice("");
-    setType("");
-    setImage("");
-    setDescription("");
-    setStock("In Stock");
+    return Math.round(
+      ((oldValue-newValue)/
+      oldValue)*100
+    );
 
-    alert("Bird Added Successfully");
   };
 
-  // =========================
-  // CHANGE EDIT BIRD DATA
-  // =========================
 
-  const changeBird = (id, field, value) => {
-    setEditBird((prev) => ({
+
+
+
+  const readImage=(file,callback)=>{
+
+    const reader = new FileReader();
+
+
+    reader.onload=()=>{
+
+      callback(
+        reader.result
+      );
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+  };
+
+
+
+
+  const handleBirdImage=(e)=>{
+
+    const file=e.target.files[0];
+
+
+    if(!file)
+      return;
+
+
+    readImage(
+      file,
+      (img)=>{
+
+        setImage(img);
+
+      }
+    );
+
+  };
+
+
+
+
+  const handleAddBird=async(e)=>{
+
+    e.preventDefault();
+
+
+    if(
+      !name ||
+      !singlePrice ||
+      !pairPrice ||
+      !type
+    ){
+
+      alert(
+        "Complete bird details"
+      );
+
+      return;
+
+    }
+
+
+
+    const result =
+      await addPet({
+
+        name:name.trim(),
+
+        price:Number(singlePrice),
+
+        singleOldPrice:
+          Number(singleOldPrice),
+
+        singlePrice:
+          Number(singlePrice),
+
+        pairOldPrice:
+          Number(pairOldPrice),
+
+        pairPrice:
+          Number(pairPrice),
+
+        type,
+
+        image,
+
+        description,
+
+        stock
+
+      });
+
+
+
+    if(!result?.error){
+
+      alert(
+        "Bird Added Successfully"
+      );
+
+
+      setName("");
+
+      setSingleOldPrice("");
+
+      setSinglePrice("");
+
+      setPairOldPrice("");
+
+      setPairPrice("");
+
+      setType("");
+
+      setImage("");
+
+      setDescription("");
+
+      setStock("In Stock");
+
+    }
+
+
+  };  const changeBird = (
+    id,
+    field,
+    value
+  )=>{
+
+    setEditBird((prev)=>({
+
       ...prev,
-      [id]: {
+
+      [id]:{
+
         ...(prev[id] || {}),
-        [field]: value,
-      },
+
+        [field]:value
+
+      }
+
     }));
+
   };
 
-  // =========================
-  // UPDATE BIRD
-  // =========================
 
-  const handleUpdateBird = (bird) => {
-    const data = editBird[bird.id] || {};
 
-    updatePet(bird.id, {
-      name: data.name ?? bird.name,
 
-      price:
-        data.price !== undefined
-          ? data.price
-          : bird.price,
+  const handleEditBirdImage = (
+    e,
+    id
+  )=>{
 
-      type: data.type ?? bird.type,
+    const file =
+      e.target.files[0];
 
-      image:
-        data.image !== undefined
-          ? data.image
-          : bird.image,
 
-      description:
-        data.description !== undefined
-          ? data.description
-          : bird.description,
+    if(!file)
+      return;
 
-      stock:
-        data.stock !== undefined
-          ? data.stock
-          : bird.stock || "In Stock",
-    });
 
-    setEditBird((prev) => {
-      const copy = { ...prev };
+    readImage(
+      file,
+      (img)=>{
+
+
+        setEditBird((prev)=>({
+
+
+          ...prev,
+
+
+          [id]:{
+
+
+            ...(prev[id] || {}),
+
+
+            image:img
+
+
+          }
+
+
+        }));
+
+
+      }
+    );
+
+
+  };
+
+
+
+
+
+  const handleUpdateBird = async(
+    bird
+  )=>{
+
+
+    const edit =
+      editBird[bird.id] || {};
+
+
+
+    await updatePet(
+
+      bird.id,
+
+      {
+
+
+        name:
+          edit.name ??
+          bird.name,
+
+
+
+        price:
+          Number(
+            edit.singlePrice ??
+            bird.singlePrice ??
+            bird.price ??
+            0
+          ),
+
+
+
+        singleOldPrice:
+          Number(
+            edit.singleOldPrice ??
+            bird.singleOldPrice ??
+            0
+          ),
+
+
+
+        singlePrice:
+          Number(
+            edit.singlePrice ??
+            bird.singlePrice ??
+            bird.price ??
+            0
+          ),
+
+
+
+        pairOldPrice:
+          Number(
+            edit.pairOldPrice ??
+            bird.pairOldPrice ??
+            0
+          ),
+
+
+
+        pairPrice:
+          Number(
+            edit.pairPrice ??
+            bird.pairPrice ??
+            0
+          ),
+
+
+
+        type:
+          edit.type ??
+          bird.type,
+
+
+
+        image:
+          edit.image ??
+          bird.image,
+
+
+
+        description:
+          edit.description ??
+          bird.description,
+
+
+
+        stock:
+          edit.stock ??
+          bird.stock ??
+          "In Stock"
+
+
+      }
+
+    );
+
+
+
+    setEditBird((prev)=>{
+
+
+      const copy={
+        ...prev
+      };
+
 
       delete copy[bird.id];
 
+
       return copy;
+
+
     });
 
-    alert("Bird Updated Successfully");
+
+
+    alert(
+      "Bird Updated Successfully"
+    );
+
+
   };
 
-  // =========================
-  // DELETE BIRD
-  // =========================
 
-  const handleDeleteBird = (id) => {
-    if (window.confirm("Delete this bird?")) {
+
+
+
+  const handleDeleteBird=(id)=>{
+
+
+    if(
+      window.confirm(
+        "Delete this bird?"
+      )
+    ){
+
       deletePet(id);
+
     }
+
   };
 
-  // =========================
-  // PAGE
-  // =========================
+
+
+
 
   return (
+
     <div className="admin-content">
 
-      {/* =========================
-          TITLE
-      ========================= */}
 
-      <h1>🐦 Manage Birds</h1>
+      <h1>
+        🐦 Manage Birds
+      </h1>
 
-      {/* =========================
-          ADD BIRD
-      ========================= */}
+
 
       <div className="add-box">
 
-        <h2>Add New Bird</h2>
 
-        <form onSubmit={handleAddBird}>
+        <h2>
+          Add New Bird
+        </h2>
 
-          {/* NAME */}
+
+
+        <form
+          onSubmit={handleAddBird}
+        >
+
 
           <input
+
             type="text"
+
             placeholder="Bird Name"
+
             value={name}
-            onChange={(e) => setName(e.target.value)}
+
+            onChange={(e)=>
+              setName(e.target.value)
+            }
+
           />
 
-          {/* PRICE */}
+
 
           <input
+
             type="number"
-            placeholder="Price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+
+            placeholder="Single Original Price"
+
+            value={singleOldPrice}
+
+            onChange={(e)=>
+              setSingleOldPrice(
+                e.target.value
+              )
+            }
+
           />
 
-          {/* CATEGORY */}
+
+
+          <input
+
+            type="number"
+
+            placeholder="Single Selling Price"
+
+            value={singlePrice}
+
+            onChange={(e)=>
+              setSinglePrice(
+                e.target.value
+              )
+            }
+
+          />
+
+
+
+          <input
+
+            type="number"
+
+            placeholder="Pair Original Price"
+
+            value={pairOldPrice}
+
+            onChange={(e)=>
+              setPairOldPrice(
+                e.target.value
+              )
+            }
+
+          />
+
+
+
+          <input
+
+            type="number"
+
+            placeholder="Pair Selling Price"
+
+            value={pairPrice}
+
+            onChange={(e)=>
+              setPairPrice(
+                e.target.value
+              )
+            }
+
+          />
+
+
 
           <select
+
             value={type}
-            onChange={(e) => setType(e.target.value)}
+
+            onChange={(e)=>
+              setType(
+                e.target.value
+              )
+            }
+
           >
 
             <option value="">
               Select Category
             </option>
 
-            {categories.map((cat) => (
-              <option
-                key={cat.id}
-                value={cat.name}
-              >
-                {cat.name}
-              </option>
-            ))}
 
-          </select>
+            {
+              categories.map((cat)=>(
 
-          {/* STOCK */}
+                <option
+                  key={cat.id}
+                  value={cat.name}
+                >
+
+                  {cat.name}
+
+                </option>
+
+              ))
+            }
+
+
+          </select>          <input
+
+            type="file"
+
+            accept="image/*"
+
+            onChange={
+              handleBirdImage
+            }
+
+          />
+
+
+
+          <textarea
+
+            placeholder="Bird Description"
+
+            value={description}
+
+            onChange={(e)=>
+              setDescription(
+                e.target.value
+              )
+            }
+
+          />
+
+
 
           <select
+
             value={stock}
-            onChange={(e) => setStock(e.target.value)}
+
+            onChange={(e)=>
+              setStock(
+                e.target.value
+              )
+            }
+
           >
 
             <option value="In Stock">
               In Stock
             </option>
 
+
             <option value="Out of Stock">
               Out of Stock
             </option>
 
+
           </select>
 
-          {/* IMAGE */}
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleBirdImage}
-          />
-
-          {/* DESCRIPTION */}
-
-          <textarea
-            placeholder="Bird Description"
-            value={description}
-            onChange={(e) =>
-              setDescription(e.target.value)
-            }
-          />
-
-          {/* ADD */}
 
           <button type="submit">
+
             ➕ Add Bird
+
           </button>
+
 
         </form>
 
+
       </div>
 
-      {/* =========================
-          BIRD LIST
-      ========================= */}
+
+
+
 
       <div className="bird-list">
 
-        {pets.length === 0 ? (
 
-          <div className="empty-admin">
+        {
+          pets.map((bird)=>(
 
-            <div>🐦</div>
-
-            <h3>
-              No Birds Added
-            </h3>
-
-            <p>
-              Add your first bird above.
-            </p>
-
-          </div>
-
-        ) : (
-
-          pets.map((bird) => (
 
             <div
+
               key={bird.id}
+
               className="bird-admin-card"
+
             >
 
-              {/* =========================
-                  IMAGE
-              ========================= */}
 
-              {editBird[bird.id]?.image ||
-              bird.image ? (
+              {
+
+                bird.image ?
 
                 <img
-                  src={
-                    editBird[bird.id]?.image ||
-                    bird.image
-                  }
+
+                  src={bird.image}
+
                   alt={bird.name}
+
                 />
 
-              ) : (
+                :
 
                 <div className="no-image">
-                  {bird.emoji || "🐦"}
+
+                  🐦
+
                 </div>
 
-              )}
+              }
 
-              {/* =========================
-                  INFORMATION
-              ========================= */}
+
 
               <div className="admin-bird-info">
 
-                {/* NAME */}
+
 
                 <input
-                  type="text"
+
                   value={
                     editBird[bird.id]?.name ??
                     bird.name
                   }
-                  onChange={(e) =>
+
+                  onChange={(e)=>
+
                     changeBird(
+
                       bird.id,
+
                       "name",
+
                       e.target.value
+
                     )
+
                   }
+
                 />
 
-                {/* PRICE */}
+
+
 
                 <input
+
                   type="number"
+
+                  placeholder="Single Price"
+
                   value={
-                    editBird[bird.id]?.price ??
+
+                    editBird[bird.id]
+                    ?.singlePrice ??
+                    bird.singlePrice ??
                     bird.price
+
                   }
-                  onChange={(e) =>
+
+
+                  onChange={(e)=>
+
                     changeBird(
+
                       bird.id,
-                      "price",
+
+                      "singlePrice",
+
                       e.target.value
+
                     )
+
                   }
+
                 />
 
-                {/* CATEGORY */}
+
+
+
+
+                <input
+
+                  type="number"
+
+                  placeholder="Pair Price"
+
+                  value={
+
+                    editBird[bird.id]
+                    ?.pairPrice ??
+                    bird.pairPrice ??
+                    ""
+
+                  }
+
+
+                  onChange={(e)=>
+
+                    changeBird(
+
+                      bird.id,
+
+                      "pairPrice",
+
+                      e.target.value
+
+                    )
+
+                  }
+
+                />
+
+
+
+
 
                 <select
+
                   value={
-                    editBird[bird.id]?.type ??
+
+                    editBird[bird.id]
+                    ?.type ??
                     bird.type
+
                   }
-                  onChange={(e) =>
+
+
+                  onChange={(e)=>
+
                     changeBird(
+
                       bird.id,
+
                       "type",
+
                       e.target.value
+
                     )
+
                   }
+
                 >
 
-                  {categories.map((cat) => (
+                  {
+                    categories.map((cat)=>(
 
-                    <option
-                      key={cat.id}
-                      value={cat.name}
-                    >
-                      {cat.name}
-                    </option>
+                      <option
 
-                  ))}
+                        key={cat.id}
+
+                        value={cat.name}
+
+                      >
+
+                        {cat.name}
+
+                      </option>
+
+                    ))
+                  }
+
 
                 </select>
 
-                {/* =========================
-                    STOCK
-                ========================= */}
+
+
+
+
+                <input
+
+                  type="file"
+
+                  accept="image/*"
+
+                  onChange={(e)=>
+
+                    handleEditBirdImage(
+
+                      e,
+
+                      bird.id
+
+                    )
+
+                  }
+
+                />
+
+
+
+
+
+                <textarea
+
+                  value={
+
+                    editBird[bird.id]
+                    ?.description ??
+                    bird.description ??
+                    ""
+
+                  }
+
+
+                  onChange={(e)=>
+
+                    changeBird(
+
+                      bird.id,
+
+                      "description",
+
+                      e.target.value
+
+                    )
+
+                  }
+
+                />
+
+
+
+
 
                 <select
+
                   value={
-                    editBird[bird.id]?.stock ??
+
+                    editBird[bird.id]
+                    ?.stock ??
                     bird.stock ??
                     "In Stock"
+
                   }
-                  onChange={(e) =>
+
+
+                  onChange={(e)=>
+
                     changeBird(
+
                       bird.id,
+
                       "stock",
+
                       e.target.value
+
                     )
+
                   }
+
                 >
 
                   <option value="In Stock">
                     In Stock
                   </option>
 
+
                   <option value="Out of Stock">
                     Out of Stock
                   </option>
 
+
                 </select>
 
-                {/* =========================
-                    IMAGE UPDATE
-                ========================= */}
 
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    handleEditBirdImage(
-                      e,
+
+
+
+                <button
+
+                  onClick={()=>
+                    handleUpdateBird(
+                      bird
+                    )
+                  }
+
+                >
+
+                  💾 Update
+
+                </button>
+
+
+
+
+
+                <button
+
+                  onClick={()=>
+                    handleDeleteBird(
                       bird.id
                     )
                   }
-                />
 
-                {/* =========================
-                    DESCRIPTION
-                ========================= */}
-
-                <textarea
-                  value={
-                    editBird[bird.id]
-                      ?.description ??
-                    bird.description ??
-                    ""
-                  }
-                  onChange={(e) =>
-                    changeBird(
-                      bird.id,
-                      "description",
-                      e.target.value
-                    )
-                  }
-                />
-
-                {/* =========================
-                    CURRENT STOCK DISPLAY
-                ========================= */}
-
-                <div
-                  style={{
-                    marginTop: "5px",
-                    marginBottom: "10px",
-                    fontWeight: "700",
-                    fontSize: "16px",
-                    color:
-                      (
-                        editBird[bird.id]?.stock ??
-                        bird.stock ??
-                        "In Stock"
-                      ) === "In Stock"
-                        ? "green"
-                        : "red",
-                  }}
                 >
-                  Stock:{" "}
-                  {
-                    editBird[bird.id]?.stock ??
-                    bird.stock ??
-                    "In Stock"
-                  }
-                </div>
 
-                {/* =========================
-                    BUTTONS
-                ========================= */}
+                  🗑 Delete
 
-                <div className="admin-actions">
+                </button>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleUpdateBird(bird)
-                    }
-                  >
-                    💾 Update
-                  </button>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleDeleteBird(bird.id)
-                    }
-                  >
-                    🗑 Delete
-                  </button>
-
-                </div>
 
               </div>
 
+
             </div>
+
 
           ))
 
-        )}
+        }
+
 
       </div>
 
+
     </div>
+
   );
+
+
 }
+
 
 export default BirdsPage;
