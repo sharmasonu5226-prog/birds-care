@@ -1,984 +1,601 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Bill() {
+function Bill(){
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
-  const [order, setOrder] = useState(null);
+const [order,setOrder] = useState(null);
 
 
-  // =========================
-  // LOAD ORDER
-  // =========================
+useEffect(()=>{
 
-  useEffect(() => {
+const saved = localStorage.getItem("birdsCareLastOrder");
 
-    const savedOrder =
-      localStorage.getItem(
-        "birdsCareLastOrder"
-      );
+if(saved){
 
+try{
 
-    if(savedOrder){
+setOrder(JSON.parse(saved));
 
-      try{
+}catch(error){
 
-        setOrder(
-          JSON.parse(savedOrder)
-        );
+console.log(error);
 
-      }
-      catch(error){
+}
 
-        console.error(
-          "Bill load error",
-          error
-        );
+}
 
-      }
+},[]);
 
-    }
 
-  },[]);
 
+const number=(value)=>{
 
+let n = Number(
+String(value ?? 0)
+.replace("₹","")
+.replace(/,/g,"")
+.trim()
+);
 
-  // =========================
-  // NUMBER FORMAT
-  // =========================
+return isNaN(n)?0:n;
 
-  const getNumber = (value)=>{
+};
 
-    const num = Number(
 
-      String(value ?? 0)
 
-      .replace("₹","")
+const price=(value)=>{
 
-      .replace(/,/g,"")
+return number(value).toLocaleString("en-IN");
 
-      .trim()
+};
 
-    );
 
 
-    return Number.isFinite(num)
-      ? num
-      : 0;
+const itemName=(item)=>{
 
-  };
+return item?.name ||
+item?.title ||
+"Bird";
 
+};
 
 
-  const formatPrice = (value)=>{
 
-    return getNumber(value)
+const itemImage=(item)=>{
 
-    .toLocaleString(
-      "en-IN"
-    );
+return item?.image ||
+item?.mainImage ||
+"";
 
-  };
+};
 
 
 
-  // =========================
-  // ITEM DATA
-  // =========================
+const itemPrice=(item)=>{
 
+return number(item?.price);
 
-  const getItemName = (item)=>{
+};
 
-    return (
 
-      item?.name ||
 
-      item?.title ||
+const quantity=(item)=>{
 
-      "Bird"
+let q = Number(
+item?.quantity ??
+item?.qty ??
+1
+);
 
-    );
+return q>0?q:1;
 
-  };
+};
 
 
 
-  const getItemImage = (item)=>{
+if(!order){
 
-    return (
+return(
 
-      item?.image ||
+<div className="bill-page">
 
-      item?.mainImage ||
+<div className="bill-container">
 
-      ""
+<h2>No Bill Found</h2>
 
-    );
+<button onClick={()=>navigate("/products")}>
 
-  };
+Continue Shopping
 
+</button>
 
+</div>
 
-  const getItemPrice = (item)=>{
+</div>
 
-    return getNumber(
-      item?.price
-    );
+);
 
-  };
+}
 
 
 
-  const getQuantity = (item)=>{
+const customer = order.customer || {
 
-    const qty = Number(
+name:order.customerName,
+mobile:order.phone,
+email:order.email,
+address:order.address,
+city:order.city,
+pincode:order.pincode
 
-      item?.quantity ??
+};
 
-      item?.qty ??
 
-      1
 
-    );
+const items = Array.isArray(order.items)
+?
+order.items
+:
+[];
 
 
-    return qty > 0
-      ? qty
-      : 1;
 
-  };
+const subtotal =
 
+number(order.subtotal) ||
 
+items.reduce(
+(total,item)=>
+total + itemPrice(item)*quantity(item)
+,0);
 
-  // =========================
-  // EMPTY BILL
-  // =========================
 
 
-  if(!order){
+const discount = number(order.discount);
 
-    return (
 
-      <section className="bill-page">
 
-        <div className="bill-empty">
+const delivery = number(
+order.deliveryCharge ??
+order.shippingCharge
+);
 
-          <h2>
-            No Bill Found
-          </h2>
 
 
-          <p>
-            Please place an order first.
-          </p>
+const grandTotal =
 
+number(order.total) ||
 
-          <button
-            onClick={()=>navigate("/products")}
-          >
+subtotal-discount+delivery;
 
-            Continue Shopping
 
-          </button>
 
+return(
 
-        </div>
+<section className="bill-page">
 
-      </section>
 
-    );
+<div className="bill-container">
 
-  }
 
 
+{/* HEADER */}
 
-  // =========================
-  // CUSTOMER DATA
-  // =========================
+<div className="new-bill-header">
 
 
-  const customer =
-    order.customer || {
+<div className="bill-logo">
 
-      name:
-      order.customerName,
+<img 
+src="/birds-care-logo.png"
+alt="Birds Care"
+/>
 
-      mobile:
-      order.phone,
+</div>
 
-      email:
-      order.email,
 
-      address:
-      order.address,
 
-      city:
-      order.city,
+<div className="invoice-title">
 
-      pincode:
-      order.pincode
+<h1>TAX INVOICE</h1>
 
-    };
+<p>Original Bill</p>
 
+</div>
 
 
-  const items = Array.isArray(order.items)
-    ? order.items
-    : [];
+</div>
 
 
 
-  // =========================
-  // TOTAL CALCULATION
-  // =========================
+<div className="address-line">
 
+Kalamma Rd Near Life Line Hospital Kamptee, Yerkheda
 
-  const subtotal =
+</div>
 
-    getNumber(order.subtotal)
 
-    ||
 
-    items.reduce(
+{/* INFO BOX */}
 
-      (sum,item)=>{
 
-        return (
+<div className="bill-box-grid">
 
-          sum +
 
-          getItemPrice(item)
+<div className="bill-box">
 
-          *
+<h3>Order Details</h3>
 
-          getQuantity(item)
+<p>
+<b>Order ID :</b> {order.orderId || "-"}
+</p>
 
-        );
+<p>
+<b>Date :</b> {order.orderDate || "-"}
+</p>
 
-      },
+<p>
+<b>Status :</b> {order.status || "Confirmed"}
+</p>
 
-      0
+</div>
 
-    );
 
 
+<div className="bill-box">
 
-  const discount =
+<h3>Payment Details</h3>
 
-    getNumber(order.discount);
+<p>
+<b>Payment Method :</b>
+{order.paymentMethod || "Cash on Delivery"}
+</p>
 
 
+<p>
+<b>Payment Status :</b>
+{order.paymentStatus || "Pending"}
+</p>
 
-  const deliveryCharge =
 
-    getNumber(
+</div>
 
-      order.deliveryCharge ??
 
-      order.shippingCharge
 
-    );
+<div className="bill-box">
 
+<h3>Customer Details</h3>
 
+<p>
+<b>Name :</b> {customer.name || "-"}
+</p>
 
-  const total =
+<p>
+<b>Mobile :</b> {customer.mobile || "-"}
+</p>
 
-    getNumber(order.total)
+<p>
+<b>Email :</b> {customer.email || "-"}
+</p>
 
-    ||
+<p>
+<b>Address :</b> {customer.address || "-"}
+</p>
 
-    Math.max(
+<p>
+<b>City :</b> {customer.city || "-"}
+</p>
 
-      0,
+<p>
+<b>Pincode :</b> {customer.pincode || "-"}
+</p>
 
-      subtotal -
 
-      discount +
+</div>
 
-      deliveryCharge
 
-    );
+</div>{/* ORDER ITEMS */}
 
+<div className="items-section">
 
-  return (
+<h3>Order Items</h3>
 
-    <section className="bill-page">
 
-      <div className="bill-container">
+<table className="bill-table">
 
 
-        {/* =========================
-            HEADER
-        ========================= */}
+<thead>
 
+<tr>
 
-        <div className="bill-header">
+<th>#</th>
+<th>Product</th>
+<th>Qty</th>
+<th>Price</th>
+<th>Amount</th>
 
+</tr>
 
-          <div>
+</thead>
 
-            <h1>
-              🐦 BIRDS CARE
-            </h1>
 
 
-            <p>
-              Birds & Pets Store
-            </p>
+<tbody>
 
 
-          </div>
+{
 
+items.map((item,index)=>(
 
 
-          <div className="invoice-title">
+<tr key={index}>
 
-            <h2>
-              TAX INVOICE
-            </h2>
 
+<td>
+{index+1}
+</td>
 
-            <p>
-              Original Bill
-            </p>
 
 
-          </div>
+<td>
 
 
-        </div>
+<div className="product-row">
 
 
+{
+itemImage(item) &&
 
-        <div className="bill-line" />
+<img
 
+src={itemImage(item)}
 
+alt={itemName(item)}
 
-        {/* =========================
-            ORDER DETAILS
-        ========================= */}
+className="bill-product-image"
 
+/>
 
-        <div className="bill-info-grid">
+}
 
 
-          <div>
 
-            <h3>
-              Order Details
-            </h3>
+<div>
 
 
-            <p>
+<b>
+{itemName(item)}
+</b>
 
-              <strong>
-                Order ID:
-              </strong>{" "}
 
-              {order.orderId || "-"}
+<p>
 
-            </p>
+Age: {item.age || "Adult"}
 
+&nbsp; | &nbsp;
 
+Gender: {item.gender || "Pair"}
 
-            <p>
+</p>
 
-              <strong>
-                Date:
-              </strong>{" "}
 
-              {order.orderDate || "-"}
+</div>
 
-            </p>
 
+</div>
 
 
-            <p>
+</td>
 
-              <strong>
-                Status:
-              </strong>{" "}
 
-              <span className="status">
 
-                {order.status ||
+<td>
 
-                order.orderStatus ||
+{quantity(item)}
 
-                "Confirmed"}
+</td>
 
-              </span>
 
-            </p>
 
+<td>
 
-          </div>
+₹{price(itemPrice(item))}
 
+</td>
 
 
 
-          <div>
+<td>
 
-            <h3>
-              Payment Details
-            </h3>
+₹{price(itemPrice(item)*quantity(item))}
 
+</td>
 
 
-            <p>
 
-              <strong>
-                Payment:
-              </strong>{" "}
+</tr>
 
-              {order.paymentMethod ||
 
-              "Cash on Delivery"}
+))
 
-            </p>
 
+}
 
 
-            <p>
+</tbody>
 
-              <strong>
-                Payment Status:
-              </strong>{" "}
 
-              {order.paymentStatus ||
+</table>
 
-              "Pending"}
 
-            </p>
+</div>
 
 
-          </div>
 
 
-        </div>
 
+{/* TOTAL */}
 
 
 
-        {/* =========================
-            CUSTOMER DETAILS
-        ========================= */}
+<div className="bill-total-box">
 
 
+<div>
 
-        <div className="customer-box">
+<span>
+Subtotal
+</span>
 
+<b>
+₹{price(subtotal)}
+</b>
 
-          <h3>
-            Customer Details
-          </h3>
 
+</div>
 
 
-          <div className="customer-grid">
 
+<div>
 
-            <div>
+<span>
+Discount
+</span>
 
-              <strong>
-                Name
-              </strong>
 
-              <p>
-                {customer.name || "-"}
-              </p>
+<b>
+- ₹{price(discount)}
+</b>
 
-            </div>
 
+</div>
 
 
 
-            <div>
+<div>
 
-              <strong>
-                Mobile
-              </strong>
+<span>
+Shipping Charge
+</span>
 
-              <p>
-                {customer.mobile || "-"}
-              </p>
 
-            </div>
+<b>
 
+{
+delivery===0
+?
+"FREE"
+:
+`₹${price(delivery)}`
+}
 
 
+</b>
 
-            <div>
 
-              <strong>
-                Email
-              </strong>
+</div>
 
-              <p>
-                {customer.email || "-"}
-              </p>
 
-            </div>
 
 
+<div className="grand-total">
 
 
-            <div>
+<span>
+Grand Total
+</span>
 
-              <strong>
-                City
-              </strong>
 
-              <p>
-                {customer.city || "-"}
-              </p>
+<b>
 
-            </div>
+₹{price(grandTotal)}
 
+</b>
 
 
+</div>
 
-            <div>
 
-              <strong>
-                Pincode
-              </strong>
 
-              <p>
-                {customer.pincode || "-"}
-              </p>
+</div>
 
-            </div>
 
 
-          </div>
 
 
+{/* BUTTONS */}
 
-          <div className="address">
 
-            <strong>
-              Delivery Address
-            </strong>
+<div className="bill-actions">
 
 
-            <p>
-              {customer.address || "-"}
-            </p>
+<button
 
+className="print-btn"
 
-          </div>
+onClick={()=>window.print()}
 
+>
 
+🖨 Print Bill
 
-        </div>
+</button>
 
 
 
+<button
 
+className="shop-btn"
 
-        {/* =========================
-            ITEMS TABLE
-        ========================= */}
+onClick={()=>navigate("/products")}
 
+>
 
+🛒 Continue Shopping
 
-        <div className="items-section">
+</button>
 
 
-          <h3>
-            Order Items
-          </h3>
+</div>
 
 
 
-          <div className="table-wrapper">
 
 
-            <table>
+{/* FOOTER */}
 
 
-              <thead>
+<div className="bill-footer">
 
 
-                <tr>
+<p>
 
-                  <th>
-                    #
-                  </th>
+Thank you for shopping with Birds Care.
 
+</p>
 
-                  <th>
-                    Product
-                  </th>
 
+<p>
 
-                  <th>
-                    Qty
-                  </th>
+We will contact you regarding your order.
 
+</p>
 
-                  <th>
-                    Price
-                  </th>
 
+</div>
 
-                  <th>
-                    Amount
-                  </th>
 
 
-                </tr>
+</div>
 
 
-              </thead>
+</section>
 
 
+);
 
-
-              <tbody>
-
-
-              {
-                items.map(
-
-                  (item,index)=>{
-
-
-                    const price =
-                    getItemPrice(item);
-
-
-                    const qty =
-                    getQuantity(item);
-
-
-                    const amount =
-                    price * qty;
-
-
-
-                    return (
-
-                      <tr
-                        key={
-                          item.id ||
-                          index
-                        }
-                      >
-
-
-                        <td>
-                          {index+1}
-                        </td>
-
-
-
-                        <td>
-
-
-                          <div className="bill-item">
-
-
-                            {
-                              getItemImage(item)
-                              &&
-
-                              <img
-
-                                src={
-                                  getItemImage(item)
-                                }
-
-                                alt={
-                                  getItemName(item)
-                                }
-
-                              />
-
-                            }
-
-
-
-                            <span>
-
-                              {
-                                getItemName(item)
-                              }
-
-                            </span>
-
-
-                          </div>
-
-
-                        </td>
-
-
-
-
-                        <td>
-
-                          {qty}
-
-                        </td>
-
-
-
-
-                        <td>
-
-                          ₹
-                          {
-                            formatPrice(price)
-                          }
-
-                        </td>
-
-
-
-
-                        <td>
-
-                          ₹
-                          {
-                            formatPrice(amount)
-                          }
-
-                        </td>
-
-
-
-                      </tr>
-
-
-                    );
-
-
-                  }
-
-                )
-
-              }
-
-
-              </tbody>
-
-
-            </table>
-
-
-          </div>
-
-
-        </div>        {/* =========================
-            TOTAL SECTION
-        ========================= */}
-
-
-        <div className="bill-bottom">
-
-
-          <div className="thank-you">
-
-
-            <h3>
-              Thank You! 🐦
-            </h3>
-
-
-            <p>
-              Thank you for shopping with Birds Care.
-            </p>
-
-
-            <p>
-              We will contact you regarding your order.
-            </p>
-
-
-          </div>
-
-
-
-
-          <div className="totals">
-
-
-            <div>
-
-              <span>
-                Subtotal
-              </span>
-
-
-              <strong>
-
-                ₹
-                {
-                  formatPrice(
-                    subtotal
-                  )
-                }
-
-              </strong>
-
-
-            </div>
-
-
-
-
-
-            <div>
-
-              <span>
-                Discount
-              </span>
-
-
-              <strong
-                className="discount-text"
-              >
-
-                -
-
-                ₹
-                {
-                  formatPrice(
-                    discount
-                  )
-                }
-
-              </strong>
-
-
-            </div>
-
-
-
-
-
-            <div>
-
-              <span>
-                Shipping
-              </span>
-
-
-              <strong>
-
-                {
-                  deliveryCharge === 0
-
-                  ?
-
-                  "FREE"
-
-                  :
-
-                  `₹${formatPrice(
-                    deliveryCharge
-                  )}`
-
-                }
-
-              </strong>
-
-
-            </div>
-
-
-
-
-
-
-            <div className="total-row">
-
-
-              <span>
-                Grand Total
-              </span>
-
-
-
-              <strong>
-
-                ₹
-                {
-                  formatPrice(
-                    total
-                  )
-                }
-
-              </strong>
-
-
-            </div>
-
-
-
-          </div>
-
-
-        </div>
-
-
-
-
-
-
-        {/* =========================
-            BUTTONS
-        ========================= */}
-
-
-
-        <div className="bill-actions">
-
-
-          <button
-
-            className="print-btn"
-
-            onClick={()=>window.print()}
-
-          >
-
-            🖨️ Print Bill
-
-          </button>
-
-
-
-
-
-          <button
-
-            className="shop-btn"
-
-            onClick={()=>navigate("/products")}
-
-          >
-
-            🛍️ Continue Shopping
-
-          </button>
-
-
-
-        </div>
-
-
-
-
-      </div>
-
-
-    </section>
-
-  );
 
 }
 

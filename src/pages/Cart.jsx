@@ -246,17 +246,10 @@ function Cart() {
         JSON.stringify(order)
       );
 
-      const oldOrders = JSON.parse(
-        localStorage.getItem("orders") || "[]"
-      );
-
-      localStorage.setItem(
-        "orders",
-        JSON.stringify([
-          ...oldOrders,
-          order,
-        ])
-      );
+localStorage.setItem(
+  "orders",
+  JSON.stringify([order])
+);
     } catch (error) {
       console.error(
         "Local order error:",
