@@ -1231,4 +1231,106 @@ img{
 }
 
 
+}/* ==========================
+   BILL PRINT FIX
+========================== */
+
+@media print {
+
+  body{
+    background:white;
+  }
+
+
+  .header,
+  .nav-menu,
+  .bill-actions,
+  button{
+    display:none !important;
+  }
+
+
+  .bill-page{
+
+    padding:0 !important;
+    margin:0 !important;
+    background:white !important;
+
+  }
+
+
+  .bill-container{
+
+    width:100% !important;
+    max-width:100% !important;
+    padding:15px !important;
+    margin:0 !important;
+    border:none !important;
+    box-shadow:none !important;
+
+  }
+
+
+  .bill-logo img{
+
+    width:150px !important;
+    height:auto !important;
+
+  }
+
+
+  .bill-table{
+
+    font-size:12px !important;
+
+  }
+
+
+  .bill-product-image{
+
+    width:45px !important;
+    height:45px !important;
+
+  }
+
+
+  .bill-footer{
+
+    margin-top:10px !important;
+
+  }
+
+
+}@media print {
+
+  @page{
+    size:A4;
+    margin:8mm;
+  }
+
+  .bill-page{
+    padding:0 !important;
+  }
+
+  .bill-container{
+    transform:scale(0.85);
+    transform-origin:top left;
+    width:117% !important;
+    max-width:none !important;
+  }
+
+  .bill-header{
+    margin-bottom:10px !important;
+  }
+
+  .customer-box,
+  .items-section,
+  .bill-total{
+    margin-top:10px !important;
+  }
+
+  .bill-actions{
+    display:none !important;
+  }
+
 }
