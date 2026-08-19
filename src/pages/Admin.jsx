@@ -991,7 +991,7 @@ function Admin() {
                 EXISTING PRODUCTS
             ================================================= */}
 
-            <div className="admin-list-grid">
+            <div className="admin-list-grid" style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:"25px"}}>
 
 
               {
@@ -1487,7 +1487,7 @@ function Admin() {
             </h1>
 
 
-            <div className="admin-list-grid">
+            <div className="admin-list-grid" style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:"25px"}}>
 
 
               {
